@@ -394,18 +394,22 @@ cmd_stat(struct super_block *sb, struct context *c)
 {
         int inode_nr;
         struct inode *in;
+        int i;
 
-        if (c->nargs != 2) {
+        if (c->nargs < 2) {
                 return -EINVAL;
+        }   
+        for (i = 1; i < c->nargs; i++ )
+        {
+                inode_nr = testfs_dir_name_to_inode_nr(c->cur_dir, c->cmd[i]);
+                if (inode_nr < 0)
+                        return inode_nr;
+                in = testfs_get_inode(sb, inode_nr);
+                printf("%s: i_nr = %d, i_type = %d, i_size = %d\n", c->cmd[i], 
+                       testfs_inode_get_nr(in), testfs_inode_get_type(in), 
+                       testfs_inode_get_size(in));
+                testfs_put_inode(in);
         }
-        inode_nr = testfs_dir_name_to_inode_nr(c->cur_dir, c->cmd[1]);
-        if (inode_nr < 0)
-                return inode_nr;
-        in = testfs_get_inode(sb, inode_nr);
-        printf("%s: i_nr = %d, i_type = %d, i_size = %d\n", c->cmd[1], 
-               testfs_inode_get_nr(in), testfs_inode_get_type(in), 
-               testfs_inode_get_size(in));
-        testfs_put_inode(in);
         return 0;
 }
 

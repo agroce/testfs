@@ -32,7 +32,7 @@ depend:
 	$(CC) -MM $(INCLUDES) $(SOURCES) > depend.mk
 
 clean:
-	rm -f *.o depend.mk $(PROGS) *.exe
+	rm -f *.o depend.mk $(PROGS) *.exe *.stackdump
 	rm -rf *~
 
 ifeq (depend.mk,$(wildcard depend.mk))

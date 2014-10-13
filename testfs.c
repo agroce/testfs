@@ -16,21 +16,22 @@ static bool can_quit = false;
 static struct {
 	const char *name;
 	int (*func)(struct super_block *sb, struct context *c);
+        int max_args;
 } cmdtable[] = {
         /* menus */
-        { "?",          cmd_help },
-        { "cd",         cmd_cd },
-        { "pwd",        cmd_pwd },
-        { "ls",         cmd_ls },
-        { "lsr",        cmd_lsr },
-        { "touch",      cmd_create },
-        { "stat",       cmd_stat },
-        { "rm",         cmd_rm },
-        { "mkdir",      cmd_mkdir },
-        { "cat",        cmd_cat },
-        { "write",      cmd_write },
-        { "checkfs",    cmd_checkfs },
-        { "quit",    	cmd_quit },
+        { "?",          cmd_help,       1, },
+        { "cd",         cmd_cd,         2, },
+        { "pwd",        cmd_pwd,        1, },
+        { "ls",         cmd_ls,         2, },
+        { "lsr",        cmd_lsr,        2, },
+        { "touch",      cmd_create,     2, },
+        { "stat",       cmd_stat,       MAX_ARGS, },
+        { "rm",         cmd_rm,         2, },
+        { "mkdir",      cmd_mkdir,      2, },
+        { "cat",        cmd_cat,        MAX_ARGS, },
+        { "write",      cmd_write,      2, },
+        { "checkfs",    cmd_checkfs,    1, },
+        { "quit",    	cmd_quit,       1, },
         { NULL,         NULL}
 };
 
@@ -54,25 +55,41 @@ cmd_quit(struct super_block *sb, struct context *c)
         return 0;
 }
 	
-void
-command(struct super_block *sb, struct context *c)
+static void
+handle_command(struct super_block *sb, struct context *c, char * name,
+        char * args)
 {
-    int i;
-    if (!c->cmd[0])
-        return;
-
-    for (i=0; cmdtable[i].name; i++) {
-        if (strcmp(c->cmd[0], cmdtable[i].name) == 0) {
-            assert(cmdtable[i].func);
-                errno = cmdtable[i].func(sb, c);
-                if (errno < 0) {
-                    errno = -errno;
-                    WARN(c->cmd[0]);
-                }
+        int i, j = 0;
+        if (name == NULL)
                 return;
+
+        for (i=0; cmdtable[i].name; i++) {
+                if (strcmp(name, cmdtable[i].name) == 0) {
+                        char * token = args;
+                        assert(cmdtable[i].func);
+                        
+                        c->cmd[j++] = name;
+                        while (j < cmdtable[i].max_args &&
+                               (c->cmd[j] = strtok(token, " \t\n")) != NULL) {
+                                j++; 
+                                token = NULL;  
+                        }
+                        if ((c->cmd[j] = strtok(token, "\n")) != NULL) {
+                                j++;
+                        }          
+                        for ( c->nargs = j++; j <= MAX_ARGS; j++ ) {
+                                c->cmd[j] = NULL;
+                        }
+                        
+                        errno = cmdtable[i].func(sb, c);
+                        if (errno < 0) {
+                                errno = -errno;
+                                WARN(c->cmd[0]);
+                        }
+                        return;
             }
-    }
-    printf("%s: command not found: type ?\n", c->cmd[0]);
+        }
+        printf("%s: command not found: type ?\n", c->cmd[0]);
 }
 
 static void 
@@ -137,7 +154,6 @@ main(int argc, char * const argv[])
 {
         struct super_block *sb;
         char *line = NULL;
-        char *token;
         size_t line_size = 0;
         ssize_t nr;
         int ret;
@@ -152,17 +168,19 @@ main(int argc, char * const argv[])
         for (;	
             PROMPT, 
             (nr = getline(&line, &line_size, stdin)) != EOF; ) {
-            token = line;
-            c.nargs = 0;
-            bzero(c.cmd, sizeof(char *) * MAX_ARGS);
-            while ((token = strtok(token, " \t\n")) != NULL) {
-                    if (c.nargs < MAX_ARGS)
-                            c.cmd[c.nargs++] = token;
-                    token = NULL;
+            char * name; 
+            char * args;
+
+            name = strtok(line, " \t\n");
+            args = strtok(NULL, "\n");
+            handle_command(sb, &c, name, args);
+            
+            if ( can_quit ) {
+                break;
             }
-            command(sb, &c);
-                if ( can_quit ) break;
         }
+        
+        free(line);
         testfs_put_inode(c.cur_dir);
         testfs_close_super_block(sb);
         return 0;

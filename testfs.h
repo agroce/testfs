@@ -19,7 +19,7 @@ struct inode;
 
 struct context {
         int nargs;
-        char *cmd[MAX_ARGS];
+        char *cmd[MAX_ARGS+1];  // +1 to keep the overflows
         struct inode *cur_dir;
 };
 
