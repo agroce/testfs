@@ -10,12 +10,11 @@ typedef enum {I_NONE, I_FILE, I_DIR} inode_type;
 #define NR_INDIRECT_BLOCKS (BLOCK_SIZE/sizeof(int))
 
 struct dinode {
-        unsigned i_type : 4;
-        unsigned i_size : 28;
-        int i_mod_time;
-        int i_block_nr[NR_DIRECT_BLOCKS];
-        int i_indirect;
-        int i_checksum;
+        inode_type i_type;                      
+        int i_size;                            
+        int i_mod_time;                       
+        int i_block_nr[NR_DIRECT_BLOCKS];     
+        int i_indirect;                     
 };
 
 #define INODES_PER_BLOCK (BLOCK_SIZE/(sizeof(struct dinode)))

@@ -17,9 +17,6 @@ struct super_block {
         FILE *dev;
         struct bitmap *inode_freemap;
         struct bitmap *block_freemap;
-#ifndef DISABLE_RECON
-        struct rv *rv;
-#endif
         tx_type tx_in_progress;
 };
 

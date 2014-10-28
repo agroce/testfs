@@ -23,7 +23,7 @@ testfs_make_super_block(char *file)
         sb->sb.block_freemap_start = sb->sb.inode_freemap_start + 
                 INODE_FREEMAP_SIZE;
         sb->sb.inode_blocks_start = sb->sb.block_freemap_start + 
-                BLOCK_FREEMAP_SIZE;
+                BLOCK_FREEMAP_SIZE + CSUM_TABLE_SIZE;
         sb->sb.data_blocks_start = sb->sb.inode_blocks_start + NR_INODE_BLOCKS;
         sb->sb.modification_time = 0;
         testfs_write_super_block(sb);
