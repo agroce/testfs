@@ -35,6 +35,9 @@ clean:
 	rm -f *.o depend.mk $(PROGS) *.exe *.stackdump
 	rm -rf *~
 
+realclean: clean
+	rm -f *.img
+	
 ifeq (depend.mk,$(wildcard depend.mk))
 include depend.mk
 endif
