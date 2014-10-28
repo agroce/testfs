@@ -10,7 +10,7 @@
 # 2014
 
 PROGS := testfs mktestfs
-COMMON_OBJECTS := bitmap.o block.o super.o inode.o dir.o file.o tx.o
+COMMON_OBJECTS := bitmap.o block.o super.o inode.o dir.o file.o tx.o csum.o
 COMMON_SOURCES := $(COMMON_OBJECTS:.o=.c)
 DEFINES :=
 INCLUDES := 
@@ -35,6 +35,9 @@ clean:
 	rm -f *.o depend.mk $(PROGS) *.exe *.stackdump
 	rm -rf *~
 
+realclean: clean
+	rm -f *.img
+	
 ifeq (depend.mk,$(wildcard depend.mk))
 include depend.mk
 endif

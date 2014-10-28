@@ -4,6 +4,7 @@
 #include "dir.h"
 #include "block.h"
 #include "bitmap.h"
+#include "csum.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -22,8 +23,10 @@ testfs_make_super_block(char *file)
         sb->sb.inode_freemap_start = SUPER_BLOCK_SIZE;
         sb->sb.block_freemap_start = sb->sb.inode_freemap_start + 
                 INODE_FREEMAP_SIZE;
-        sb->sb.inode_blocks_start = sb->sb.block_freemap_start + 
+        sb->sb.csum_table_start = sb->sb.block_freemap_start +
                 BLOCK_FREEMAP_SIZE;
+        sb->sb.inode_blocks_start = sb->sb.csum_table_start + 
+                CSUM_TABLE_SIZE;
         sb->sb.data_blocks_start = sb->sb.inode_blocks_start + NR_INODE_BLOCKS;
         sb->sb.modification_time = 0;
         testfs_write_super_block(sb);
@@ -41,6 +44,14 @@ void
 testfs_make_block_freemap(struct super_block *sb)
 {
         zero_blocks(sb, sb->sb.block_freemap_start, BLOCK_FREEMAP_SIZE);
+}
+
+void
+testfs_make_csum_table(struct super_block *sb)
+{
+        /* number of data blocks cannot exceed size of checksum table */
+        assert(MAX_NR_CSUMS > NR_DATA_BLOCKS);
+        zero_blocks(sb, sb->sb.csum_table_start, CSUM_TABLE_SIZE);
 }
 
 void
@@ -63,17 +74,16 @@ testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
                 return -ENOMEM;
         }
 
-	    if ( (sock = open(file, O_RDWR
+        if ( (sock = open(file, O_RDWR
 #ifndef DISABLE_OSYNC
-			    | O_SYNC
+           | O_SYNC
 #endif
-		   )) < 0 )
-	    {
-		    return errno;
-	    }
-	    else if ((sb->dev = fdopen(sock, "r+")) == NULL) {
-		    return errno;
-	    }	
+           )) < 0 ) {
+            return errno;
+        }
+        else if ((sb->dev = fdopen(sock, "r+")) == NULL) {
+            return errno;
+        }	
 
         read_blocks(sb, block, 0, 1);
         memcpy(&sb->sb, block, sizeof(struct dsuper_block));
@@ -91,6 +101,11 @@ testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
                 return ret;
         read_blocks(sb, bitmap_getdata(sb->block_freemap), 
                     sb->sb.block_freemap_start, BLOCK_FREEMAP_SIZE);
+        sb->csum_table = malloc(CSUM_TABLE_SIZE * BLOCK_SIZE);
+        if ( !sb->csum_table )
+                return -ENOMEM;
+        read_blocks(sb, (char *)sb->csum_table, sb->sb.csum_table_start, 
+                    CSUM_TABLE_SIZE);
         sb->tx_in_progress = TX_NONE;
         inode_hash_init();
         *sbp = sb;

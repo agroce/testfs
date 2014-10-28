@@ -3,6 +3,7 @@
 #include "block.h"
 #include "inode.h"
 #include "list.h"
+#include "csum.h"
 
 /* inode flags */
 #define I_FLAGS_DIRTY     0x1
@@ -330,6 +331,7 @@ testfs_write_data(struct inode *in, int start, char *buf, const int size)
         do {
                 int block_nr = (start + buf_offset)/BLOCK_SIZE;
                 int copy_size;
+                int csum;
 
                 block_nr = testfs_allocate_block(in, block, block_nr);
                 if (block_nr < 0) {
@@ -347,7 +349,9 @@ testfs_write_data(struct inode *in, int start, char *buf, const int size)
                         copy_size = BLOCK_SIZE - b_offset;
                 }
                 memcpy(block + b_offset, buf + buf_offset, copy_size);
+                csum = testfs_calculate_csum(block, BLOCK_SIZE);
                 write_blocks(in->sb, block, block_nr, 1);
+                testfs_put_csum(in->sb, block_nr, csum);
                 buf_offset += copy_size;
                 b_offset = 0;
         } while (!done);
@@ -417,6 +421,11 @@ testfs_check_inode(struct super_block *sb, struct bitmap *b_freemap,
                 if (block_nr == 0)
                         return size;
                 size += BLOCK_SIZE;
+                
+                /* verify checksum */
+                testfs_verify_csum(sb, block_nr);
+                
+                /* mark block freemap */
                 block_nr -= sb->sb.data_blocks_start;
                 bitmap_mark(b_freemap, block_nr);
         }

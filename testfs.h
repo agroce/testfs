@@ -6,11 +6,12 @@
 
 #define BLOCK_SIZE 64
 
-#define SUPER_BLOCK_SIZE 1              /* start  0x00 */
-#define INODE_FREEMAP_SIZE 1            /* start  0x40 */
-#define BLOCK_FREEMAP_SIZE 2            /* start  0x80 */
-#define NR_INODE_BLOCKS 10              /* start 0x100 */
-#define NR_DATA_BLOCKS 40               /* start 0x380 */
+#define SUPER_BLOCK_SIZE    1           /* start 0x0000 */
+#define INODE_FREEMAP_SIZE  1           /* start 0x0040 */
+#define BLOCK_FREEMAP_SIZE  2           /* start 0x0080 */
+#define CSUM_TABLE_SIZE    60           /* start 0x0100 */
+#define NR_INODE_BLOCKS   128           /* start 0x1000 */
+#define NR_DATA_BLOCKS    512           /* start 0x3000 */
 
 struct super_block;
 struct inode;
@@ -19,7 +20,7 @@ struct inode;
 
 struct context {
         int nargs;
-        char *cmd[MAX_ARGS+1];  // +1 to keep the overflows
+        char *cmd[MAX_ARGS+1];          // +1 to keep the overflows
         struct inode *cur_dir;
 };
 

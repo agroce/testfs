@@ -7,6 +7,7 @@
 struct dsuper_block {
         int inode_freemap_start;
         int block_freemap_start;
+        int csum_table_start;   
         int inode_blocks_start;
         int data_blocks_start;
         int modification_time;
@@ -17,15 +18,16 @@ struct super_block {
         FILE *dev;
         struct bitmap *inode_freemap;
         struct bitmap *block_freemap;
-#ifndef DISABLE_RECON
-        struct rv *rv;
-#endif
-        tx_type tx_in_progress;
+        tx_type tx_in_progress;    
+
+        // TODO: add your code here
+        int *csum_table;
 };
 
 struct super_block *testfs_make_super_block(char *file);
 void testfs_make_inode_freemap(struct super_block *sb);
 void testfs_make_block_freemap(struct super_block *sb);
+void testfs_make_csum_table(struct super_block *sb);
 void testfs_make_inode_blocks(struct super_block *sb);
 
 int testfs_init_super_block(const char *file, int corrupt, 

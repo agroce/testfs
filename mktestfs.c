@@ -24,6 +24,7 @@ main(int argc, char *argv[])
         sb = testfs_make_super_block(argv[1]);
         testfs_make_inode_freemap(sb);
         testfs_make_block_freemap(sb);
+        testfs_make_csum_table(sb);
         testfs_make_inode_blocks(sb);
         testfs_close_super_block(sb);
 
