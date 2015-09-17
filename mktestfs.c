@@ -7,7 +7,7 @@
 static void
 usage(char *progname)
 {
-        fprintf(stderr, "Usage: %s rawfile\n", progname);
+        fprintf(stdout, "Usage: %s rawfile\n", progname);
         exit(1);
 }
 

@@ -95,7 +95,7 @@ handle_command(struct super_block *sb, struct context *c, char * name,
 static void 
 usage(const char * progname)
 {
-    fprintf(stderr, "Usage: %s [-ch][--help] rawfile\n", progname);
+    fprintf(stdout, "Usage: %s [-ch][--help] rawfile\n", progname);
     exit(1);
 }
 

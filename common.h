@@ -8,14 +8,14 @@
 #include <stdlib.h>
 
 #define EXIT(error) do { \
-        fprintf(stderr, "%s: %s: %s\n", __FUNCTION__, error, strerror(errno)); \
-        fflush(stderr); \
+        fprintf(stdout, "%s: %s: %s\n", __FUNCTION__, error, strerror(errno)); \
+        fflush(stdout); \
         exit(1); \
  } while (0)
 
 #define WARN(error) do { \
-        fprintf(stderr, "%s: %s: %s\n", __FUNCTION__, error, strerror(errno)); \
-        fflush(stderr); \
+        fprintf(stdout, "%s: %s: %s\n", __FUNCTION__, error, strerror(errno)); \
+        fflush(stdout); \
  } while (0)
 
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
