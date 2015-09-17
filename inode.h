@@ -24,10 +24,10 @@ void inode_hash_destroy(void);
 struct inode *testfs_get_inode(struct super_block *sb, int inode_nr);
 void testfs_sync_inode(struct inode *in);
 void testfs_put_inode(struct inode *in);
-inline int testfs_inode_get_size(struct inode *in);
-inline inode_type testfs_inode_get_type(struct inode *in);
-inline int testfs_inode_get_nr(struct inode *in);
-inline struct super_block *testfs_inode_get_sb(struct inode *in);
+int testfs_inode_get_size(struct inode *in);
+inode_type testfs_inode_get_type(struct inode *in);
+int testfs_inode_get_nr(struct inode *in);
+struct super_block *testfs_inode_get_sb(struct inode *in);
 int testfs_create_inode(struct super_block *sb, inode_type type,
                         struct inode **inp);
 void testfs_remove_inode(struct inode *in);
