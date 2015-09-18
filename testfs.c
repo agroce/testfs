@@ -171,6 +171,7 @@ main(int argc, char * const argv[])
             char * name; 
             char * args;
 
+            printf("command: %s\n", line);
             name = strtok(line, " \t\n");
             args = strtok(NULL, "\n");
             handle_command(sb, &c, name, args);

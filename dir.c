@@ -62,7 +62,6 @@ static int
 testfs_write_dirent(struct inode *dir, char *name, int len, int inode_nr,
                     int offset)
 {
-        fslice_name(name, len);
         int ret;
         struct dirent *d = malloc(sizeof(struct dirent) + len);
         
@@ -154,7 +153,7 @@ testfs_remove_dirent(struct super_block *sb, struct inode *dir, char *name)
                 p_offset = offset;
                 if ((d = testfs_next_dirent(dir, &offset)) == NULL)
                         break;
-                fslice_name(D_NAME(d), d->d_name_len);
+                //fslice_name(D_NAME(d), d->d_name_len);
                 if ((d->d_inode_nr < 0) || (strcmp(D_NAME(d), name) != 0))
                         continue;
                 /* found the dirent */
@@ -269,7 +268,7 @@ testfs_dir_name_to_inode_nr(struct inode *dir, char *name)
         assert(name);
         assert(testfs_inode_get_type(dir) == I_DIR);
         for (; ret < 0 && (d = testfs_next_dirent(dir, &offset)); free(d)) {
-                fslice_name(D_NAME(d), d->d_name_len);
+                //fslice_name(D_NAME(d), d->d_name_len);
                 if ((d->d_inode_nr < 0) || (strcmp(D_NAME(d), name) != 0))
                         continue;
                 ret = d->d_inode_nr;

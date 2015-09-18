@@ -69,7 +69,6 @@ cmd_write(struct super_block *sb, struct context *c)
                 goto out;
         }
         size = strlen(content);
-        fslice_data(content, size);
         testfs_tx_start(sb, TX_WRITE);
         ret = testfs_write_data(in, 0, content, size);
         if (ret >= 0) {
