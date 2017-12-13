@@ -109,7 +109,9 @@ static long WriteFile(int fd, const void *data_, unsigned long size) {
   for (auto i = 0UL; i < size; ++i) {
     gFileData[gFilePos++] = data[i];
   }
+
   ASSERT(gFilePos == static_cast<long>(pos_after_write));
+  errno = 0;
   return static_cast<long>(size);
 }
 
@@ -127,33 +129,70 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
          num_read < static_cast<long>(size)) {
     data[num_read++] = gFileData[gFilePos++];
   }
+
+  errno = 0;
   return num_read;
 }
 
-TEST(TestFs, Initialize) {
+static void InitFileOperations(void) {
   FOPS.open = OpenFile;
   FOPS.close = CloseFile;
   FOPS.seek = SeekFile;
   FOPS.write = WriteFile;
   FOPS.read = ReadFile;
+}
 
-  struct super_block *sb;
-  int ret;
-  
-  sb = testfs_make_super_block(gFsPath);
+static void CreateEmptyFileSystem(void) {
+  LOG(INFO) << "Making super block";
+  auto sb = testfs_make_super_block(gFsPath);
+
+  LOG(INFO) << "Making inode free map";
   testfs_make_inode_freemap(sb);
+
+  LOG(INFO) << "Making block free map";
   testfs_make_block_freemap(sb);
+
+
+  LOG(INFO) << "Making checksum table";
   testfs_make_csum_table(sb);
+
+
+  LOG(INFO) << "Making inode blocks";
   testfs_make_inode_blocks(sb);
+
   testfs_close_super_block(sb);
-  
-  ret = testfs_init_super_block(gFsPath, 0, &sb);
-  ASSERT(!ret)
+
+  LOG(INFO) << "Done creating empty file system.";
+}
+
+TEST(TestFs, Initialize) {
+  InitFileOperations();
+  CreateEmptyFileSystem();
+
+  struct super_block *sb = nullptr;
+  int ret = testfs_init_super_block(gFsPath, 0, &sb);
+  ASSERT(!ret && sb != nullptr)
       << "Couldn't initialize super block";
 
   ret = testfs_make_root_dir(sb);
   ASSERT(!ret)
       << "Couldn't create root directory.";
+
+  LOG(INFO)
+      << "Getting inode for root directory";
+  struct inode *root_dir_inode = testfs_get_inode(sb, 0); /* root dir */
+
+  struct context context = {};
+  context.cur_dir = root_dir_inode;
+
+  auto dir_name = DeepState_CStr(3);
+  LOG(INFO)
+      << "Creating directory with name " << dir_name;
+  context.cmd[0] = dir_name;
+  cmd_mkdir(sb, &context);
+
+  // This will do a `printf`.
+  cmd_stat(sb, &context);
 
   testfs_close_super_block(sb);
 }
