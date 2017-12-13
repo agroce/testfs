@@ -25,4 +25,4 @@ struct file_operations {
   long (*write)(int, const void *, unsigned long);
 };
 
-struct file_operations FOPS;
+extern struct file_operations FOPS;

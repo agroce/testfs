@@ -15,7 +15,7 @@ COMMON_SOURCES := $(COMMON_OBJECTS:.o=.c)
 DEFINES :=
 INCLUDES := 
 #CFLAGS := -O2 -Wall -Werror $(DEFINES) $(INCLUDES)
-CFLAGS := -g -O0 -Wall -Werror $(DEFINES) $(INCLUDES)
+CFLAGS := -g3 -O0 -Wall -Werror $(DEFINES) $(INCLUDES)
 SOURCES := testfs.c mktestfs.c $(COMMON_SOURCES)
 
 all: depend $(PROGS) tests
@@ -25,7 +25,7 @@ testfs: testfs.o $(COMMON_OBJECTS)
 
 
 tests: Tests.cpp testfs
-	g++ -std=gnu++11 -o Tests $(COMMON_OBJECTS) Tests.cpp -ldeepstate 
+	g++ $(CFLAGS) -std=gnu++11 -o Tests $(COMMON_OBJECTS) Tests.cpp -ldeepstate 
 
 mktestfs: mktestfs.o $(COMMON_OBJECTS)
 	$(CC) -o $@ $(CFLAGS) $^ $(LOADLIBES)     
