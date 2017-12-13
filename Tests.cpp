@@ -208,12 +208,13 @@ TEST(TestFs, Initialize) {
 
   struct context context = {};
 
-  //auto dir_name = DeepState_CStr(3);
-  char dir_name[] = {'h', 'i', '\0'};
+  auto dir_name = DeepState_CStr(3);
+  //char dir_name[] = {'h', 'i', '\0'};
   LOG(INFO)
       << "Creating directory /" << dir_name;
   context.cur_dir = root_dir_inode;
-  context.cmd[0] = dir_name;
+  context.cmd[1] = dir_name;
+  context.nargs = 2;
   cmd_mkdir(sb, &context);
 
   LOG(INFO)
@@ -221,9 +222,11 @@ TEST(TestFs, Initialize) {
 
   // This will do a `printf`.
   context.cur_dir = root_dir_inode;
-  context.cmd[0] = dir_name;
+  context.cmd[1] = dir_name;
+  context.nargs = 2;
   cmd_stat(sb, &context);
 
+  testfs_put_inode(root_dir_inode);
   testfs_close_super_block(sb);
 }
 
