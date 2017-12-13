@@ -206,8 +206,8 @@ TEST(TestFs, Initialize) {
 
   struct context context = {};
 
-  auto dir_name = DeepState_CStr(3);
-  //char dir_name[] = {'h', 'i', '\0'};
+//  auto dir_name = DeepState_CStr(3);
+  char dir_name[] = {'h', 'i', '\0'};
   LOG(INFO)
       << "Creating directory /" << dir_name;
   context.cur_dir = root_dir_inode;
