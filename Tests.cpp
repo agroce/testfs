@@ -50,30 +50,39 @@ static long SeekFile(int fd, long offset, int whence) {
   switch (whence) {
     case SEEK_CUR: {
       auto pos = gFilePos + offset;
-      if (0 > pos || pos > size) {
+      if (0 > pos) {
         errno = EINVAL;
         return -1;
       } else {
+        if (pos > size) {
+          gFileData.resize(static_cast<size_t>(pos));
+        }
         gFilePos = pos;
         return pos;
       }
     }
 
     case SEEK_SET:
-      if (0 > offset || offset > size) {
+      if (0 > offset) {
         errno = EINVAL;
         return -1;
       } else {
+        if (offset > size) {
+          gFileData.resize(static_cast<size_t>(offset));
+        }
         gFilePos = offset;
         return offset;
       }
 
     case SEEK_END: {
       auto pos = size - offset;
-      if (0 > pos || pos > size) {
+      if (0 > pos) {
         errno = EINVAL;
         return -1;
       } else {
+        if (pos > size) {
+          gFileData.resize(static_cast<size_t>(pos));
+        }
         gFilePos = pos;
         return pos;
       }
@@ -114,7 +123,8 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
   auto data = reinterpret_cast<char *>(data_);
 
   long num_read = 0;
-  while (gFilePos < static_cast<long>(gFileData.size())) {
+  while (gFilePos < static_cast<long>(gFileData.size()) &&
+         num_read < static_cast<long>(size)) {
     data[num_read++] = gFileData[gFilePos++];
   }
   return num_read;
