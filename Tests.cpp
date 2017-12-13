@@ -154,6 +154,7 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
 }
 
 static void InitFileOperations(void) {
+  return;
   FOPS.open = OpenFile;
   FOPS.close = CloseFile;
   FOPS.seek = SeekFile;
@@ -201,15 +202,21 @@ TEST(TestFs, Initialize) {
   struct inode *root_dir_inode = testfs_get_inode(sb, 0); /* root dir */
 
   struct context context = {};
-  context.cur_dir = root_dir_inode;
 
-  auto dir_name = DeepState_CStr(3);
+  //auto dir_name = DeepState_CStr(3);
+  char dir_name[] = {'h', 'i', '\0'};
   LOG(INFO)
-      << "Creating directory with name " << dir_name;
+      << "Creating directory /" << dir_name;
+  context.cur_dir = root_dir_inode;
   context.cmd[0] = dir_name;
   cmd_mkdir(sb, &context);
 
+  LOG(INFO)
+      << "Directory created, doing a stat.";
+
   // This will do a `printf`.
+  context.cur_dir = root_dir_inode;
+  context.cmd[0] = dir_name;
   cmd_stat(sb, &context);
 
   testfs_close_super_block(sb);
