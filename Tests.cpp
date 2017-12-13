@@ -29,18 +29,23 @@ using namespace deepstate;
 
 #define LENGTH 4
 
+static bool gIsOpen = false;
 static constexpr int kFd = 99;
 static char gFsPath[] = {'r', 'a', 'w', '.', 'f', 's', '\0'}; 
-static std::vector<char> gFileData;
+static std::vector<uint8_t> gFileData;
 static long gFilePos = 0;
 
 static int OpenFile(const char *path, int, ...) {
+  ASSERT(!gIsOpen);
   ASSERT(path == gFsPath);
+  gIsOpen = true;
+  gFilePos = 0;
   return kFd;
 }
 
 static int CloseFile(int fd) {
   ASSERT(fd == kFd);
+  gIsOpen = false;
   return 0;
 }
 
@@ -55,7 +60,7 @@ static long SeekFile(int fd, long offset, int whence) {
         return -1;
       } else {
         if (pos > size) {
-          gFileData.resize(static_cast<size_t>(pos));
+          gFileData.resize(static_cast<size_t>(pos), 0);
         }
         gFilePos = pos;
         return pos;
@@ -68,7 +73,7 @@ static long SeekFile(int fd, long offset, int whence) {
         return -1;
       } else {
         if (offset > size) {
-          gFileData.resize(static_cast<size_t>(offset));
+          gFileData.resize(static_cast<size_t>(offset), 0);
         }
         gFilePos = offset;
         return offset;
@@ -81,7 +86,7 @@ static long SeekFile(int fd, long offset, int whence) {
         return -1;
       } else {
         if (pos > size) {
-          gFileData.resize(static_cast<size_t>(pos));
+          gFileData.resize(static_cast<size_t>(pos), 0);
         }
         gFilePos = pos;
         return pos;
@@ -100,11 +105,11 @@ static long WriteFile(int fd, const void *data_, unsigned long size) {
     return 0;
   }
 
-  auto data = reinterpret_cast<const char *>(data_);
+  auto data = reinterpret_cast<const uint8_t *>(data_);
   gFileData.reserve(gFileData.size() + size);
   auto pos_after_write = (gFileData.size() - gFilePos) + size;
   if (pos_after_write > gFileData.size()) {
-    gFileData.resize(pos_after_write);
+    gFileData.resize(pos_after_write, 0);
   }
   for (auto i = 0UL; i < size; ++i) {
     gFileData[gFilePos++] = data[i];
@@ -122,7 +127,7 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
     return 0;
   }
 
-  auto data = reinterpret_cast<char *>(data_);
+  auto data = reinterpret_cast<uint8_t *>(data_);
 
   long num_read = 0;
   while (gFilePos < static_cast<long>(gFileData.size()) &&
