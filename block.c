@@ -1,6 +1,6 @@
 #include "testfs.h"
 #include "block.h"
-#include "fslice.h"
+#include "ops.h"
 
 static char zero[BLOCK_SIZE] = {0};
 
@@ -9,19 +9,19 @@ write_blocks(struct super_block *sb, char *blocks, int start, int nr)
 {
         long pos;
 
-        if ((pos = ftell(sb->dev)) < 0) {
+
+
+        if ((pos = FOPS.seek(sb->dev_fd, 0, SEEK_CUR)) < 0) {
                 EXIT("ftell");
         }
-        if (fseek(sb->dev, start * BLOCK_SIZE, SEEK_SET) < 0) {
+        if (FOPS.seek(sb->dev_fd, start * BLOCK_SIZE, SEEK_SET) < 0) {
                 EXIT("fseek");
         }
-        for (int i = 0; i < nr; i++) {
-            fslice_write_block(blocks + i * BLOCK_SIZE, BLOCK_SIZE, start+i);
-        }
-        if (fwrite(blocks, BLOCK_SIZE, nr, sb->dev) != nr) {
+
+        if (FOPS.write(sb->dev_fd, blocks, BLOCK_SIZE * nr) != (BLOCK_SIZE * nr)) {
                 EXIT("fwrite");
         }
-        if (fseek(sb->dev, pos, SEEK_SET) < 0) {
+        if (FOPS.seek(sb->dev_fd, pos, SEEK_SET) < 0) {
                 EXIT("fseek");
         }
 }
@@ -40,21 +40,18 @@ void
 read_blocks(struct super_block *sb, char *blocks, int start, int nr)
 {
         long pos;
-
-        if ((pos = ftell(sb->dev)) < 0) {
+        pos = FOPS.seek(sb->dev_fd, 0, SEEK_CUR);
+        if (pos < 0) {
                 EXIT("ftell");
         }
-        if (fseek(sb->dev, start * BLOCK_SIZE, SEEK_SET) < 0) {
+        if (FOPS.seek(sb->dev_fd, start * BLOCK_SIZE, SEEK_SET) < 0) {
                 EXIT("fseek");
         }
-        if (fread(blocks, BLOCK_SIZE, nr, sb->dev) != nr) {
-                EXIT("freed");
+        if (FOPS.read(sb->dev_fd, blocks, BLOCK_SIZE * nr) != (nr * BLOCK_SIZE)) {
+                EXIT("fread");
         }
-        if (fseek(sb->dev, pos, SEEK_SET) < 0) {
+        if (FOPS.seek(sb->dev_fd, pos, SEEK_SET) < 0) {
                 EXIT("fseek");
-        }
-        for (int i = 0; i < nr; i++) {
-            fslice_read_block(blocks + i * BLOCK_SIZE, BLOCK_SIZE, start+i);
         }
 }
 

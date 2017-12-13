@@ -5,8 +5,6 @@
 #include "list.h"
 #include "csum.h"
 
-#include "fslice.h"
-
 /* inode flags */
 #define I_FLAGS_DIRTY     0x1
 
@@ -313,7 +311,6 @@ testfs_read_data(struct inode *in, int start, char *buf, const int size)
                 buf_offset += copy_size;
                 b_offset = 0;
         } while (!done);
-        //fslice_data(buf, size);
         return 0;
 }
 
@@ -329,8 +326,6 @@ testfs_write_data(struct inode *in, int start, char *buf, const int size)
         int buf_offset = 0; /* src offset in buf for copy */
         int done = 0;
         
-        fslice_data(buf, size);
-
         assert(buf);
         assert(start <= in->in.i_size);
         do {

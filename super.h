@@ -15,7 +15,7 @@ struct dsuper_block {
 
 struct super_block {
         struct dsuper_block sb;
-        FILE *dev;
+        int dev_fd;
         struct bitmap *inode_freemap;
         struct bitmap *block_freemap;
         tx_type tx_in_progress;    

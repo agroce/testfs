@@ -2,7 +2,6 @@
 #include "inode.h"
 #include "dir.h"
 #include "tx.h"
-#include "fslice.h"
 
 
 int

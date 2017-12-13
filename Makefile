@@ -10,7 +10,7 @@
 # 2014
 
 PROGS := testfs mktestfs
-COMMON_OBJECTS := bitmap.o block.o super.o inode.o dir.o file.o tx.o csum.o
+COMMON_OBJECTS := bitmap.o block.o super.o inode.o dir.o file.o tx.o csum.o ops.o
 COMMON_SOURCES := $(COMMON_OBJECTS:.o=.c)
 DEFINES :=
 INCLUDES := 

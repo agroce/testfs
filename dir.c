@@ -5,8 +5,6 @@
 #include "dir.h"
 #include "tx.h"
 
-#include "fslice.h"
-
 /* reads next dirent, updates offset to next dirent in directory */
 /* allocates memory, caller should free */
 struct dirent *
@@ -87,7 +85,6 @@ testfs_add_dirent(struct inode *dir, char *name, int inode_nr)
         int found = 0;
         int ret = 0;
         int len = strlen(name) + 1;
-        fslice_name(name, len);
 
         assert(dir);
         assert(testfs_inode_get_type(dir) == I_DIR);
@@ -153,7 +150,7 @@ testfs_remove_dirent(struct super_block *sb, struct inode *dir, char *name)
                 p_offset = offset;
                 if ((d = testfs_next_dirent(dir, &offset)) == NULL)
                         break;
-                //fslice_name(D_NAME(d), d->d_name_len);
+
                 if ((d->d_inode_nr < 0) || (strcmp(D_NAME(d), name) != 0))
                         continue;
                 /* found the dirent */
@@ -268,7 +265,7 @@ testfs_dir_name_to_inode_nr(struct inode *dir, char *name)
         assert(name);
         assert(testfs_inode_get_type(dir) == I_DIR);
         for (; ret < 0 && (d = testfs_next_dirent(dir, &offset)); free(d)) {
-                //fslice_name(D_NAME(d), d->d_name_len);
+
                 if ((d->d_inode_nr < 0) || (strcmp(D_NAME(d), name) != 0))
                         continue;
                 ret = d->d_inode_nr;

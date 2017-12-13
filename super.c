@@ -5,6 +5,7 @@
 #include "block.h"
 #include "bitmap.h"
 #include "csum.h"
+#include "ops.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -17,7 +18,7 @@ testfs_make_super_block(char *file)
         if (!sb) {
                 EXIT("malloc");
         }
-        if ((sb->dev = fopen(file, "w")) == NULL) {
+        if ((sb->dev_fd = FOPS.open(file, O_WRONLY|O_TRUNC|O_CREAT, 0666)) == -1) {
                 EXIT(file);
         }
         sb->sb.inode_freemap_start = SUPER_BLOCK_SIZE;
@@ -68,20 +69,13 @@ testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
 {
         struct super_block *sb = malloc(sizeof(struct super_block));
         char block[BLOCK_SIZE];
-        int ret, sock;
+        int ret;
 
         if (!sb) {
                 return -ENOMEM;
         }
 
-        if ( (sock = open(file, O_RDWR
-#ifndef DISABLE_OSYNC
-           | O_SYNC
-#endif
-           )) < 0 ) {
-            return errno;
-        }
-        else if ((sb->dev = fdopen(sock, "r+")) == NULL) {
+        if ((sb->dev_fd = FOPS.open(file, O_RDWR)) == -1) {
             return errno;
         }	
 
@@ -142,9 +136,8 @@ testfs_close_super_block(struct super_block *sb)
                 sb->block_freemap = NULL;
         }
         testfs_tx_commit(sb, TX_UMOUNT);
-        fflush(sb->dev);
-        fclose(sb->dev);
-        sb->dev = NULL;
+        FOPS.close(sb->dev_fd);
+        sb->dev_fd = -1;
         free(sb);
 }
 
