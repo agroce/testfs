@@ -5,7 +5,7 @@
  * Fixed-size array of bits. (Intended for storage management.)
  *
  * Functions:
- *     bitmap_create  - allocate a new bitmap object.
+ *     bitmap_create  - allocate a new_ bitmap object.
  *                      Returns NULL on error.
  *     bitmap_getdata - return pointer to raw bit data (for I/O).
  *     bitmap_alloc   - locate a cleared bit, set it, and return its index.

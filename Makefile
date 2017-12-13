@@ -18,11 +18,15 @@ INCLUDES :=
 CFLAGS := -g -O0 -Wall -Werror $(DEFINES) $(INCLUDES)
 SOURCES := testfs.c mktestfs.c $(COMMON_SOURCES)
 
-all: depend $(PROGS)
+all: depend $(PROGS) tests
 
 testfs: testfs.o $(COMMON_OBJECTS)
 	$(CC) -o $@ $(CFLAGS) $^ $(LOADLIBES) 
-    
+
+
+tests: Tests.cpp testfs
+	g++ -std=gnu++11 -o Tests $(COMMON_OBJECTS) Tests.cpp -ldeepstate 
+
 mktestfs: mktestfs.o $(COMMON_OBJECTS)
 	$(CC) -o $@ $(CFLAGS) $^ $(LOADLIBES)     
 
@@ -34,6 +38,7 @@ depend:
 clean:
 	rm -f *.o depend.mk $(PROGS) *.exe *.stackdump
 	rm -rf *~
+
 
 realclean: clean
 	rm -f *.img
