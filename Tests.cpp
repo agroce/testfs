@@ -40,12 +40,14 @@ static int OpenFile(const char *path, int, ...) {
   ASSERT(path == gFsPath);
   gIsOpen = true;
   gFilePos = 0;
+  LOG(DEBUG) << "open(" << path << ") = " << kFd;
   return kFd;
 }
 
 static int CloseFile(int fd) {
   ASSERT(fd == kFd);
   gIsOpen = false;
+  LOG(DEBUG) << "close(" << fd << ")";
   return 0;
 }
 
@@ -63,6 +65,7 @@ static long SeekFile(int fd, long offset, int whence) {
           gFileData.resize(static_cast<size_t>(pos), 0);
         }
         gFilePos = pos;
+        LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_CUR) = " << pos;
         return pos;
       }
     }
@@ -76,11 +79,12 @@ static long SeekFile(int fd, long offset, int whence) {
           gFileData.resize(static_cast<size_t>(offset), 0);
         }
         gFilePos = offset;
+        LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_SET) = " << offset;
         return offset;
       }
 
     case SEEK_END: {
-      auto pos = size - offset;
+      auto pos = size + offset;
       if (0 > pos) {
         errno = EINVAL;
         return -1;
@@ -89,6 +93,7 @@ static long SeekFile(int fd, long offset, int whence) {
           gFileData.resize(static_cast<size_t>(pos), 0);
         }
         gFilePos = pos;
+        LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_END) = " << pos;
         return pos;
       }
     }
@@ -107,10 +112,14 @@ static long WriteFile(int fd, const void *data_, unsigned long size) {
 
   auto data = reinterpret_cast<const uint8_t *>(data_);
   gFileData.reserve(gFileData.size() + size);
-  auto pos_after_write = (gFileData.size() - gFilePos) + size;
+  auto pos_after_write = gFilePos + size;
   if (pos_after_write > gFileData.size()) {
     gFileData.resize(pos_after_write, 0);
   }
+
+  LOG(DEBUG) << "write(" << fd << ", " << data_ << ", "
+             << size << ") @ " << gFilePos;
+
   for (auto i = 0UL; i < size; ++i) {
     gFileData[gFilePos++] = data[i];
   }
@@ -126,6 +135,10 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
   if (!size) {
     return 0;
   }
+
+
+  LOG(DEBUG) << "read(" << fd << ", " << data_ << ", "
+             << size << ") @ " << gFilePos;
 
   auto data = reinterpret_cast<uint8_t *>(data_);
 
