@@ -154,7 +154,6 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
 }
 
 static void InitFileOperations(void) {
-  return;
   FOPS.open = OpenFile;
   FOPS.close = CloseFile;
   FOPS.seek = SeekFile;
@@ -181,13 +180,12 @@ static void CreateEmptyFileSystem(void) {
   testfs_close_super_block(sb);
   LOG(INFO) << "Done creating empty file system.";
 
-  int ret = testfs_init_super_block(gFsPath, 0, &sb);
-  ASSERT(!ret && sb != nullptr)
+  ASSERT(!testfs_init_super_block(gFsPath, 0, &sb))
       << "Couldn't initialize super block";
 
-  ret = testfs_make_root_dir(sb);
-  ASSERT(!ret)
+  ASSERT(!testfs_make_root_dir(sb))
       << "Couldn't create root directory.";
+
   testfs_close_super_block(sb);
   LOG(INFO)
       << "Created root directory; File system initialized";
@@ -215,16 +213,15 @@ TEST(TestFs, Initialize) {
   context.cur_dir = root_dir_inode;
   context.cmd[1] = dir_name;
   context.nargs = 2;
-  cmd_mkdir(sb, &context);
-
-  LOG(INFO)
-      << "Directory created, doing a stat.";
+  ASSERT(!cmd_mkdir(sb, &context))
+      << "Could not create directory /" << dir_name;
 
   // This will do a `printf`.
   context.cur_dir = root_dir_inode;
   context.cmd[1] = dir_name;
   context.nargs = 2;
-  cmd_stat(sb, &context);
+  ASSERT(!cmd_stat(sb, &context))
+      << "Could not state directory /" << dir_name;
 
   testfs_put_inode(root_dir_inode);
   testfs_close_super_block(sb);
