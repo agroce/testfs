@@ -268,6 +268,8 @@ testfs_checkfs(struct super_block *sb, struct bitmap *i_freemap,
         /* block processing */
         size = testfs_check_inode(sb, b_freemap, in);
         assert(size == size_roundup);
+        (void) size;
+        (void) size_roundup;
         testfs_put_inode(in);
         return 0;
 }

@@ -15,7 +15,7 @@ COMMON_SOURCES := $(COMMON_OBJECTS:.o=.c)
 DEFINES :=
 INCLUDES := 
 #CFLAGS := -O2 -Wall -Werror $(DEFINES) $(INCLUDES)
-CFLAGS := -g3 -O0 -Wall -Werror $(DEFINES) $(INCLUDES)
+CFLAGS := -g3 -O3 -Wall -Werror $(DEFINES) $(INCLUDES)
 SOURCES := testfs.c mktestfs.c $(COMMON_SOURCES)
 
 all: depend $(PROGS) tests
