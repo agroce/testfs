@@ -175,13 +175,22 @@ static void CreateEmptyFileSystem(void) {
   LOG(INFO) << "Making checksum table";
   testfs_make_csum_table(sb);
 
-
   LOG(INFO) << "Making inode blocks";
   testfs_make_inode_blocks(sb);
 
   testfs_close_super_block(sb);
-
   LOG(INFO) << "Done creating empty file system.";
+
+  int ret = testfs_init_super_block(gFsPath, 0, &sb);
+  ASSERT(!ret && sb != nullptr)
+      << "Couldn't initialize super block";
+
+  ret = testfs_make_root_dir(sb);
+  ASSERT(!ret)
+      << "Couldn't create root directory.";
+  testfs_close_super_block(sb);
+  LOG(INFO)
+      << "Created root directory; File system initialized";
 }
 
 TEST(TestFs, Initialize) {
@@ -192,10 +201,6 @@ TEST(TestFs, Initialize) {
   int ret = testfs_init_super_block(gFsPath, 0, &sb);
   ASSERT(!ret && sb != nullptr)
       << "Couldn't initialize super block";
-
-  ret = testfs_make_root_dir(sb);
-  ASSERT(!ret)
-      << "Couldn't create root directory.";
 
   LOG(INFO)
       << "Getting inode for root directory";

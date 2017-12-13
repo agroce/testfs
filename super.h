@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "tx.h"
 
+struct hlist_head;
+
 struct dsuper_block {
         int inode_freemap_start;
         int block_freemap_start;
@@ -22,6 +24,7 @@ struct super_block {
 
         // TODO: add your code here
         int *csum_table;
+        struct hlist_head *inode_hash_table;
 };
 
 struct super_block *testfs_make_super_block(char *file);

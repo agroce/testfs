@@ -21,7 +21,7 @@ testfs_next_dirent(struct inode *dir, int *offset)
         if (ret < 0)
                 return NULL;
         assert(d.d_name_len > 0);
-        dp = malloc(sizeof(struct dirent) + d.d_name_len);
+        dp = calloc(sizeof(struct dirent), d.d_name_len);
         if (!dp)
                 return NULL;
         *dp = d;

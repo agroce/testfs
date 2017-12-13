@@ -17,8 +17,6 @@ struct inode {
         struct super_block *sb;
 };
 
-static struct hlist_head *inode_hash_table = NULL;
-
 #define INODE_HASH_SHIFT 8
 
 #define inode_hashfn(nr)	\
@@ -26,22 +24,23 @@ static struct hlist_head *inode_hash_table = NULL;
 
 static const int inode_hash_size = (1 << INODE_HASH_SHIFT);
 
-void
+struct hlist_head *
 inode_hash_init(void)
 {
         int i;
 
-        inode_hash_table = malloc(inode_hash_size * sizeof(struct hlist_head));
+        struct hlist_head *inode_hash_table = calloc(inode_hash_size, sizeof(struct hlist_head));
         if (!inode_hash_table) {
-                EXIT("malloc");
+                EXIT("calloc");
         }
         for (i = 0; i < inode_hash_size; i++) {
                 INIT_HLIST_HEAD(&inode_hash_table[i]);
         }
+        return inode_hash_table;
 }
 
 void
-inode_hash_destroy(void)
+inode_hash_destroy(struct hlist_head *inode_hash_table)
 {
         int i;
         assert(inode_hash_table);
@@ -49,6 +48,7 @@ inode_hash_destroy(void)
                 assert(hlist_empty(&inode_hash_table[i]));
         }
         free(inode_hash_table);
+        inode_hash_table = NULL;
 }
 
 static struct inode *
@@ -58,7 +58,7 @@ inode_hash_find(struct super_block *sb, int inode_nr)
         struct inode *in;
 
         hlist_for_each_entry(in, elem, 
-                             &inode_hash_table[inode_hashfn(inode_nr)], hnode) {
+                             &sb->inode_hash_table[inode_hashfn(inode_nr)], hnode) {
                 if ((in->sb == sb) && (in->i_nr == inode_nr)) {
                         return in;
                 }
@@ -71,7 +71,7 @@ inode_hash_insert(struct inode *in)
 {
         INIT_HLIST_NODE(&in->hnode);
         hlist_add_head(&in->hnode, 
-                       &inode_hash_table[inode_hashfn(in->i_nr)]);
+                       &in->sb->inode_hash_table[inode_hashfn(in->i_nr)]);
 }
 
 static void

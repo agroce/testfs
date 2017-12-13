@@ -31,7 +31,7 @@ testfs_make_super_block(char *file)
         sb->sb.data_blocks_start = sb->sb.inode_blocks_start + NR_INODE_BLOCKS;
         sb->sb.modification_time = 0;
         testfs_write_super_block(sb);
-        inode_hash_init();
+        sb->inode_hash_table = inode_hash_init();
         return sb;
 }
 
@@ -67,16 +67,19 @@ testfs_make_inode_blocks(struct super_block *sb)
 int
 testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
 {
-        struct super_block *sb = malloc(sizeof(struct super_block));
+        struct super_block *sb = NULL;
         char block[BLOCK_SIZE];
         int ret;
+
+        *sbp = NULL;
+        sb = malloc(sizeof(struct super_block));
 
         if (!sb) {
                 return -ENOMEM;
         }
 
         if ((sb->dev_fd = FOPS.open(file, O_RDWR)) == -1) {
-            return errno;
+            return -errno;
         }	
 
         read_blocks(sb, block, 0, 1);
@@ -95,13 +98,13 @@ testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
                 return ret;
         read_blocks(sb, bitmap_getdata(sb->block_freemap), 
                     sb->sb.block_freemap_start, BLOCK_FREEMAP_SIZE);
-        sb->csum_table = malloc(CSUM_TABLE_SIZE * BLOCK_SIZE);
+        sb->csum_table = calloc(CSUM_TABLE_SIZE, BLOCK_SIZE);
         if ( !sb->csum_table )
                 return -ENOMEM;
         read_blocks(sb, (char *)sb->csum_table, sb->sb.csum_table_start, 
                     CSUM_TABLE_SIZE);
         sb->tx_in_progress = TX_NONE;
-        inode_hash_init();
+        sb->inode_hash_table = inode_hash_init();
         *sbp = sb;
         
         return 0;
@@ -122,7 +125,8 @@ testfs_close_super_block(struct super_block *sb)
 {
         testfs_tx_start(sb, TX_UMOUNT);
         testfs_write_super_block(sb);
-        inode_hash_destroy();
+        inode_hash_destroy(sb->inode_hash_table);
+        sb->inode_hash_table = NULL;
         if (sb->inode_freemap) {
                 write_blocks(sb, bitmap_getdata(sb->inode_freemap), 
                              sb->sb.inode_freemap_start, INODE_FREEMAP_SIZE);
@@ -138,6 +142,7 @@ testfs_close_super_block(struct super_block *sb)
         testfs_tx_commit(sb, TX_UMOUNT);
         FOPS.close(sb->dev_fd);
         sb->dev_fd = -1;
+        free(sb->csum_table);
         free(sb);
 }
 

@@ -35,13 +35,12 @@ bitmap_create(u_int32_t nbits, struct bitmap **bp)
 	if (b == NULL) {
 		return -ENOMEM;
 	}
-	b->v = malloc(words*sizeof(WORD_TYPE));
+	b->v = calloc(words, sizeof(WORD_TYPE));
 	if (b->v == NULL) {
 		free(b);
 		return -ENOMEM;
 	}
 
-	bzero(b->v, words*sizeof(WORD_TYPE));
 	b->nbits = nbits;
 
 	/* Mark any leftover bits at the end in use */

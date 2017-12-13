@@ -19,8 +19,8 @@ struct dinode {
 
 #define INODES_PER_BLOCK (BLOCK_SIZE/(sizeof(struct dinode)))
 
-void inode_hash_init(void);
-void inode_hash_destroy(void);
+struct hlist_head *inode_hash_init(void);
+void inode_hash_destroy(struct hlist_head *);
 struct inode *testfs_get_inode(struct super_block *sb, int inode_nr);
 void testfs_sync_inode(struct inode *in);
 void testfs_put_inode(struct inode *in);

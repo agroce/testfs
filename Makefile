@@ -9,6 +9,9 @@
 # University of Toronto
 # 2014
 
+CC=clang-3.8
+CXX=clang++-3.8
+
 PROGS := testfs mktestfs
 COMMON_OBJECTS := bitmap.o block.o super.o inode.o dir.o file.o tx.o csum.o ops.o
 COMMON_SOURCES := $(COMMON_OBJECTS:.o=.c)
@@ -25,7 +28,7 @@ testfs: testfs.o $(COMMON_OBJECTS)
 
 
 tests: Tests.cpp testfs
-	g++ $(CFLAGS) -std=gnu++11 -o Tests $(COMMON_OBJECTS) Tests.cpp -ldeepstate 
+	$(CXX) $(CFLAGS) -std=gnu++11 -o Tests $(COMMON_OBJECTS) Tests.cpp -ldeepstate 
 
 mktestfs: mktestfs.o $(COMMON_OBJECTS)
 	$(CC) -o $@ $(CFLAGS) $^ $(LOADLIBES)     
