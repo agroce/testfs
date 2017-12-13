@@ -40,14 +40,14 @@ static int OpenFile(const char *path, int, ...) {
   ASSERT(path == gFsPath);
   gIsOpen = true;
   gFilePos = 0;
-  LOG(DEBUG) << "open(" << path << ") = " << kFd;
+  // LOG(DEBUG) << "open(" << path << ") = " << kFd;
   return kFd;
 }
 
 static int CloseFile(int fd) {
   ASSERT(fd == kFd);
   gIsOpen = false;
-  LOG(DEBUG) << "close(" << fd << ")";
+  // LOG(DEBUG) << "close(" << fd << ")";
   return 0;
 }
 
@@ -65,7 +65,8 @@ static long SeekFile(int fd, long offset, int whence) {
           gFileData.resize(static_cast<size_t>(pos), 0);
         }
         gFilePos = pos;
-        LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_CUR) = " << pos;
+        // LOG(DEBUG) << "lseek(" << fd << ", " << offset
+        //            << ", SEEK_CUR) = " << pos;
         return pos;
       }
     }
@@ -79,7 +80,7 @@ static long SeekFile(int fd, long offset, int whence) {
           gFileData.resize(static_cast<size_t>(offset), 0);
         }
         gFilePos = offset;
-        LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_SET) = " << offset;
+        // LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_SET) = " << offset;
         return offset;
       }
 
@@ -93,7 +94,7 @@ static long SeekFile(int fd, long offset, int whence) {
           gFileData.resize(static_cast<size_t>(pos), 0);
         }
         gFilePos = pos;
-        LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_END) = " << pos;
+        // LOG(DEBUG) << "lseek(" << fd << ", " << offset << ", SEEK_END) = " << pos;
         return pos;
       }
     }
@@ -117,8 +118,8 @@ static long WriteFile(int fd, const void *data_, unsigned long size) {
     gFileData.resize(pos_after_write, 0);
   }
 
-  LOG(DEBUG) << "write(" << fd << ", " << data_ << ", "
-             << size << ") @ " << gFilePos;
+  // LOG(DEBUG) << "write(" << fd << ", " << data_ << ", "
+  //            << size << ") @ " << gFilePos;
 
   for (auto i = 0UL; i < size; ++i) {
     gFileData[gFilePos++] = data[i];
@@ -137,8 +138,8 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
   }
 
 
-  LOG(DEBUG) << "read(" << fd << ", " << data_ << ", "
-             << size << ") @ " << gFilePos;
+  // LOG(DEBUG) << "read(" << fd << ", " << data_ << ", "
+  //            << size << ") @ " << gFilePos;
 
   auto data = reinterpret_cast<uint8_t *>(data_);
 
@@ -169,7 +170,6 @@ static void CreateEmptyFileSystem(void) {
 
   LOG(INFO) << "Making block free map";
   testfs_make_block_freemap(sb);
-
 
   LOG(INFO) << "Making checksum table";
   testfs_make_csum_table(sb);
