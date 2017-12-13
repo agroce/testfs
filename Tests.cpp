@@ -43,10 +43,13 @@ TEST(TestFs, Initialize) {
   testfs_close_super_block(sb);
   
   ret = testfs_init_super_block(gFsPath, 0, &sb);
-  if (ret) {
-    EXIT("testfs_init_super_block");
-  }
-  testfs_make_root_dir(sb);
+  ASSERT(!ret)
+      << "Couldn't initialize super block";
+
+  ret = testfs_make_root_dir(sb);
+  ASSERT(!ret)
+      << "Couldn't create root directory.";
+
   testfs_close_super_block(sb);
 }
 
