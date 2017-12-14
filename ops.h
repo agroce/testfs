@@ -21,8 +21,8 @@ struct file_operations {
   int (*open)(const char *path, int, ...);
   int (*close)(int);
   long (*seek)(int, long, int);
-  long (*read)(int, void *, unsigned long);
-  long (*write)(int, const void *, unsigned long);
+  ssize_t (*read)(int, void *, size_t);
+  ssize_t (*write)(int, const void *, size_t);
 };
 
 extern struct file_operations FOPS;

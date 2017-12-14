@@ -104,7 +104,7 @@ static long SeekFile(int fd, long offset, int whence) {
   }
 }
 
-static long WriteFile(int fd, const void *data_, unsigned long size) {
+static ssize_t WriteFile(int fd, const void *data_, size_t size) {
   ASSERT(fd == kFd);
   ASSERT(nullptr != data_);
   if (!size) {
@@ -127,10 +127,10 @@ static long WriteFile(int fd, const void *data_, unsigned long size) {
 
   ASSERT(gFilePos == static_cast<long>(pos_after_write));
   errno = 0;
-  return static_cast<long>(size);
+  return static_cast<ssize_t>(size);
 }
 
-static long ReadFile(int fd, void *data_, unsigned long size) {
+static ssize_t ReadFile(int fd, void *data_, size_t size) {
   ASSERT(fd == kFd);
   ASSERT(nullptr != data_);
   if (!size) {
@@ -143,9 +143,9 @@ static long ReadFile(int fd, void *data_, unsigned long size) {
 
   auto data = reinterpret_cast<uint8_t *>(data_);
 
-  long num_read = 0;
-  while (gFilePos < static_cast<long>(gFileData.size()) &&
-         num_read < static_cast<long>(size)) {
+  ssize_t num_read = 0;
+  while (gFilePos < static_cast<ssize_t>(gFileData.size()) &&
+         num_read < static_cast<ssize_t>(size)) {
     data[num_read++] = gFileData[gFilePos++];
   }
 
