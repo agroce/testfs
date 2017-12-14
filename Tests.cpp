@@ -30,11 +30,11 @@ using namespace deepstate;
 #define LENGTH 3
 
 #define NUM_PATHS 2
-#define PATH_LEN 2
+#define PATH_LEN 3
 
 #define DATA_LEN 2
 
-#define NUM_FDS 2
+#define NUM_FDS 3
 
 static bool gIsOpen = false;
 static constexpr int kFd = 99;
@@ -74,7 +74,7 @@ static void MakeNewPath(char *path) {
   int i, max_i = Pump(l);
   for (i = 0; i < max_i; i++) {
     /* path[i] = PathChar(); */
-    path[i] = "abA/"[DeepState_IntInRange(0, 4)];
+    path[i] = OneOf("aAbB/.");
   }
   path[i] = 0;
 }
