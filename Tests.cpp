@@ -59,19 +59,18 @@ static void MakeNewData(char *data) {
   data[i] = 0;
 }
 
-static char PathChar() {
-  symbolic_char c;
-  ASSUME ((c == 'a') || (c == 'b') || (c == 'A') || (c == '/'));
-  return c;
-}
-
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
   ASSUME_GT(l, 0);
   ASSUME_LT(l, PATH_LEN+1);
   int i;
   for (i = 0; i < l; i++) {
-    path[i] = PathChar();
+    OneOf([&path, i] {path[i] = 'a';},
+	  [&path, i] {path[i] = 'A';},
+	  [&path, i] {path[i] = 'b';},
+	  [&path, i] {path[i] = 'B';},
+	  [&path, i] {path[i] = '/';},
+	  [&path, i] {path[i] = '.';});
   }
   path[i] = 0;
 }
@@ -287,13 +286,15 @@ TEST(TestFs, FilesDirs) {
 	    path = GetPath();
 	    ASSUME_EQ(unused[path], 0);
 	    MakeNewPath(paths[path]);
-	    printf("%d: paths[%d] = %s\n", n, path, paths[path]);
+	    printf("%d: paths[%d] = %s\n", 
+		   n, path, paths[path]);
 	    unused[path] = 1;
 	  },
 	  [n, &path, &paths, &unused] {
 	    path = GetPath();
 	    ASSUME_NE(strlen(paths[path]), 0);
-	    printf("%d: Mkdir(%s)\n", n, paths[path]);
+	    printf("%d: Mkdir(%s)\n",
+		   n, paths[path]);
 	    fs_mkdir(paths[path]);
 	    unused[path] = 0;
 	  },
@@ -302,15 +303,18 @@ TEST(TestFs, FilesDirs) {
 	    path = GetPath();
 	    ASSUME_EQ(fds[fd], -1);
 	    ASSUME_NE(strlen(paths[path]), 0);
-	    printf("%d: fds[%d] = open(%s)\n", n, fd, paths[path]);
-	    fds[fd] = fs_open(paths[path], O_CREAT | O_EXCL | O_TRUNC);
+	    printf("%d: fds[%d] = open(%s)\n", 
+		   n, fd, paths[path]);
+	    fds[fd] = fs_open(paths[path], 
+			      O_CREAT|O_TRUNC);
 	    unused[path] = 1;
 	  },
 	  [n, &fd, &fds, &data] {
 	    MakeNewData(data);
 	    fd = GetFD();
 	    ASSUME_NE(fds[fd], -1);
-	    printf("%d: write(fds[%d],\"%s\")\n", n, fd, data);
+	    printf("%d: write(fds[%d],\"%s\")\n", 
+		   n, fd, data);
 	    fs_write(fds[fd], data, strlen(data));
 	  },
 	  [n, &fd, &fds] {
