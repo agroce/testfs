@@ -30,11 +30,11 @@ using namespace deepstate;
 #define LENGTH 3
 
 #define NUM_PATHS 2
-#define PATH_LEN 2
+#define PATH_LEN 3
 
 #define DATA_LEN 2
 
-#define NUM_FDS 2
+#define NUM_FDS 3
 
 static bool gIsOpen = false;
 static constexpr int kFd = 99;
