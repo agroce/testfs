@@ -27,15 +27,37 @@ extern "C" {
 
 using namespace deepstate;
 
-#define LENGTH 2
-#define PLEN 2
-#define MAX_FDS 2
+#define LENGTH 3
+
+#define NUM_PATHS 2
+#define PATH_LEN 2
+
+#define DATA_LEN 2
+
+#define NUM_FDS 2
 
 static bool gIsOpen = false;
 static constexpr int kFd = 99;
 static char gFsPath[] = {'r', 'a', 'w', '.', 'f', 's', '\0'}; 
 static std::vector<uint8_t> gFileData;
 static long gFilePos = 0;
+
+static char DataChar() {
+  symbolic_char c;
+  ASSUME ((c == 'x') || (c == 'y'));
+  return c;
+}
+
+static void MakeNewData(char *data) {
+  symbolic_unsigned l;
+  ASSUME_GT(l, 0);
+  ASSUME_LT(l, DATA_LEN+1);
+  int i;
+  for (i = 0; i < l; i++) {
+    data[i] = DataChar();
+  }
+  data[i] = 0;
+}
 
 static char PathChar() {
   symbolic_char c;
@@ -46,16 +68,23 @@ static char PathChar() {
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
   ASSUME_GT(l, 0);
-  ASSUME_LT(l, PLEN+1);
-  for (int i = 0; i < l; i++) {
+  ASSUME_LT(l, PATH_LEN+1);
+  int i;
+  for (i = 0; i < l; i++) {
     path[i] = PathChar();
   }
-  path[PLEN+1] = 0;
+  path[i] = 0;
+}
+
+static int GetPath() {
+  symbolic_unsigned path;
+  ASSUME_LT(path, NUM_PATHS);
+  return path;
 }
 
 static int GetFD() {
   symbolic_unsigned fd;
-  ASSUME_LT(fd, MAX_FDS);
+  ASSUME_LT(fd, NUM_FDS);
   return fd;
 }
 
@@ -68,10 +97,22 @@ static int OpenFile(const char *path, int, ...) {
   return kFd;
 }
 
+static int fs_mkdir(const char *path) {
+  return 0;
+}
+
+static int fs_open(const char *path, int, ...) {
+  return 1;
+}
+
 static int CloseFile(int fd) {
   ASSERT(fd == kFd);
   gIsOpen = false;
   // LOG(DEBUG) << "close(" << fd << ")";
+  return 0;
+}
+
+static int fs_close(int fd) {
   return 0;
 }
 
@@ -126,6 +167,10 @@ static long SeekFile(int fd, long offset, int whence) {
       errno = EINVAL;
       return -1;
   }
+}
+
+static long fs_write(int fd, const void *data_, unsigned long size) {
+  return 0;
 }
 
 static long WriteFile(int fd, const void *data_, unsigned long size) {
@@ -227,32 +272,51 @@ TEST(TestFs, FilesDirs) {
       << "Couldn't initialize super block";
   */
 
-  char path[PLEN+1] = {};
-  int fds[MAX_FDS] = {};
-  int fd;
-  for (int i = 0; i < MAX_FDS; i++) {
+  char paths[NUM_PATHS][PATH_LEN+1] = {};
+  bool unused[NUM_PATHS] = {};
+  char data[DATA_LEN+1] = {};
+  int fds[NUM_FDS] = {};
+  int fd, path = -1;
+  for (int i = 0; i < NUM_FDS; i++) {
     fds[i] = -1;
   }
 
   for (int n = 0; n < LENGTH; n++) {
-    fd = GetFD();
     OneOf(
-	  [n, fd, &fds, &path] {
+	  [n, &path, &paths, &unused] {
+	    path = GetPath();
+	    ASSUME_EQ(unused[path], 0);
+	    MakeNewPath(paths[path]);
+	    printf("%d: paths[%d] = %s\n", n, path, paths[path]);
+	    unused[path] = 1;
+	  },
+	  [n, &path, &paths, &unused] {
+	    path = GetPath();
+	    ASSUME_NE(strlen(paths[path]), 0);
+	    printf("%d: Mkdir(%s)\n", n, paths[path]);
+	    fs_mkdir(paths[path]);
+	    unused[path] = 0;
+	  },
+	  [n, &fd, &fds, &path, &paths, &unused] {
+	    fd = GetFD();
+	    path = GetPath();
 	    ASSUME_EQ(fds[fd], -1);
-	    MakeNewPath(path);
-	    printf ("%d: fds[%d] = open(%s)\n", n, fd, path);
-	    //fds[fd] = OpenFile(path, O_CREAT | O_EXCL | O_TRUNC);
-	    fds[fd] = 0; // Fake opening for now to make sure idea works
+	    ASSUME_NE(strlen(paths[path]), 0);
+	    printf("%d: fds[%d] = open(%s)\n", n, fd, paths[path]);
+	    fds[fd] = fs_open(paths[path], O_CREAT | O_EXCL | O_TRUNC);
+	    unused[path] = 1;
 	  },
-	  [n, fd, &fds] {
+	  [n, &fd, &fds, &data] {
+	    MakeNewData(data);
+	    fd = GetFD();
 	    ASSUME_NE(fds[fd], -1);
-	    printf ("%d: write(fds[%d])\n", n, fd);
-	    //WriteFile(fds[fd], "a", 1);
+	    printf("%d: write(fds[%d],\"%s\")\n", n, fd, data);
+	    fs_write(fds[fd], data, strlen(data));
 	  },
-	  [n, fd, &fds] {
+	  [n, &fd, &fds] {
 	    ASSUME_NE(fds[fd], -1);
-	    printf ("%d: close(fds[%d])\n", n, fd);
-	    //CloseFile(fds[fd]);
+	    printf("%d: close(fds[%d])\n", n, fd);
+	    fs_close(fds[fd]);
 	    fds[fd] = -1;
 	  }
 	  );
