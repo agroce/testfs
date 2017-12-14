@@ -73,8 +73,7 @@ static void MakeNewPath(char *path) {
   ASSUME_LT(l, PATH_LEN+1);
   int i, max_i = Pump(l);
   for (i = 0; i < max_i; i++) {
-    /* path[i] = PathChar(); */
-    path[i] = "abA/"[DeepState_IntInRange(0, 4)];
+    path[i] = OneOf("aAbB/.");
   }
   path[i] = 0;
 }
@@ -290,14 +289,14 @@ TEST(TestFs, FilesDirs) {
         path = GetPath();
         ASSUME(!used[path]);
         MakeNewPath(paths[path]);
-        printf("%d: paths[%d] = %s\n", 
+        printf("%d: paths[%d] = %s", 
          n, path, paths[path]);
         used[path] = true;
       },
       [n, &path, &paths, &used] {
         path = GetPath();
         ASSUME_GT(strlen(paths[path]), 0);
-        printf("%d: Mkdir(%s)\n",
+        printf("%d: Mkdir(%s)",
          n, paths[path]);
         fs_mkdir(paths[path]);
         used[path] = 0;
@@ -307,7 +306,7 @@ TEST(TestFs, FilesDirs) {
         path = GetPath();
         ASSUME_EQ(fds[fd], -1);
         ASSUME_NE(strlen(paths[path]), 0);
-        printf("%d: fds[%d] = open(%s)\n", 
+        printf("%d: fds[%d] = open(%s)", 
          n, fd, paths[path]);
         fds[fd] = fs_open(paths[path], 
               O_CREAT|O_TRUNC);
@@ -317,13 +316,13 @@ TEST(TestFs, FilesDirs) {
         MakeNewData(data);
         fd = GetFD();
         ASSUME_NE(fds[fd], -1);
-        printf("%d: write(fds[%d],\"%s\")\n", 
+        printf("%d: write(fds[%d],\"%s\")", 
          n, fd, data);
         fs_write(fds[fd], data, strlen(data));
       },
       [n, &fd, &fds] {
         ASSUME_NE(fds[fd], -1);
-        printf("%d: close(fds[%d])\n", n, fd);
+        printf("%d: close(fds[%d])", n, fd);
         fs_close(fds[fd]);
         fds[fd] = -1;
       });

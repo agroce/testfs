@@ -45,7 +45,7 @@ add_executable(Tests32
   ${SOURCE_FILES})
 
 set_target_properties(Tests32
-  PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+  PROPERTIES COMPILE_FLAGS "-m32 -g3" LINK_FLAGS "-m32 -g3")
 
 target_link_libraries(Tests
   deepstate)
