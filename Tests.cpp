@@ -59,18 +59,25 @@ static void MakeNewData(char *data) {
   data[i] = 0;
 }
 
+/*
+static char PathChar() {
+  symbolic_char c;
+  ASSUME ((c == 'a') || (c == 'b') || (c == 'A') || (c == '/'));
+  return c;
+}
+*/
+
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
   ASSUME_GT(l, 0);
   ASSUME_LT(l, PATH_LEN+1);
   int i;
   for (i = 0; i < l; i++) {
+    /* path[i] = PathChar(); */
     OneOf([&path, i] {path[i] = 'a';},
-	  [&path, i] {path[i] = 'A';},
 	  [&path, i] {path[i] = 'b';},
-	  [&path, i] {path[i] = 'B';},
-	  [&path, i] {path[i] = '/';},
-	  [&path, i] {path[i] = '.';});
+	  [&path, i] {path[i] = 'A';},
+	  [&path, i] {path[i] = '/';});
   }
   path[i] = 0;
 }
