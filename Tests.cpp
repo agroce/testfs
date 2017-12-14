@@ -27,13 +27,37 @@ extern "C" {
 
 using namespace deepstate;
 
-#define LENGTH 4
+#define LENGTH 2
+#define PLEN 2
+#define MAX_FDS 2
 
 static bool gIsOpen = false;
 static constexpr int kFd = 99;
 static char gFsPath[] = {'r', 'a', 'w', '.', 'f', 's', '\0'}; 
 static std::vector<uint8_t> gFileData;
 static long gFilePos = 0;
+
+static char PathChar() {
+  symbolic_char c;
+  ASSUME ((c == 'a') || (c == 'b') || (c == 'A') || (c == '/'));
+  return c;
+}
+
+static void MakeNewPath(char *path) {
+  symbolic_unsigned l;
+  ASSUME_GT(l, 0);
+  ASSUME_LT(l, PLEN+1);
+  for (int i = 0; i < l; i++) {
+    path[i] = PathChar();
+  }
+  path[PLEN+1] = 0;
+}
+
+static int GetFD() {
+  symbolic_unsigned fd;
+  ASSUME_LT(fd, MAX_FDS);
+  return fd;
+}
 
 static int OpenFile(const char *path, int, ...) {
   ASSERT(!gIsOpen);
@@ -162,6 +186,7 @@ static void InitFileOperations(void) {
 }
 
 static void CreateEmptyFileSystem(void) {
+  return;
   LOG(INFO) << "Making super block";
   auto sb = testfs_make_super_block(gFsPath);
 
@@ -191,40 +216,49 @@ static void CreateEmptyFileSystem(void) {
       << "Created root directory; File system initialized";
 }
 
-TEST(TestFs, Initialize) {
+TEST(TestFs, FilesDirs) {
   InitFileOperations();
   CreateEmptyFileSystem();
 
+  /*
   struct super_block *sb = nullptr;
   int ret = testfs_init_super_block(gFsPath, 0, &sb);
   ASSERT(!ret && sb != nullptr)
       << "Couldn't initialize super block";
+  */
 
-  LOG(INFO)
-      << "Getting inode for root directory";
-  struct inode *root_dir_inode = testfs_get_inode(sb, 0); /* root dir */
+  char path[PLEN+1] = {};
+  int fds[MAX_FDS] = {};
+  int fd;
+  for (int i = 0; i < MAX_FDS; i++) {
+    fds[i] = -1;
+  }
 
-  struct context context = {};
+  for (int n = 0; n < LENGTH; n++) {
+    fd = GetFD();
+    OneOf(
+	  [n, fd, &fds, &path] {
+	    ASSUME_EQ(fds[fd], -1);
+	    MakeNewPath(path);
+	    printf ("%d: fds[%d] = open(%s)\n", n, fd, path);
+	    //fds[fd] = OpenFile(path, O_CREAT | O_EXCL | O_TRUNC);
+	    fds[fd] = 0; // Fake opening for now to make sure idea works
+	  },
+	  [n, fd, &fds] {
+	    ASSUME_NE(fds[fd], -1);
+	    printf ("%d: write(fds[%d])\n", n, fd);
+	    //WriteFile(fds[fd], "a", 1);
+	  },
+	  [n, fd, &fds] {
+	    ASSUME_NE(fds[fd], -1);
+	    printf ("%d: close(fds[%d])\n", n, fd);
+	    //CloseFile(fds[fd]);
+	    fds[fd] = -1;
+	  }
+	  );
+  }
 
-//  auto dir_name = DeepState_CStr(3);
-  char dir_name[] = {'h', 'i', '\0'};
-  LOG(INFO)
-      << "Creating directory /" << dir_name;
-  context.cur_dir = root_dir_inode;
-  context.cmd[1] = dir_name;
-  context.nargs = 2;
-  ASSERT(!cmd_mkdir(sb, &context))
-      << "Could not create directory /" << dir_name;
-
-  // This will do a `printf`.
-  context.cur_dir = root_dir_inode;
-  context.cmd[1] = dir_name;
-  context.nargs = 2;
-  ASSERT(!cmd_stat(sb, &context))
-      << "Could not state directory /" << dir_name;
-
-  testfs_put_inode(root_dir_inode);
-  testfs_close_super_block(sb);
+  //testfs_close_super_block(sb);
 }
 
 int main(int argc, char *argv[]) {
