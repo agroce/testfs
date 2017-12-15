@@ -290,34 +290,36 @@ TEST(TestFs, FilesDirs) {
         ASSUME(!used[path]);
         MakeNewPath(paths[path]);
         printf("%d: paths[%d] = %s", 
-         n, path, paths[path]);
+               n, path, paths[path]);
         used[path] = true;
       },
       [n, &path, &paths, &used] {
         path = GetPath();
+        ASSUME(used[path]);
         ASSUME_GT(strlen(paths[path]), 0);
         printf("%d: Mkdir(%s)",
-         n, paths[path]);
+               n, paths[path]);
         fs_mkdir(paths[path]);
-        used[path] = 0;
+        used[path] = false;
       },
       [n, &fd, &fds, &path, &paths, &used] {
         fd = GetFD();
         path = GetPath();
+        ASSUME(used[path]);
         ASSUME_EQ(fds[fd], -1);
-        ASSUME_NE(strlen(paths[path]), 0);
+        ASSUME_GT(strlen(paths[path]), 0);
         printf("%d: fds[%d] = open(%s)", 
-         n, fd, paths[path]);
+               n, fd, paths[path]);
         fds[fd] = fs_open(paths[path], 
-              O_CREAT|O_TRUNC);
-        used[path] = 1;
+                          O_CREAT|O_TRUNC);
+        used[path] = false;
       },
       [n, &fd, &fds, &data] {
         MakeNewData(data);
         fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("%d: write(fds[%d],\"%s\")", 
-         n, fd, data);
+               n, fd, data);
         fs_write(fds[fd], data, strlen(data));
       },
       [n, &fd, &fds] {
