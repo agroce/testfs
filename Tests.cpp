@@ -334,5 +334,6 @@ TEST(TestFs, FilesDirs) {
 }
 
 int main(int argc, char *argv[]) {
+  DeepState_InitOptions(argc, argv);
   return DeepState_Run();
 }
