@@ -7,17 +7,17 @@
 
 int tfs_mkdir(struct super_block *sb, const char *path) {
   struct context c;
-  char *cpath = malloc(strlen(path)*sizeof(char));
+  char *cpath = malloc((strlen(path)+1)*sizeof(char));
   char **components = malloc(strlen(path)*sizeof(char *));
   int lpos = 0;
   strcpy(cpath, path);
   char *dir = dirname(cpath);
-  components[lpos] = malloc(strlen(path)*sizeof(char));  
+  components[lpos] = malloc((strlen(path)+1)*sizeof(char));  
   strcpy(components[lpos], basename(cpath));
   printf("PATH %d: %s\n", lpos, components[lpos]);  
   lpos++;
   while (!(strcmp(dir,"/") == 0) && !(strcmp(dir,".") == 0)) {
-    components[lpos] = malloc(strlen(path)*sizeof(char));
+    components[lpos] = malloc((strlen(path)+1)*sizeof(char));
     strcpy(components[lpos], basename(cpath));
     printf("PATH %d: %s\n", lpos, components[lpos]);
     lpos++;    

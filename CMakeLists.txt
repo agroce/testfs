@@ -49,6 +49,9 @@ add_executable(Tests32
 set_target_properties(Tests32
   PROPERTIES COMPILE_FLAGS "-m32 -g3" LINK_FLAGS "-m32 -g3")
 
+set_target_properties(Tests
+  PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
+
 target_link_libraries(Tests
   deepstate)
 
