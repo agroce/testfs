@@ -41,14 +41,14 @@ set(SOURCE_FILES
 add_executable(Tests
   ${SOURCE_FILES})
 
-add_executable(Tests32
-  ${SOURCE_FILES})
+#add_executable(Tests32
+#  ${SOURCE_FILES})
 
-set_target_properties(Tests32
-  PROPERTIES COMPILE_FLAGS "-m32 -g3" LINK_FLAGS "-m32 -g3")
+#set_target_properties(Tests32
+#  PROPERTIES COMPILE_FLAGS "-m32 -g3" LINK_FLAGS "-m32 -g3")
 
 target_link_libraries(Tests
   deepstate)
 
-target_link_libraries(Tests32
-  deepstate32)
+#target_link_libraries(Tests32
+#  deepstate32)
