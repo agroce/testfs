@@ -28,6 +28,8 @@ endif ()
 
 set(SOURCE_FILES
   Tests.cpp
+  RamInterface.cpp
+  posixtfs.c
   bitmap.c
   block.c
   csum.c
