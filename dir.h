@@ -1,14 +1,14 @@
 #ifndef _DIR_H
 #define _DIR_H
 
-struct dirent {
+struct tfs_dirent {
         int d_name_len;
         int d_inode_nr;
 };
 
-#define D_NAME(d) ((char*)(d) + sizeof(struct dirent))
+#define D_NAME(d) ((char*)(d) + sizeof(struct tfs_dirent))
 
-struct dirent *testfs_next_dirent(struct inode *dir, int *offset);
+struct tfs_dirent *testfs_next_dirent(struct inode *dir, int *offset);
 int testfs_dir_name_to_inode_nr(struct inode *dir, char *name);
 int testfs_make_root_dir(struct super_block *sb);
 

@@ -233,7 +233,6 @@ static void InitFileOperations(void) {
 }
 
 static void CreateEmptyFileSystem(void) {
-  return;
   LOG(INFO) << "Making super block";
   auto sb = testfs_make_super_block(gFsPath);
 

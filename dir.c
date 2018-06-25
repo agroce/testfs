@@ -7,25 +7,25 @@
 
 /* reads next dirent, updates offset to next dirent in directory */
 /* allocates memory, caller should free */
-struct dirent *
+struct tfs_dirent *
 testfs_next_dirent(struct inode *dir, int *offset)
 {
         int ret;
-        struct dirent d, *dp;
+        struct tfs_dirent d, *dp;
 
         assert(dir);
         assert(testfs_inode_get_type(dir) == I_DIR);
         if (*offset >= testfs_inode_get_size(dir))
                 return NULL;
-        ret = testfs_read_data(dir, *offset, (char *)&d, sizeof(struct dirent));
+        ret = testfs_read_data(dir, *offset, (char *)&d, sizeof(struct tfs_dirent));
         if (ret < 0)
                 return NULL;
         assert(d.d_name_len > 0);
-        dp = calloc(sizeof(struct dirent), d.d_name_len);
+        dp = calloc(sizeof(struct tfs_dirent), d.d_name_len);
         if (!dp)
                 return NULL;
         *dp = d;
-        *offset += sizeof(struct dirent);
+        *offset += sizeof(struct tfs_dirent);
         ret = testfs_read_data(dir, *offset, D_NAME(dp), d.d_name_len);
         if (ret < 0) {
                 free(dp);
@@ -38,10 +38,10 @@ testfs_next_dirent(struct inode *dir, int *offset)
 /* returns dirent associated with inode_nr in dir.
  * returns NULL on error.
  * allocates memory, caller should free. */
-static struct dirent *
+static struct tfs_dirent *
 testfs_find_dirent(struct inode *dir, int inode_nr)
 {
-        struct dirent *d;
+        struct tfs_dirent *d;
         int offset = 0;
 
         assert(dir);
@@ -61,7 +61,7 @@ testfs_write_dirent(struct inode *dir, char *name, int len, int inode_nr,
                     int offset)
 {
         int ret;
-        struct dirent *d = malloc(sizeof(struct dirent) + len);
+        struct tfs_dirent *d = malloc(sizeof(struct tfs_dirent) + len);
         
         if (!d)
                 return -ENOMEM;
@@ -70,7 +70,7 @@ testfs_write_dirent(struct inode *dir, char *name, int len, int inode_nr,
         d->d_inode_nr = inode_nr;
         strcpy(D_NAME(d), name);
         ret = testfs_write_data(dir, offset, (char *)d, 
-                                sizeof(struct dirent) + len);
+                                sizeof(struct tfs_dirent) + len);
         free(d);
         return ret;
 }
@@ -80,7 +80,7 @@ testfs_write_dirent(struct inode *dir, char *name, int len, int inode_nr,
 static int
 testfs_add_dirent(struct inode *dir, char *name, int inode_nr)
 {
-        struct dirent *d;
+        struct tfs_dirent *d;
         int p_offset = 0, offset = 0;
         int found = 0;
         int ret = 0;
@@ -114,7 +114,7 @@ testfs_remove_dirent_allowed(struct super_block *sb, int inode_nr)
 {
         struct inode *dir;
         int offset = 0;
-        struct dirent *d;
+        struct tfs_dirent *d;
         int ret = 0;
 
         dir = testfs_get_inode(sb, inode_nr);
@@ -136,7 +136,7 @@ out:
 static int
 testfs_remove_dirent(struct super_block *sb, struct inode *dir, char *name)
 {
-        struct dirent *d;
+        struct tfs_dirent *d;
         int p_offset, offset = 0;
         int inode_nr = -1;
         int ret = -ENOENT;
@@ -159,7 +159,7 @@ testfs_remove_dirent(struct super_block *sb, struct inode *dir, char *name)
                         continue; /* this will break out of the loop */
                 d->d_inode_nr = -1;
                 ret = testfs_write_data(dir, p_offset, (char *)d, 
-                                        sizeof(struct dirent) + d->d_name_len);
+                                        sizeof(struct tfs_dirent) + d->d_name_len);
                 if (ret >= 0)
                         ret = inode_nr;
         }
@@ -232,7 +232,7 @@ testfs_pwd(struct super_block *sb, struct inode *in)
 {
         int p_inode_nr;
         struct inode *p_in;
-        struct dirent *d;
+        struct tfs_dirent *d;
         int ret;
 
         assert(in);
@@ -257,7 +257,7 @@ testfs_pwd(struct super_block *sb, struct inode *in)
 int
 testfs_dir_name_to_inode_nr(struct inode *dir, char *name)
 {
-        struct dirent *d;
+        struct tfs_dirent *d;
         int offset = 0;
         int ret = -ENOENT;
 
@@ -316,7 +316,7 @@ static int
 testfs_ls(struct inode *in, int recursive)
 {
         int offset = 0;
-        struct dirent *d;
+        struct tfs_dirent *d;
 
         for (; (d = testfs_next_dirent(in, &offset)); free(d)) {
                 struct inode *cin;

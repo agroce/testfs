@@ -261,7 +261,7 @@ testfs_checkfs(struct super_block *sb, struct bitmap *i_freemap,
         bitmap_mark(i_freemap, inode_nr);
         if (testfs_inode_get_type(in) == I_DIR) {
                 int offset = 0;
-                struct dirent *d;
+                struct tfs_dirent *d;
                 for (; (d = testfs_next_dirent(in, &offset)); free(d)) {
                         if ((d->d_inode_nr < 0) || 
                             (strcmp(D_NAME(d), ".") == 0) || 
