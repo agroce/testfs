@@ -57,3 +57,5 @@ target_link_libraries(Tests
 
 target_link_libraries(Tests32
   deepstate32)
+
+target_link_libraries(Tests -static "-Wl,--allow-multiple-definition")
