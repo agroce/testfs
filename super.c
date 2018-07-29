@@ -62,7 +62,7 @@ testfs_make_inode_blocks(struct super_block *sb)
 
 /* returns negative value on error */
 int
-testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
+testfs_init_super_block(const char* storage, int corrupt, struct super_block **sbp)
 {
         struct super_block *sb = NULL;
         char block[BLOCK_SIZE];
@@ -75,9 +75,7 @@ testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
                 return -ENOMEM;
         }
 
-        if ((sb->dev_fd = open(file, O_RDWR)) == -1) {
-            return -errno;
-        }	
+        memcpy(sb->storage, storage, MAX_STORAGE);
 
         read_blocks(sb, block, 0, 1);
         memcpy(&sb->sb, block, sizeof(struct dsuper_block));
@@ -118,10 +116,11 @@ testfs_write_super_block(struct super_block *sb)
 }
 
 void
-testfs_close_super_block(struct super_block *sb)
+testfs_close_super_block(struct super_block *sb, char* storage)
 {
         testfs_tx_start(sb, TX_UMOUNT);
         testfs_write_super_block(sb);
+	memcpy(sb->storage, storage, MAX_STORAGE);
         inode_hash_destroy(sb->inode_hash_table);
         sb->inode_hash_table = NULL;
         if (sb->inode_freemap) {
@@ -137,7 +136,6 @@ testfs_close_super_block(struct super_block *sb)
                 sb->block_freemap = NULL;
         }
         testfs_tx_commit(sb, TX_UMOUNT);
-        sb->dev_fd = -1;
         free(sb->csum_table);
         free(sb);
 }
