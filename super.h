@@ -37,10 +37,10 @@ void testfs_make_block_freemap(struct super_block *sb);
 void testfs_make_csum_table(struct super_block *sb);
 void testfs_make_inode_blocks(struct super_block *sb);
 
-int testfs_init_super_block(const char *file, int corrupt, 
+int testfs_init_super_block(const char *storage, int corrupt, 
     struct super_block **sbp);
 void testfs_write_super_block(struct super_block *sb);
-void testfs_close_super_block(struct super_block *sb);
+void testfs_close_super_block(struct super_block *sb, char *storage);
 
 int testfs_get_inode_freemap(struct super_block *sb);
 void testfs_put_inode_freemap(struct super_block *sb, int inode_nr);
