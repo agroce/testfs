@@ -2,9 +2,10 @@
 #define _SUPER_H
 
 #include <stdio.h>
+#include "testfs.h"
 #include "tx.h"
 
-#define MAX_STORAGE 65536
+#define MAX_STORAGE BLOCK_SIZE*1024
 
 struct hlist_head;
 
