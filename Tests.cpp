@@ -76,6 +76,18 @@ TEST(TestFs, FilesDirs) {
   ASSERT(sb != nullptr)
       << "Couldn't initialize super block";
 
+  LOG(INFO) << "Making inode free map";
+  testfs_make_inode_freemap(sb);
+
+  LOG(INFO) << "Making block free map";
+  testfs_make_block_freemap(sb);
+
+  LOG(INFO) << "Making checksum table";
+  testfs_make_csum_table(sb);
+
+  LOG(INFO) << "Making inode blocks";
+  testfs_make_inode_blocks(sb);
+  
   tfs_checkfs(sb);  
   //tfs_mkdir(sb, "foo");
   //tfs_checkfs(sb);
