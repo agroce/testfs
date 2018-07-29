@@ -28,7 +28,6 @@ endif ()
 
 set(SOURCE_FILES
   Tests.cpp
-  RamInterface.cpp
   posixtfs.c
   bitmap.c
   block.c
@@ -36,18 +35,11 @@ set(SOURCE_FILES
   dir.c
   file.c
   inode.c
-  ops.c
   super.c
   tx.c)
 
 add_executable(Tests
   ${SOURCE_FILES})
-
-add_executable(Tests32
-  ${SOURCE_FILES})
-
-set_target_properties(Tests32
-  PROPERTIES COMPILE_FLAGS "-m32 -g3" LINK_FLAGS "-m32 -g3")
 
 set_target_properties(Tests
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
@@ -55,9 +47,4 @@ set_target_properties(Tests
 target_link_libraries(Tests
   deepstate)
 
-target_link_libraries(Tests32
-  deepstate32)
-
 target_link_libraries(Tests -static "-Wl,--allow-multiple-definition")
-
-target_link_libraries(Tests32 -static "-Wl,--allow-multiple-definition")

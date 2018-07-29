@@ -20,8 +20,6 @@
 
 using namespace deepstate;
 
-#include "RamInterface.h"
-
 extern "C" {
 #include "super.h"
 #include "posixtfs.h"
@@ -50,14 +48,6 @@ static void MakeNewData(char *data) {
   data[i] = 0;
 }
 
-/*
-static char PathChar() {
-  symbolic_char c;
-  ASSUME ((c == 'a') || (c == 'b') || (c == 'A') || (c == '/'));
-  return c;
-}
-*/
-
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
   ASSUME_GT(l, 0);
@@ -82,12 +72,8 @@ static int GetFD() {
 }
 
 TEST(TestFs, FilesDirs) {
-  InitFileOperations();
-  CreateEmptyFileSystem();
-
-  struct super_block *sb = nullptr;
-  int ret = testfs_init_super_block(gFsPath, 0, &sb);
-  ASSERT(!ret && sb != nullptr)
+  struct super_block *sb = testfs_make_super_block();
+  ASSERT(sb != nullptr)
       << "Couldn't initialize super block";
 
   tfs_checkfs(sb);  

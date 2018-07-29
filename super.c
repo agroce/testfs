@@ -11,15 +11,12 @@
 #include <fcntl.h>
 
 struct super_block *
-testfs_make_super_block(char *file)
+testfs_make_super_block()
 {
         struct super_block *sb = calloc(1, sizeof(struct super_block));
 
         if (!sb) {
                 EXIT("malloc");
-        }
-        if ((sb->dev_fd = FOPS.open(file, O_WRONLY|O_TRUNC|O_CREAT, 0666)) == -1) {
-                EXIT(file);
         }
         sb->sb.inode_freemap_start = SUPER_BLOCK_SIZE;
         sb->sb.block_freemap_start = sb->sb.inode_freemap_start + 
@@ -78,7 +75,7 @@ testfs_init_super_block(const char *file, int corrupt, struct super_block **sbp)
                 return -ENOMEM;
         }
 
-        if ((sb->dev_fd = FOPS.open(file, O_RDWR)) == -1) {
+        if ((sb->dev_fd = open(file, O_RDWR)) == -1) {
             return -errno;
         }	
 
@@ -140,7 +137,6 @@ testfs_close_super_block(struct super_block *sb)
                 sb->block_freemap = NULL;
         }
         testfs_tx_commit(sb, TX_UMOUNT);
-        FOPS.close(sb->dev_fd);
         sb->dev_fd = -1;
         free(sb->csum_table);
         free(sb);

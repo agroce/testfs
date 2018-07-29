@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "tx.h"
 
+#define MAX_STORAGE 65536
+
 struct hlist_head;
 
 struct dsuper_block {
@@ -25,9 +27,11 @@ struct super_block {
         // TODO: add your code here
         int *csum_table;
         struct hlist_head *inode_hash_table;
+
+        char storage[MAX_STORAGE];
 };
 
-struct super_block *testfs_make_super_block(char *file);
+struct super_block *testfs_make_super_block();
 void testfs_make_inode_freemap(struct super_block *sb);
 void testfs_make_block_freemap(struct super_block *sb);
 void testfs_make_csum_table(struct super_block *sb);
