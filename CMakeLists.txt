@@ -59,6 +59,7 @@ target_link_libraries(Tests
 target_link_libraries(TestsLF
   deepstate_LF)
 
-target_link_libraries(Tests -static "-Wl,--allow-multiple-definition")
+target_link_libraries(Tests -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
-target_link_libraries(TestsLF -static "-Wl,--allow-multiple-definition")
+target_link_libraries(TestsLF -static
+"-Wl,--allow-multiple-definition,--no-export-dynamic,-fsanitize=fuzzer")
