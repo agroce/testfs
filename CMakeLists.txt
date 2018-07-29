@@ -15,6 +15,9 @@
 project(testfs)
 cmake_minimum_required(VERSION 2.8)
 
+SET(CMAKE_C_COMPILER clang-6.0)
+SET(CMAKE_CXX_COMPILER clang++-6.0)
+
 enable_language(C)
 enable_language(CXX)
 
@@ -41,10 +44,19 @@ set(SOURCE_FILES
 add_executable(Tests
   ${SOURCE_FILES})
 
-set_target_properties(Tests
+add_executable(TestsLF
+  ${SOURCE_FILES})
+
+set_target_properties(Tests 
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
 
-target_link_libraries(Tests
+set_target_properties(TestsLF
+  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer -DLIBFUZZER" LINK_FLAGS "-g")
+
+target_link_libraries(Tests 
   deepstate)
+
+target_link_libraries(TestsLF
+  deepstate_LF)
 
 target_link_libraries(Tests -static "-Wl,--allow-multiple-definition")
