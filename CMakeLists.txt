@@ -61,4 +61,4 @@ target_link_libraries(TestsLF
 
 target_link_libraries(Tests -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
-target_link_libraries(TestsLF -static "-Wl,--allow-multiple-definition,--no-export-dynamic,-fsanitize=fuzzer,-shared")
+target_link_libraries(TestsLF "-fsanitize=fuzzer")
