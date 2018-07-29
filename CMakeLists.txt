@@ -15,8 +15,8 @@
 project(testfs)
 cmake_minimum_required(VERSION 2.8)
 
-SET(CMAKE_C_COMPILER clang-6.0)
-SET(CMAKE_CXX_COMPILER clang++-6.0)
+SET(CMAKE_C_COMPILER /usr/bin/clang-6.0)
+SET(CMAKE_CXX_COMPILER /usr/bin/clang++-6.0)
 
 enable_language(C)
 enable_language(CXX)
