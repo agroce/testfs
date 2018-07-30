@@ -18,6 +18,7 @@ testfs_make_super_block(char *storage)
         if (!sb) {
                 EXIT("malloc");
         }
+	sb->storage = storage;	
         sb->sb.inode_freemap_start = SUPER_BLOCK_SIZE;
         sb->sb.block_freemap_start = sb->sb.inode_freemap_start + 
                 INODE_FREEMAP_SIZE;
@@ -29,7 +30,6 @@ testfs_make_super_block(char *storage)
         sb->sb.modification_time = 0;
         testfs_write_super_block(sb);
         sb->inode_hash_table = inode_hash_init();
-	sb->storage = storage;
         return sb;
 }
 
