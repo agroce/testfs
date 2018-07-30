@@ -151,6 +151,7 @@ TEST(TestFs, FilesDirs) {
         tfs_write(sb, fds[fd], data, strlen(data));
       },
       [n, sb, &fd, &fds] {
+	fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("%d: close(fds[%d])", n, fd);
         tfs_close(sb, fds[fd]);
