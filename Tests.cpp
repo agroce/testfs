@@ -100,7 +100,7 @@ TEST(TestFs, FilesDirs) {
   ASSERT(!testfs_make_root_dir(sb))
       << "Couldn't create root directory.";
 
-  tfs_mkdir(sb, "foo");
+  //tfs_mkdir(sb, "foo");
 
   testfs_close_super_block(sb);
   free(storage);
