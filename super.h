@@ -28,7 +28,7 @@ struct super_block {
         int *csum_table;
         struct hlist_head *inode_hash_table;
 
-        char storage[MAX_STORAGE];
+        char *storage;
 };
 
 struct super_block *testfs_make_super_block(char* storage);
