@@ -96,8 +96,8 @@ TEST(TestFs, FilesDirs) {
 
   testfs_init_super_block(storage, 0, &sb);
   
-  tfs_checkfs(sb);  
-  //tfs_mkdir(sb, "foo");
+  //tfs_checkfs(sb);  
+  tfs_mkdir(sb, "foo");
   //tfs_checkfs(sb);
   //tfs_mkdir(sb, "foo/bar");
   //tfs_checkfs(sb);
