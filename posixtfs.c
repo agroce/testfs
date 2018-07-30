@@ -14,23 +14,23 @@ int tfs_mkdir(struct super_block *sb, const char *path) {
   char *dir = dirname(cpath);
   components[lpos] = malloc((strlen(path)+1)*sizeof(char));  
   strcpy(components[lpos], basename(cpath));
-  printf("PATH %d: %s\n", lpos, components[lpos]);  
+  //printf("PATH %d: %s\n", lpos, components[lpos]);  
   lpos++;
   while (!(strcmp(dir,"/") == 0) && !(strcmp(dir,".") == 0)) {
     components[lpos] = malloc((strlen(path)+1)*sizeof(char));
     strcpy(components[lpos], basename(cpath));
-    printf("PATH %d: %s\n", lpos, components[lpos]);
+    //printf("PATH %d: %s\n", lpos, components[lpos]);
     lpos++;    
     cpath = dirname(cpath);
     dir = basename(cpath);
   }
   c.cur_dir = testfs_get_inode(sb, 0);
   for (int pos = lpos-1; pos > 1; pos--) {
-    printf("%d: %s\n", lpos, components[pos]);
+    //printf("%d: %s\n", lpos, components[pos]);
     c.cur_dir = testfs_get_inode(sb, testfs_dir_name_to_inode_nr(c.cur_dir, components[pos]));
   }
   c.cmd[1] = components[0];
-  printf("NAME: %s\n", c.cmd[1]);
+  //printf("NAME: %s\n", c.cmd[1]);
   c.nargs = 2;
   return cmd_mkdir(sb, &c);  
   return 0;

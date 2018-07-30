@@ -157,6 +157,9 @@ TEST(TestFs, FilesDirs) {
         tfs_close(sb, fds[fd]);
         fds[fd] = -1;
       });
+    
+    LOG(INFO) << "Checking the file system...";
+    
     tfs_checkfs(sb);
   }
 
