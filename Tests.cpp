@@ -95,8 +95,11 @@ TEST(TestFs, FilesDirs) {
   testfs_close_super_block(sb);  
 
   testfs_init_super_block(storage, 0, &sb);
+
+  ASSERT(!testfs_make_root_dir(sb))
+      << "Couldn't create root directory.";
   
-  //tfs_checkfs(sb);  
+  tfs_checkfs(sb);  
   tfs_mkdir(sb, "foo");
   //tfs_checkfs(sb);
   //tfs_mkdir(sb, "foo/bar");
