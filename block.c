@@ -6,7 +6,7 @@ static char zero[BLOCK_SIZE] = {0};
 void
 write_blocks(struct super_block *sb, char *blocks, int start, int nr)
 {
-  memcpy(sb->storage + start * BLOCK_SIZE * sizeof(char), blocks, nr * BLOCK_SIZE);
+  memcpy(sb->storage + (start * BLOCK_SIZE), blocks, nr * BLOCK_SIZE);
 }
 
 void
@@ -22,6 +22,6 @@ zero_blocks(struct super_block *sb, int start, int nr)
 void
 read_blocks(struct super_block *sb, char *blocks, int start, int nr)
 {
-  memcpy(blocks, sb->storage + start * BLOCK_SIZE * sizeof(char), nr * BLOCK_SIZE);
+  memcpy(blocks, sb->storage + (start * BLOCK_SIZE), nr * BLOCK_SIZE);
 }
 
