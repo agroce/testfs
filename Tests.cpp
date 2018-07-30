@@ -60,12 +60,6 @@ static void MakeNewPath(char *path) {
   path[i] = 0;
 }
 
-static int GetPath() {
-  symbolic_unsigned path;
-  ASSUME_LT(path, NUM_PATHS);
-  return path;
-}
-
 static int GetFD() {
   symbolic_unsigned fd;
   ASSUME_LT(fd, NUM_FDS);
@@ -100,43 +94,31 @@ TEST(TestFs, FilesDirs) {
   ASSERT(!testfs_make_root_dir(sb))
       << "Couldn't create root directory.";
 
+  LOG(INFO) << "Checking the initial file system...";  
   tfs_checkfs(sb);
 
-  char paths[NUM_PATHS][PATH_LEN+1] = {};
-  bool used[NUM_PATHS] = {};
+  char path[PATH_LEN+1];
   char data[DATA_LEN+1] = {};
   int fds[NUM_FDS] = {};
-  int fd, path = -1;
+  int fd;
   for (int i = 0; i < NUM_FDS; i++) {
     fds[i] = -1;
   }
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-	[n, sb, &path, &paths, &used] {
-        path = GetPath();
-        ASSUME(!used[path]);
-        MakeNewPath(paths[path]);
-        printf("%d: paths[%d] = %s", 
-               n, path, paths[path]);
-        used[path] = true;
-      },
       [n, sb, &path, &paths, &used] {
-        path = GetPath();
-        ASSUME(used[path]);
-        ASSUME_GT(strlen(paths[path]), 0);
-        printf("%d: Mkdir(%s)",
+        MakeNewPath(path);
+        printf("STEP %d: tfs_mkdir(sb, %s)",
                n, paths[path]);
         tfs_mkdir(sb, paths[path]);
         used[path] = false;
       },
       [n, sb, &fd, &fds, &path, &paths, &used] {
         fd = GetFD();
-        path = GetPath();
-        ASSUME(used[path]);
+	MakeNewPath(path);
         ASSUME_EQ(fds[fd], -1);
-        ASSUME_GT(strlen(paths[path]), 0);
-        printf("%d: fds[%d] = open(%s)", 
+        printf("STEP %d: fds[%d] = open(%s)", 
                n, fd, paths[path]);
         fds[fd] = tfs_open(sb, paths[path], 
                           O_CREAT|O_TRUNC);
@@ -146,20 +128,19 @@ TEST(TestFs, FilesDirs) {
         MakeNewData(data);
         fd = GetFD();
         ASSUME_NE(fds[fd], -1);
-        printf("%d: write(fds[%d],\"%s\")", 
+        printf("STEP %d: write(fds[%d],\"%s\")", 
                n, fd, data);
         tfs_write(sb, fds[fd], data, strlen(data));
       },
       [n, sb, &fd, &fds] {
 	fd = GetFD();
         ASSUME_NE(fds[fd], -1);
-        printf("%d: close(fds[%d])", n, fd);
+        printf("STEP %d: close(fds[%d])", n, fd);
         tfs_close(sb, fds[fd]);
         fds[fd] = -1;
       });
     
     LOG(INFO) << "Checking the file system...";
-    
     tfs_checkfs(sb);
   }
 
