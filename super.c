@@ -76,7 +76,7 @@ testfs_init_super_block(const char* storage, int corrupt, struct super_block **s
                 return -ENOMEM;
         }
 
-        memcpy(sb->storage, storage, MAX_STORAGE);
+	sb->storage = storage;
 
         read_blocks(sb, block, 0, 1);
         memcpy(&sb->sb, block, sizeof(struct dsuper_block));
