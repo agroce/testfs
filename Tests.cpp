@@ -74,9 +74,9 @@ static int GetFD() {
 TEST(TestFs, FilesDirs) {
   char storage[MAX_STORAGE];
 
-  memset(&storage, 0, MAX_STORAGE);
+  memset(storage, 0, MAX_STORAGE);
   
-  struct super_block *sb = testfs_make_super_block();
+  struct super_block *sb = testfs_make_super_block(storage);
   ASSERT(sb != nullptr)
       << "Couldn't initialize super block";
 

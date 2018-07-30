@@ -31,7 +31,7 @@ struct super_block {
         char storage[MAX_STORAGE];
 };
 
-struct super_block *testfs_make_super_block();
+struct super_block *testfs_make_super_block(char* storage);
 void testfs_make_inode_freemap(struct super_block *sb);
 void testfs_make_block_freemap(struct super_block *sb);
 void testfs_make_csum_table(struct super_block *sb);

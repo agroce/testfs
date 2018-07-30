@@ -11,7 +11,7 @@
 #include <fcntl.h>
 
 struct super_block *
-testfs_make_super_block()
+testfs_make_super_block(char *storage)
 {
         struct super_block *sb = calloc(1, sizeof(struct super_block));
 
@@ -29,6 +29,7 @@ testfs_make_super_block()
         sb->sb.modification_time = 0;
         testfs_write_super_block(sb);
         sb->inode_hash_table = inode_hash_init();
+	sb->storage = storage;
         return sb;
 }
 
