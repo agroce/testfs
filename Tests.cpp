@@ -100,12 +100,8 @@ TEST(TestFs, FilesDirs) {
   ASSERT(!testfs_make_root_dir(sb))
       << "Couldn't create root directory.";
 
-  //tfs_mkdir(sb, "foo");
+  tfs_checkfs(sb);
 
-  testfs_close_super_block(sb);
-  free(storage);
-  return;
-  
   char paths[NUM_PATHS][PATH_LEN+1] = {};
   bool used[NUM_PATHS] = {};
   char data[DATA_LEN+1] = {};
@@ -160,6 +156,7 @@ TEST(TestFs, FilesDirs) {
         tfs_close(sb, fds[fd]);
         fds[fd] = -1;
       });
+    tfs_checkfs(sb);
   }
 
   testfs_close_super_block(sb);
