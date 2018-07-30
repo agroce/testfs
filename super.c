@@ -117,11 +117,10 @@ testfs_write_super_block(struct super_block *sb)
 }
 
 void
-testfs_close_super_block(struct super_block *sb, char* storage)
+testfs_close_super_block(struct super_block *sb)
 {
         testfs_tx_start(sb, TX_UMOUNT);
         testfs_write_super_block(sb);
-	memcpy(sb->storage, storage, MAX_STORAGE);
         inode_hash_destroy(sb->inode_hash_table);
         sb->inode_hash_table = NULL;
         if (sb->inode_freemap) {

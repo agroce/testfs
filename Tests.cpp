@@ -92,7 +92,7 @@ TEST(TestFs, FilesDirs) {
   LOG(INFO) << "Making inode blocks";
   testfs_make_inode_blocks(sb);
 
-  testfs_close_super_block(sb, storage);  
+  testfs_close_super_block(sb);  
 
   testfs_init_super_block(storage, 0, &sb);
   
