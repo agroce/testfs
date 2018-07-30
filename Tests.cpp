@@ -112,7 +112,6 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: tfs_mkdir(sb, %s)",
                n, path);
         tfs_mkdir(sb, path);
-        used[path] = false;
       },
       [n, sb, &fd, &fds, &path] {
         fd = GetFD();
@@ -121,7 +120,6 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: fds[%d] = open(%s)", 
                n, fd, path);
         fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
-        used[path] = false;
       },
       [n, sb, &fd, &fds, &data] {
         MakeNewData(data);
