@@ -23,6 +23,7 @@ using namespace deepstate;
 extern "C" {
 #include "super.h"
 #include "posixtfs.h"
+#include "dir.h"
 }
 
 #define LENGTH 3
