@@ -100,14 +100,6 @@ TEST(TestFs, FilesDirs) {
   ASSERT(!testfs_make_root_dir(sb))
       << "Couldn't create root directory.";
   
-  tfs_checkfs(sb);  
-  tfs_mkdir(sb, "foo");
-  //tfs_checkfs(sb);
-  //tfs_mkdir(sb, "foo/bar");
-  //tfs_checkfs(sb);
-  free(storage);
-  return;
-  
   char paths[NUM_PATHS][PATH_LEN+1] = {};
   bool used[NUM_PATHS] = {};
   char data[DATA_LEN+1] = {};
@@ -164,7 +156,9 @@ TEST(TestFs, FilesDirs) {
       });
   }
 
-  //testfs_close_super_block(sb);
+  testfs_close_super_block(sb);
+  
+  free(storage);
 }
 
 #ifndef LIBFUZZER
