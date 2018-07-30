@@ -72,7 +72,7 @@ static int GetFD() {
 }
 
 TEST(TestFs, FilesDirs) {
-  char storage[MAX_STORAGE];
+  char* storage = (char*) malloc(MAX_STORAGE);
 
   memset(storage, 0, MAX_STORAGE);
   
@@ -101,6 +101,7 @@ TEST(TestFs, FilesDirs) {
   //tfs_checkfs(sb);
   //tfs_mkdir(sb, "foo/bar");
   //tfs_checkfs(sb);
+  free(storage);
   return;
   
   char paths[NUM_PATHS][PATH_LEN+1] = {};
