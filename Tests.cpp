@@ -107,21 +107,20 @@ TEST(TestFs, FilesDirs) {
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-      [n, sb, &path, &paths, &used] {
+      [n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_mkdir(sb, %s)",
-               n, paths[path]);
-        tfs_mkdir(sb, paths[path]);
+               n, path);
+        tfs_mkdir(sb, path);
         used[path] = false;
       },
-      [n, sb, &fd, &fds, &path, &paths, &used] {
+      [n, sb, &fd, &fds, &path] {
         fd = GetFD();
 	MakeNewPath(path);
         ASSUME_EQ(fds[fd], -1);
         printf("STEP %d: fds[%d] = open(%s)", 
-               n, fd, paths[path]);
-        fds[fd] = tfs_open(sb, paths[path], 
-                          O_CREAT|O_TRUNC);
+               n, fd, path);
+        fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
         used[path] = false;
       },
       [n, sb, &fd, &fds, &data] {
