@@ -24,6 +24,7 @@ extern "C" {
 #include "super.h"
 #include "posixtfs.h"
 #include "dir.h"
+#include "inode.h"
 }
 
 #define LENGTH 1
@@ -125,11 +126,11 @@ TEST(TestFs, FilesDirs) {
         tfs_mkdir(sb, path);
       },
       [n, sb] {
-        printf("STEP %d: tfs_ls(sb);");
+        printf("STEP %d: tfs_ls(sb);", n);
         tfs_ls(sb);
       },
       [n, sb] {
-        printf("STEP %d: tfs_lsr(sb);");
+        printf("STEP %d: tfs_lsr(sb);", n);
         tfs_lsr(sb);
       },            
       [n, sb, &fd, &fds, &path] {
