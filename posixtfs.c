@@ -58,12 +58,12 @@ int tfs_ls(struct super_block * sb) {
   struct context c;
   c.nargs = 1;
   c.cur_dir = testfs_get_inode(sb, 0);  
-  return cmd_ls(sb, c);
+  return cmd_ls(sb, &c);
 }
 
 int tfs_lsr(struct super_block * sb) {
   struct context c;
   c.nargs = 1;
   c.cur_dir = testfs_get_inode(sb, 0);  
-  return cmd_lsr(sb, c);
+  return cmd_lsr(sb, &c);
 }
