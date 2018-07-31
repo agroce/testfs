@@ -5,7 +5,6 @@
 #include "block.h"
 #include "bitmap.h"
 #include "csum.h"
-#include "ops.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
