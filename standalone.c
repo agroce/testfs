@@ -36,5 +36,9 @@ int main() {
   struct inode *root = testfs_get_inode(sb, 0);
   assert (root != NULL);
 
+  tfs_mkdir(sb, "foo");
+
+  tfs_checkfs(sb);
+
   tfs_checkfs(sb);
 }
