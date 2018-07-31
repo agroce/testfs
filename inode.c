@@ -57,7 +57,7 @@ inode_hash_find(struct super_block *sb, int inode_nr)
         struct hlist_node *elem;
         struct inode *in;
 
-	assert(&sb->inode_hash_table != NULL);
+	printf("hash_table = %p\n", &sb->inode_hash_table);
 
         hlist_for_each_entry(in, elem, 
                              &sb->inode_hash_table[inode_hashfn(inode_nr)], hnode) {
