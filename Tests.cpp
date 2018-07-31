@@ -99,6 +99,12 @@ TEST(TestFs, FilesDirs) {
   LOG(INFO)
       << "Created root directory; File system initialized";
 
+  ASSERT(!testfs_init_super_block(storage, 0, &sb))
+    << "Couldn't initialize super block";
+
+  struct inode *root = testfs_get_inode(sb, 0);
+  ASSERT(root != NULL) << "Root is null!";
+
   LOG(INFO) << "Checking the initial file system...";  
   tfs_checkfs(sb);
 
