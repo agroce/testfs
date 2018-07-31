@@ -67,7 +67,7 @@ static int GetFD() {
 }
 
 TEST(TestFs, FilesDirs) {
-  char* storage = (char*) malloc(MAX_STORAGE);
+  char storage[MAX_STORAGE];
 
   memset(storage, 0, MAX_STORAGE);
   
@@ -111,7 +111,7 @@ TEST(TestFs, FilesDirs) {
         MakeNewPath(path);
         printf("STEP %d: tfs_mkdir(sb, \"%s\");",
                n, path);
-        tfs_mkdir(sb, path);
+        //tfs_mkdir(sb, path);
       },
       [n, sb, &fd, &fds, &path] {
         fd = GetFD();
@@ -142,8 +142,6 @@ TEST(TestFs, FilesDirs) {
   }
 
   testfs_close_super_block(sb);
-  
-  free(storage);
 }
 
 #ifndef LIBFUZZER
