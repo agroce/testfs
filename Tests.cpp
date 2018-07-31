@@ -89,10 +89,15 @@ TEST(TestFs, FilesDirs) {
 
   testfs_close_super_block(sb);  
 
-  testfs_init_super_block(storage, 0, &sb);
+  ASSERT(!testfs_init_super_block(storage, 0, &sb))
+    << "Couldn't initialize super block";
 
   ASSERT(!testfs_make_root_dir(sb))
       << "Couldn't create root directory.";
+
+  testfs_close_super_block(sb);
+  LOG(INFO)
+      << "Created root directory; File system initialized";
 
   LOG(INFO) << "Checking the initial file system...";  
   tfs_checkfs(sb);
