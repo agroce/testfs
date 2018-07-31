@@ -111,8 +111,16 @@ TEST(TestFs, FilesDirs) {
         MakeNewPath(path);
         printf("STEP %d: tfs_mkdir(sb, \"%s\");",
                n, path);
-        //tfs_mkdir(sb, path);
+        tfs_mkdir(sb, path);
       },
+      [n, sb] {
+        printf("STEP %d: tfs_ls(sb);");
+        tfs_ls(sb, path);
+      },
+      [n, sb] {
+        printf("STEP %d: tfs_lsr(sb);");
+        tfs_lsr(sb, path);
+      },            
       [n, sb, &fd, &fds, &path] {
         fd = GetFD();
 	MakeNewPath(path);
