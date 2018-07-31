@@ -115,11 +115,11 @@ TEST(TestFs, FilesDirs) {
       },
       [n, sb] {
         printf("STEP %d: tfs_ls(sb);");
-        tfs_ls(sb, path);
+        tfs_ls(sb);
       },
       [n, sb] {
         printf("STEP %d: tfs_lsr(sb);");
-        tfs_lsr(sb, path);
+        tfs_lsr(sb);
       },            
       [n, sb, &fd, &fds, &path] {
         fd = GetFD();
