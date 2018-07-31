@@ -61,6 +61,7 @@ inode_hash_find(struct super_block *sb, int inode_nr)
 	printf("entry = %p\n", &sb->inode_hash_table[inode_hashfn(inode_nr)]);
 
 	if (&sb->inode_hash_table[inode_hashfn(inode_nr)] == NULL) {
+	  printf ("entry is NULL\n");
 	  return NULL;
 	}
 	
