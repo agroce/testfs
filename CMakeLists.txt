@@ -51,7 +51,7 @@ set_target_properties(Tests
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
 
 set_target_properties(TestsLF
-  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,address -DLIBFUZZER" LINK_FLAGS "-g")
+  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer -DLIBFUZZER" LINK_FLAGS "-g")
 
 target_link_libraries(Tests 
   deepstate)
@@ -61,4 +61,4 @@ target_link_libraries(TestsLF
 
 target_link_libraries(Tests -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
-target_link_libraries(TestsLF "-fsanitize=fuzzer,address")
+target_link_libraries(TestsLF "-fsanitize=fuzzer")
