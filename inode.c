@@ -190,11 +190,12 @@ testfs_allocate_block(struct inode *in, char *block, int log_block_nr)
 struct inode *
 testfs_get_inode(struct super_block *sb, int inode_nr)
 {
+  printf("GETTING INODE %d\n", inode_nr);
         char block[BLOCK_SIZE];
         int block_offset;
         struct inode *in;
 
-        in = inode_hash_find(sb, inode_nr);
+        in = 0; //inode_hash_find(sb, inode_nr);
         if (in) {
                 in->i_count++;
                 return in;
@@ -209,7 +210,7 @@ testfs_get_inode(struct super_block *sb, int inode_nr)
         testfs_read_inode_block(in, block);
         block_offset = testfs_inode_to_block_offset(in);
         memcpy(&in->in, block + block_offset, sizeof(struct dinode));
-        inode_hash_insert(in);
+        //inode_hash_insert(in);
         return in;
 }
 
@@ -230,6 +231,7 @@ testfs_sync_inode(struct inode *in)
 void
 testfs_put_inode(struct inode *in)
 {
+  return;
         assert((in->i_flags & I_FLAGS_DIRTY) == 0);
         if (--in->i_count == 0) {
                 inode_hash_remove(in);
