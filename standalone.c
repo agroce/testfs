@@ -9,7 +9,7 @@ int main() {
   char storage[MAX_STORAGE];
 
   memset(storage, 0, MAX_STORAGE);
-  
+
   struct super_block *sb = testfs_make_super_block(storage);
 
   testfs_make_inode_freemap(sb);
@@ -41,4 +41,6 @@ int main() {
   tfs_checkfs(sb);
 
   tfs_checkfs(sb);
+
+  printf("DONE\n");
 }
