@@ -56,16 +56,6 @@ inode_hash_find(struct super_block *sb, int inode_nr)
 {
         struct hlist_node *elem;
         struct inode *in;
-
-	/*
-	printf("hash = %p, inode = %d, hash = %d\n", &sb->inode_hash_table, inode_nr, inode_hashfn(inode_nr));
-	printf("entry = %p\n", &sb->inode_hash_table[inode_hashfn(inode_nr)]);
-
-	if (&sb->inode_hash_table[inode_hashfn(inode_nr)] == NULL) {
-	  printf ("entry is NULL\n");
-	  return NULL;
-	}
-	*/
 	
         hlist_for_each_entry(in, elem, 
                              &sb->inode_hash_table[inode_hashfn(inode_nr)], hnode) {
@@ -87,6 +77,7 @@ inode_hash_insert(struct inode *in)
 static void
 inode_hash_remove(struct inode *in)
 {
+  return; // We're not using the hash
         hlist_del(&in->hnode);
 }
 
@@ -194,7 +185,8 @@ testfs_get_inode(struct super_block *sb, int inode_nr)
         int block_offset;
         struct inode *in;
 
-        in = inode_hash_find(sb, inode_nr);
+	// The hash is broken, so just look up every time for now.
+        in = 0; // inode_hash_find(sb, inode_nr);
         if (in) {
                 in->i_count++;
                 return in;
@@ -209,7 +201,7 @@ testfs_get_inode(struct super_block *sb, int inode_nr)
         testfs_read_inode_block(in, block);
         block_offset = testfs_inode_to_block_offset(in);
         memcpy(&in->in, block + block_offset, sizeof(struct dinode));
-        inode_hash_insert(in);
+        //inode_hash_insert(in);
         return in;
 }
 
