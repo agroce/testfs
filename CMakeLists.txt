@@ -29,7 +29,19 @@ if (NOT WIN32)
   set(CMAKE_CXX_STANDARD 11)
 endif ()
 
-set(SOURCE_FILES
+set(TESTS_SOURCE_FILES
+  Tests.cpp
+  posixtfs.c
+  bitmap.c
+  block.c
+  csum.c
+  dir.c
+  file.c
+  inode.c
+  super.c
+  tx.c)
+
+set(MKDIR_RMDIR_SOURCE_FILES
   Tests.cpp
   posixtfs.c
   bitmap.c
@@ -42,23 +54,46 @@ set(SOURCE_FILES
   tx.c)
 
 add_executable(Tests
-  ${SOURCE_FILES})
+  ${TESTS_SOURCE_FILES})
 
 add_executable(TestsLF
-  ${SOURCE_FILES})
+  ${TESTS_SOURCE_FILES})
+
+
+add_executable(MkdirRmDir
+  ${MKDIR_RMDIR_SOURCE_FILES})
+
+add_executable(MkdirRmdirLF
+  ${MKDIR_RMDIR_SOURCE_FILES})
 
 set_target_properties(Tests 
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
 
-set_target_properties(TestsLF
+set_target_properties(MkdirRmdir
+  PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
+
+set_target_properties(TestsLF 
+  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
+
+set_target_properties(MkdirRmdirLF 
   PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
 
 target_link_libraries(Tests 
   deepstate)
 
-target_link_libraries(TestsLF
+target_link_libraries(MkdirRmdir
+  deepstate)
+
+target_link_libraries(TestsLF 
+  deepstate_LF)
+
+target_link_libraries(MkdirRmdirLF 
   deepstate_LF)
 
 target_link_libraries(Tests -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
+target_link_libraries(MkdirRmdir -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
+
 target_link_libraries(TestsLF "-fsanitize=fuzzer,undefined")
+
+target_link_libraries(MkdirRmdirLF "-fsanitize=fuzzer,undefined")

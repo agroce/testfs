@@ -27,27 +27,7 @@ extern "C" {
 #include "inode.h"
 }
 
-#define LENGTH 10
-#define PATH_LEN 5
-#define DATA_LEN 2
-#define NUM_FDS 1
-
-static char DataChar() {
-  symbolic_char c;
-  ASSUME ((c == 'x') || (c == 'y'));
-  return c;
-}
-
-static void MakeNewData(char *data) {
-  symbolic_unsigned l;
-  ASSUME_GT(l, 0);
-  ASSUME_LT(l, DATA_LEN+1);
-  unsigned i;
-  for (i = 0; i < l; i++) {
-    data[i] = DataChar();
-  }
-  data[i] = 0;
-}
+#define PATH_LEN 3
 
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
@@ -55,18 +35,12 @@ static void MakeNewPath(char *path) {
   ASSUME_LT(l, PATH_LEN+1);
   int i, max_i = Pump(l);
   for (i = 0; i < max_i; i++) {
-    path[i] = OneOf("aAbB/.");
+    path[i] = OneOf("ab/");
   }
   path[i] = 0;
 }
 
-static int GetFD() {
-  symbolic_unsigned fd;
-  ASSUME_LT(fd, NUM_FDS);
-  return fd;
-}
-
-TEST(TestFs, FilesDirs) {
+TEST(TestFs, MkdirRmdir) {
   char storage[MAX_STORAGE];
 
   memset(storage, 0, MAX_STORAGE);
@@ -109,62 +83,12 @@ TEST(TestFs, FilesDirs) {
   tfs_checkfs(sb);
 
   char path[PATH_LEN+1];
-  char data[DATA_LEN+1] = {};
-  int fds[NUM_FDS] = {};
-  int fd;
-  for (int i = 0; i < NUM_FDS; i++) {
-    fds[i] = -1;
-  }
 
-  for (int n = 0; n < LENGTH; n++) {
-    OneOf(
-      [n, sb, &path] {
-        MakeNewPath(path);
-        printf("STEP %d: tfs_mkdir(sb, \"%s\");",
-               n, path);
-        tfs_mkdir(sb, path);
-      },
-      [n, sb, &path] {
-        MakeNewPath(path);
-        printf("STEP %d: tfs_rmdir(sb, \"%s\");",
-               n, path);
-        tfs_rmdir(sb, path);
-      },
-      [n, sb] {
-        printf("STEP %d: tfs_ls(sb);", n);
-        tfs_ls(sb);
-      },
-      [n, sb] {
-        printf("STEP %d: tfs_lsr(sb);", n);
-        tfs_lsr(sb);
-      },            
-      [n, sb, &fd, &fds, &path] {
-        fd = GetFD();
-	MakeNewPath(path);
-        ASSUME_EQ(fds[fd], -1);
-        printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC);", 
-               n, fd, path);
-        fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
-      },
-      [n, sb, &fd, &fds, &data] {
-        MakeNewData(data);
-        fd = GetFD();
-        ASSUME_NE(fds[fd], -1);
-        printf("STEP %d: write(sb, fds[%d],\"%s\");", 
-               n, fd, data);
-        tfs_write(sb, fds[fd], data, strlen(data));
-      },
-      [n, sb, &fd, &fds] {
-	fd = GetFD();
-        ASSUME_NE(fds[fd], -1);
-        printf("STEP %d: close(sb, fds[%d]);", n, fd);
-        tfs_close(sb, fds[fd]);
-        fds[fd] = -1;
-      });
-    
-    LOG(INFO) << "Checking the file system...";
-    tfs_checkfs(sb);
-  }
+  MakeNewPath(path);
+  tfs_mkdir(sb, path);
+
+  MakeNewPath(path);
+  tfs_rmdir(sb, path);
 
   testfs_close_super_block(sb);
 }
