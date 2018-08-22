@@ -27,7 +27,7 @@ extern "C" {
 #include "inode.h"
 }
 
-#define PATH_LEN 3
+#define PATH_LEN 1
 
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
@@ -87,8 +87,8 @@ TEST(TestFs, MkdirRmdir) {
   MakeNewPath(path);
   tfs_mkdir(sb, path);
 
-  MakeNewPath(path);
-  tfs_rmdir(sb, path);
+  //MakeNewPath(path);
+  //tfs_rmdir(sb, path);
 
   testfs_close_super_block(sb);
 }
