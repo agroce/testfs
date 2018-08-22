@@ -60,7 +60,7 @@ add_executable(TestsLF
   ${TESTS_SOURCE_FILES})
 
 
-add_executable(MkdirRmDir
+add_executable(MkdirRmdir
   ${MKDIR_RMDIR_SOURCE_FILES})
 
 add_executable(MkdirRmdirLF
