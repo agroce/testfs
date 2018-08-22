@@ -125,6 +125,13 @@ TEST(TestFs, FilesDirs) {
                n, path);
         tfs_mkdir(sb, path);
       },
+      OneOf(
+      [n, sb, &path] {
+        MakeNewPath(path);
+        printf("STEP %d: tfs_rmdir(sb, \"%s\");",
+               n, path);
+        tfs_rmdir(sb, path);
+      },
       [n, sb] {
         printf("STEP %d: tfs_ls(sb);", n);
         tfs_ls(sb);
