@@ -27,7 +27,7 @@ extern "C" {
 #include "inode.h"
 }
 
-#define LENGTH 10
+#define LENGTH 1
 #define PATH_LEN 5
 #define DATA_LEN 2
 #define NUM_FDS 1
