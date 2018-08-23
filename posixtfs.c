@@ -40,14 +40,12 @@ int tfs_mkdir(struct super_block *sb, const char *path) {
 
 int tfs_rmdir(struct super_block *sb, const char *path) {
   struct context c;
-  struct context c;
   put_context_at_dir(sb, path, &c);
   c.nargs = 2;
   return cmd_rm(sb, &c);  
 }
 
 int tfs_unlink(struct super_block *sb, const char *path) {
-  struct context c;
   struct context c;
   put_context_at_dir(sb, path, &c);
   c.nargs = 2;
