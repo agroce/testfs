@@ -23,12 +23,12 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
     cpath = dirname(cpath);
     dir = basename(cpath);
   }
-  c.cur_dir = testfs_get_inode(sb, 0);
+  c->cur_dir = testfs_get_inode(sb, 0);
   for (int pos = lpos-1; pos > 1; pos--) {
     //printf("%d: %s\n", lpos, components[pos]);
-    c.cur_dir = testfs_get_inode(sb, testfs_dir_name_to_inode_nr(c.cur_dir, components[pos]));
+    c->cur_dir = testfs_get_inode(sb, testfs_dir_name_to_inode_nr(c->cur_dir, components[pos]));
   }
-  c.cmd[1] = components[0];  
+  c->cmd[1] = components[0];  
 }
 
 int tfs_mkdir(struct super_block *sb, const char *path) {
