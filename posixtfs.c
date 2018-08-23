@@ -26,28 +26,39 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
   c->cur_dir = testfs_get_inode(sb, 0);
   for (int pos = lpos-1; pos > 1; pos--) {
     //printf("%d: %s\n", lpos, components[pos]);
-    c->cur_dir = testfs_get_inode(sb, testfs_dir_name_to_inode_nr(c->cur_dir, components[pos]));
+    int nr = testfs_dir_name_to_inode_nr(c->cur_dir, components[pos]);
+    if (nr < 0) {
+      return -1;
+    }
+    c->cur_dir = testfs_get_inode(sb, nr);
   }
-  c->cmd[1] = components[0];  
+  c->cmd[1] = components[0];
+  return 0;
 }
 
 int tfs_mkdir(struct super_block *sb, const char *path) {
   struct context c;
-  put_context_at_dir(sb, path, &c);
+  if (put_context_at_dir(sb, path, &c) < 0) {
+    return -1;
+  }
   c.nargs = 2;
   return cmd_mkdir(sb, &c);  
 }
 
 int tfs_rmdir(struct super_block *sb, const char *path) {
   struct context c;
-  put_context_at_dir(sb, path, &c);
+  if (put_context_at_dir(sb, path, &c) < 0) {
+    return -1;
+  }
   c.nargs = 2;
   return cmd_rm(sb, &c);  
 }
 
 int tfs_unlink(struct super_block *sb, const char *path) {
   struct context c;
-  put_context_at_dir(sb, path, &c);
+  if (put_context_at_dir(sb, path, &c) < 0) {
+    return -1;
+  }
   c.nargs = 2;
   return cmd_rm(sb, &c);
 }
