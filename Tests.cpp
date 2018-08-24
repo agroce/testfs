@@ -27,8 +27,8 @@ extern "C" {
 #include "inode.h"
 }
 
-#define LENGTH 5
-#define PATH_LEN 5
+#define LENGTH 20
+#define PATH_LEN 10
 #define DATA_LEN 2
 #define NUM_FDS 1
 
@@ -144,7 +144,8 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: tfs_lsr(sb);", n);
         r = tfs_lsr(sb);
 	printf("STEP %d: tfs_lsr(sb) = %d", n, r);	
-      },            
+      });
+    /*
       [&r, n, sb, &fd, &fds, &path] {
         fd = GetFD();
 	MakeNewPath(path);
@@ -174,6 +175,7 @@ TEST(TestFs, FilesDirs) {
 	       n, fd, r);	
         fds[fd] = -1;
       });
+    */
     
     LOG(INFO) << "Checking the file system...";
     tfs_checkfs(sb);
