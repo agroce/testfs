@@ -119,7 +119,7 @@ TEST(TestFs, FilesDirs) {
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-      [r, n, sb, &path] {
+      [&r, n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_mkdir(sb, \"%s\");",
                n, path);
@@ -127,7 +127,7 @@ TEST(TestFs, FilesDirs) {
 	printf("STEP %d: tfs_mkdir(sb, \"%s\") = %d",
 	       n, path, r);
       },
-      [r, n, sb, &path] {
+      [&r, n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_rmdir(sb, \"%s\");",
                n, path);
@@ -135,17 +135,17 @@ TEST(TestFs, FilesDirs) {
 	printf("STEP %d: tfs_rmdir(sb, \"%s\") = %d",
 	       n, path, r);	
       },
-      [r, n, sb] {
+      [&r, n, sb] {
         printf("STEP %d: tfs_ls(sb);", n);
         r = tfs_ls(sb);
 	printf("STEP %d: tfs_ls(sb) = %d", n, r);	
       },
-      [r, n, sb] {
+      [&r, n, sb] {
         printf("STEP %d: tfs_lsr(sb);", n);
         r = tfs_lsr(sb);
 	printf("STEP %d: tfs_lsr(sb) = %d", n, r);	
       },            
-      [r, n, sb, &fd, &fds, &path] {
+      [&r, n, sb, &fd, &fds, &path] {
         fd = GetFD();
 	MakeNewPath(path);
         ASSUME_EQ(fds[fd], -1);
@@ -155,7 +155,7 @@ TEST(TestFs, FilesDirs) {
 	printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC) = %d",
 	       n, fd, path, fds[fd]);	
       },
-      [r, n, sb, &fd, &fds, &data] {
+      [&r, n, sb, &fd, &fds, &data] {
         MakeNewData(data);
         fd = GetFD();
         ASSUME_NE(fds[fd], -1);
@@ -165,7 +165,7 @@ TEST(TestFs, FilesDirs) {
 	printf("STEP %d: write(sb, fds[%d],\"%s\") = %d",
 	       n, fd, data, r);	
       },
-      [r, n, sb, &fd, &fds] {
+      [&r, n, sb, &fd, &fds] {
 	fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("STEP %d: close(sb, fds[%d]);", n, fd);
