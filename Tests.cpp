@@ -119,54 +119,54 @@ TEST(TestFs, FilesDirs) {
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-      [n, sb, &path] {
+      [r, n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_mkdir(sb, \"%s\");",
                n, path);
         r = tfs_mkdir(sb, path);
-	printf("RESULT = %d", r);
+	printf("STEP %d: tfs_mkdir(sb, \"%s\") = %d", r);
       },
-      [n, sb, &path] {
+      [r, n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_rmdir(sb, \"%s\");",
                n, path);
         r = tfs_rmdir(sb, path);
-	printf("RESULT = %d", r);	
+	printf("STEP %d: tfs_rmdir(sb, \"%s\") = %d", r);	
       },
-      [n, sb] {
+      [r, n, sb] {
         printf("STEP %d: tfs_ls(sb);", n);
         r = tfs_ls(sb);
-	printf("RESULT = %d", r);	
+	printf("STEP %d: tfs_ls(sb) = %d", r);	
       },
-      [n, sb] {
+      [r, n, sb] {
         printf("STEP %d: tfs_lsr(sb);", n);
         r = tfs_lsr(sb);
-	printf("RESULT = %d", r);	
+	printf("STEP %d: tfs_lsr(sb) = %d", r);	
       },            
-      [n, sb, &fd, &fds, &path] {
+      [r, n, sb, &fd, &fds, &path] {
         fd = GetFD();
 	MakeNewPath(path);
         ASSUME_EQ(fds[fd], -1);
         printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC);", 
                n, fd, path);
         fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
-	printf("RESULT = %d", fds[fd]);	
+	printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC) = %d", fds[fd]);	
       },
-      [n, sb, &fd, &fds, &data] {
+      [r, n, sb, &fd, &fds, &data] {
         MakeNewData(data);
         fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("STEP %d: write(sb, fds[%d],\"%s\");", 
                n, fd, data);
         r = tfs_write(sb, fds[fd], data, strlen(data));
-	printf("RESULT = %d", r);	
+	printf("STEP %d: write(sb, fds[%d],\"%s\") = %d", r);	
       },
-      [n, sb, &fd, &fds] {
+      [r, n, sb, &fd, &fds] {
 	fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("STEP %d: close(sb, fds[%d]);", n, fd);
         r = tfs_close(sb, fds[fd]);
-	printf("RESULT = %d", r);	
+	printf("STEP %d: close(sb, fds[%d]) = %d", r);	
         fds[fd] = -1;
       });
     
