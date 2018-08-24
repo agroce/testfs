@@ -27,7 +27,7 @@ extern "C" {
 #include "inode.h"
 }
 
-#define LENGTH 1
+#define LENGTH 5
 #define PATH_LEN 5
 #define DATA_LEN 2
 #define NUM_FDS 1
@@ -112,6 +112,7 @@ TEST(TestFs, FilesDirs) {
   char data[DATA_LEN+1] = {};
   int fds[NUM_FDS] = {};
   int fd;
+  int r;
   for (int i = 0; i < NUM_FDS; i++) {
     fds[i] = -1;
   }
@@ -122,21 +123,25 @@ TEST(TestFs, FilesDirs) {
         MakeNewPath(path);
         printf("STEP %d: tfs_mkdir(sb, \"%s\");",
                n, path);
-        tfs_mkdir(sb, path);
+        r = tfs_mkdir(sb, path);
+	printf("RESULT = %d", r);
       },
       [n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_rmdir(sb, \"%s\");",
                n, path);
-        tfs_rmdir(sb, path);
+        r = tfs_rmdir(sb, path);
+	printf("RESULT = %d", r);	
       },
       [n, sb] {
         printf("STEP %d: tfs_ls(sb);", n);
-        tfs_ls(sb);
+        r = tfs_ls(sb);
+	printf("RESULT = %d", r);	
       },
       [n, sb] {
         printf("STEP %d: tfs_lsr(sb);", n);
-        tfs_lsr(sb);
+        r = tfs_lsr(sb);
+	printf("RESULT = %d", r);	
       },            
       [n, sb, &fd, &fds, &path] {
         fd = GetFD();
@@ -145,6 +150,7 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC);", 
                n, fd, path);
         fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
+	printf("RESULT = %d", fds[fd]);	
       },
       [n, sb, &fd, &fds, &data] {
         MakeNewData(data);
@@ -152,13 +158,15 @@ TEST(TestFs, FilesDirs) {
         ASSUME_NE(fds[fd], -1);
         printf("STEP %d: write(sb, fds[%d],\"%s\");", 
                n, fd, data);
-        tfs_write(sb, fds[fd], data, strlen(data));
+        r = tfs_write(sb, fds[fd], data, strlen(data));
+	printf("RESULT = %d", r);	
       },
       [n, sb, &fd, &fds] {
 	fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("STEP %d: close(sb, fds[%d]);", n, fd);
-        tfs_close(sb, fds[fd]);
+        r = tfs_close(sb, fds[fd]);
+	printf("RESULT = %d", r);	
         fds[fd] = -1;
       });
     
