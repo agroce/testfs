@@ -124,24 +124,26 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: tfs_mkdir(sb, \"%s\");",
                n, path);
         r = tfs_mkdir(sb, path);
-	printf("STEP %d: tfs_mkdir(sb, \"%s\") = %d", r);
+	printf("STEP %d: tfs_mkdir(sb, \"%s\") = %d",
+	       n, path, r);
       },
       [r, n, sb, &path] {
         MakeNewPath(path);
         printf("STEP %d: tfs_rmdir(sb, \"%s\");",
                n, path);
         r = tfs_rmdir(sb, path);
-	printf("STEP %d: tfs_rmdir(sb, \"%s\") = %d", r);	
+	printf("STEP %d: tfs_rmdir(sb, \"%s\") = %d",
+	       n, path, r);	
       },
       [r, n, sb] {
         printf("STEP %d: tfs_ls(sb);", n);
         r = tfs_ls(sb);
-	printf("STEP %d: tfs_ls(sb) = %d", r);	
+	printf("STEP %d: tfs_ls(sb) = %d", n, r);	
       },
       [r, n, sb] {
         printf("STEP %d: tfs_lsr(sb);", n);
         r = tfs_lsr(sb);
-	printf("STEP %d: tfs_lsr(sb) = %d", r);	
+	printf("STEP %d: tfs_lsr(sb) = %d", n, r);	
       },            
       [r, n, sb, &fd, &fds, &path] {
         fd = GetFD();
@@ -150,7 +152,8 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC);", 
                n, fd, path);
         fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
-	printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC) = %d", fds[fd]);	
+	printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC) = %d",
+	       n, fd, path, fds[fd]);	
       },
       [r, n, sb, &fd, &fds, &data] {
         MakeNewData(data);
@@ -159,14 +162,16 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: write(sb, fds[%d],\"%s\");", 
                n, fd, data);
         r = tfs_write(sb, fds[fd], data, strlen(data));
-	printf("STEP %d: write(sb, fds[%d],\"%s\") = %d", r);	
+	printf("STEP %d: write(sb, fds[%d],\"%s\") = %d",
+	       n, fd, data, r);	
       },
       [r, n, sb, &fd, &fds] {
 	fd = GetFD();
         ASSUME_NE(fds[fd], -1);
         printf("STEP %d: close(sb, fds[%d]);", n, fd);
         r = tfs_close(sb, fds[fd]);
-	printf("STEP %d: close(sb, fds[%d]) = %d", r);	
+	printf("STEP %d: close(sb, fds[%d]) = %d",
+	       n, fd, r);	
         fds[fd] = -1;
       });
     
