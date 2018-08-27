@@ -40,7 +40,7 @@ while (runs * timeout) < total_time:
         else:
             subprocess.call(cmd1, shell=True, stdout=outf, stderr=outf)            
     runs += 1
-    print "RUN #" + str(runs)
+    print prefix, "RUN #" + str(runs)
     if BUILD_DICT:
         dictionary = []
         dict_started = False
