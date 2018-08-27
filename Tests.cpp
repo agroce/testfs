@@ -110,8 +110,6 @@ TEST(TestFs, FilesDirs) {
 
   char path[PATH_LEN+1];
   char data[DATA_LEN+1] = {};
-  int fds[NUM_FDS] = {};
-  int fd;
   int r;
   for (int i = 0; i < NUM_FDS; i++) {
     fds[i] = -1;
@@ -144,38 +142,32 @@ TEST(TestFs, FilesDirs) {
         printf("STEP %d: tfs_lsr(sb);", n);
         r = tfs_lsr(sb);
 	printf("STEP %d: tfs_lsr(sb) = %d", n, r);	
-      });
-    /*
-      [&r, n, sb, &fd, &fds, &path] {
-        fd = GetFD();
+      },
+      [&r, n, sb, &path] {
 	MakeNewPath(path);
-        ASSUME_EQ(fds[fd], -1);
-        printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC);", 
-               n, fd, path);
-        fds[fd] = tfs_open(sb, path, O_CREAT|O_TRUNC);
-	printf("STEP %d: fds[%d] = open(sb, \"%s\", O_CREAT|O_TRUNC) = %d",
-	       n, fd, path, fds[fd]);	
+        printf("STEP %d: create(sb, \"%s\");", 
+               n, path);
+        r = tfs_create(sb, path);
+	printf("STEP %d: create(sb, \"%s\") = %d",
+	       n, path, r);	
       },
-      [&r, n, sb, &fd, &fds, &data] {
+      [&r, n, sb, &path, &data] {
+	MakeNewPath(path);
         MakeNewData(data);
-        fd = GetFD();
-        ASSUME_NE(fds[fd], -1);
-        printf("STEP %d: write(sb, fds[%d],\"%s\");", 
-               n, fd, data);
-        r = tfs_write(sb, fds[fd], data, strlen(data));
-	printf("STEP %d: write(sb, fds[%d],\"%s\") = %d",
-	       n, fd, data, r);	
+        printf("STEP %d: write(sb, \"%s\", \"%s\");", 
+               n, path, data);
+        r = tfs_write(sb, path, data);
+	printf("STEP %d: write(sb, \"%s\", \"%s\") = %d",
+	       n, path, data, r);	
       },
-      [&r, n, sb, &fd, &fds] {
-	fd = GetFD();
-        ASSUME_NE(fds[fd], -1);
-        printf("STEP %d: close(sb, fds[%d]);", n, fd);
-        r = tfs_close(sb, fds[fd]);
-	printf("STEP %d: close(sb, fds[%d]) = %d",
-	       n, fd, r);	
-        fds[fd] = -1;
+      [&r, n, sb, &path] {
+	MakeNewPath(path);
+        printf("STEP %d: stat(sb, \"%s\");", 
+               n, path);
+        r = tfs_stat(sb, path);
+	printf("STEP %d: stat(sb, \"%s\") = %d",
+	       n, path, r);	
       });
-    */
     
     LOG(INFO) << "Checking the file system...";
     tfs_checkfs(sb);
