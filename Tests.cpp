@@ -30,7 +30,6 @@ extern "C" {
 #define LENGTH 20
 #define PATH_LEN 10
 #define DATA_LEN 2
-#define NUM_FDS 1
 
 static char DataChar() {
   symbolic_char c;
@@ -58,12 +57,6 @@ static void MakeNewPath(char *path) {
     path[i] = OneOf("aAbB/.");
   }
   path[i] = 0;
-}
-
-static int GetFD() {
-  symbolic_unsigned fd;
-  ASSUME_LT(fd, NUM_FDS);
-  return fd;
 }
 
 TEST(TestFs, FilesDirs) {
@@ -111,9 +104,6 @@ TEST(TestFs, FilesDirs) {
   char path[PATH_LEN+1];
   char data[DATA_LEN+1] = {};
   int r;
-  for (int i = 0; i < NUM_FDS; i++) {
-    fds[i] = -1;
-  }
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
