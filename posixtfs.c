@@ -8,6 +8,7 @@
 int put_context_at_dir(struct super_block *sb, const char *path, struct context *c) {
   char *cpath = malloc((strlen(path)+1)*sizeof(char));
   char **components = malloc(strlen(path)*sizeof(char *));
+  printf("CALLING PUT CONTEXT\n");
   int lpos = 0;
   strcpy(cpath, path);
   char *dir = dirname(cpath);
