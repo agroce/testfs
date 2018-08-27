@@ -1,21 +1,32 @@
 import subprocess
 import os
+import sys
 
 timeout = 60
+total_time = int(sys.argv[1])
 
-BUILD_DICT = True
+BUILD_DICT = "--no_dict" not in sys.argv
+VALUE_PROFILE = "--no_value_profile" not in sys.argv
+
+if VALUE_PROFILE:
+    val_prof = " --use_value_profile=1 "
+else:
+    val_prof = " "
 
 runs = 0
 total_execs = 0
-cmd0 = ["./TestsLF -rss_limit_mb=4096 -use_value_profile=1 -print_final_stats=1 -max_total_time=" +
+cmd0 = ["./TestsLF -rss_limit_mv=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
         str(timeout) + " corpus"]
-cmd1 = ["./TestsLF -rss_limit_mb=4096 -use_value_profile=1 -print_final_stats=1 -max_total_time=" +
-        str(timeout) + " -dict=dict.txt corpus"]
+if BUILD_DICT:
+    cmd1 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
+            str(timeout) + " -dict=dict.txt corpus"]
+else:
+    cmd1 = cmd0
 
 with open("libfuzzer.data",'w') as outf:
-    outf.write("time,coverage,total_execs,dictionary\n")
+    outf.write("time,coverage,fitness,total_execs,dictionary\n")
 
-while True:
+while (runs * timeout) < total_time:
     with open("libfuzzer.out",'w') as outf:
         if runs == 0:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
@@ -29,9 +40,12 @@ while True:
     with open("libfuzzer.out",'r') as inf:
         coverage = None
         execs = None
+        fit = None
         for line in inf:
             if "cov:" in line:
                 coverage = int(line.split()[2])
+            if "ft:" in line:
+                fit = int(line.split()[2])                
             if "number_of_executed_units" in line:
                 execs = int(line.split()[2])
             if BUILD_DICT and dict_started:
@@ -45,12 +59,14 @@ while True:
                 dict_started = True
                 current_entry = ""
     print "COVERAGE:", coverage
+    print "FITNESS:", fit    
     print "EXECS:", execs
     total_execs += execs
     print "TOTAL EXECS:", total_execs
     print "TOTAL RUNTIME:", runs * timeout,"seconds"
     with open("libfuzzer.data",'a') as outf:
-        outf.write(str(runs * timeout) + "," + str(coverage) + "," + str(total_execs) + "," + str(len(dictionary)) + "\n")
+        outf.write(str(runs * timeout) + "," + str(coverage) + "," + str(fit) + "," +
+                   str(total_execs) + "," + str(len(dictionary)) + "\n")
     if BUILD_DICT:
         print "DICTIONARY LENGTH:", len(dictionary)
         with open("dict.txt",'w') as outf:
