@@ -31,7 +31,7 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
     free(components[pos]);
     if (nr < 0) {
       return -1;
-    }    
+    }
     if (testfs_inode_get_type(testfs_get_inode(sb, nr)) != I_DIR) {
       return -1;
     }    
@@ -47,8 +47,10 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
 
 int tfs_mkdir(struct super_block *sb, const char *path) {
   struct context c;
-  int r;
-  if (put_context_at_dir(sb, path, &c) < 0) {
+  int r;  
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
     return -1;
   }
   c.nargs = 2;
@@ -60,7 +62,9 @@ int tfs_mkdir(struct super_block *sb, const char *path) {
 int tfs_rmdir(struct super_block *sb, const char *path) {
   struct context c;
   int r;
-  if (put_context_at_dir(sb, path, &c) < 0) {
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);  
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
     return -1;
   }
   c.nargs = 2;
@@ -72,7 +76,9 @@ int tfs_rmdir(struct super_block *sb, const char *path) {
 int tfs_unlink(struct super_block *sb, const char *path) {
   struct context c;
   int r;
-  if (put_context_at_dir(sb, path, &c) < 0) {
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);  
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
     return -1;
   }
   c.nargs = 2;
@@ -84,7 +90,9 @@ int tfs_unlink(struct super_block *sb, const char *path) {
 int tfs_create(struct super_block *sb, const char *path) {
   struct context c;
   int r;
-  if (put_context_at_dir(sb, path, &c) < 0) {
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);  
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
     return -1;
   }
   c.nargs = 2;
@@ -96,7 +104,9 @@ int tfs_create(struct super_block *sb, const char *path) {
 int tfs_write(struct super_block *sb, const char *path, char *data) {
   struct context c;
   int r;
-  if (put_context_at_dir(sb, path, &c) < 0) {
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);  
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
     return -1;
   }
   c.cmd[2] = data;
@@ -109,7 +119,9 @@ int tfs_write(struct super_block *sb, const char *path, char *data) {
 int tfs_stat(struct super_block *sb, const char *path) {
   struct context c;
   int r;
-  if (put_context_at_dir(sb, path, &c) < 0) {
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);  
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
     return -1;
   }
   c.nargs = 2;
