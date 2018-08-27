@@ -33,9 +33,11 @@ else:
 with open(prefix + ".libfuzzer.data",'w') as outf:
     outf.write("time,coverage,fitness,total_execs,dictionary\n")
 
+dictionary = []
+    
 while (runs * timeout) < total_time:
     with open(prefix + ".libfuzzer.out",'w') as outf:
-        if runs == 0:
+        if len(dictionary) == 0:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
         else:
             subprocess.call(cmd1, shell=True, stdout=outf, stderr=outf)            
