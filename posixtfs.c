@@ -6,11 +6,10 @@
 #include "posixtfs.h"
 
 int put_context_at_dir(struct super_block *sb, const char *path, struct context *c) {
-  char *cpath = malloc((strlen(path)+1)*sizeof(char));
+  char *cpath = path;
   char **components = malloc(strlen(path)*sizeof(char *));
   printf("CALLING PUT CONTEXT\n");
   int lpos = 0;
-  strcpy(cpath, path);
   char *dir = dirname(cpath);
   components[lpos] = malloc((strlen(path)+1)*sizeof(char));  
   strcpy(components[lpos], basename(cpath));
@@ -20,7 +19,7 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
     components[lpos] = malloc((strlen(path)+1)*sizeof(char));
     strcpy(components[lpos], basename(cpath));
     //printf("PATH %d: %s\n", lpos, components[lpos]);
-    lpos++;    
+    lpos++;
     cpath = dirname(cpath);
     dir = basename(cpath);
   }
@@ -39,8 +38,6 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
   printf("DONE SETTING CURRENT DIRECTORY");
   char *p = malloc(strlen(components[0])+1*sizeof(char));
   strcpy(p, components[0]);
-  printf("FREEING CPATH\n");
-  free(cpath);
   printf("FREEING COMPONENTS\n");
   free(components);
   printf("DONE FREEING MEMORY\n");  
