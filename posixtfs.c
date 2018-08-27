@@ -36,11 +36,12 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
     }
     c->cur_dir = testfs_get_inode(sb, nr);
   }
-  printf("DONE SETTING CURREN DIRECTORY");
+  printf("DONE SETTING CURRENT DIRECTORY");
   char *p = malloc(strlen(components[0])+1*sizeof(char));
   strcpy(p, components[0]);
-  printf("FREEING MEMORY\n");
+  printf("FREEING CPATH\n");
   free(cpath);
+  printf("FREEING COMPONENTS\n");
   free(components);
   printf("DONE FREEING MEMORY\n");  
   c->cmd[1] = p;
