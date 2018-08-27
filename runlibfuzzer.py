@@ -3,31 +3,38 @@ import os
 import sys
 
 timeout = 60
-total_time = int(sys.argv[1])
+prefix = sys.argv[1]
+total_time = int(sys.argv[2])
 
 BUILD_DICT = "--no_dict" not in sys.argv
 VALUE_PROFILE = "--no_value_profile" not in sys.argv
 
 if VALUE_PROFILE:
-    val_prof = " --use_value_profile=1 "
+    val_prof = " -use_value_profile=1 "
 else:
     val_prof = " "
 
 runs = 0
 total_execs = 0
+
+with open(os.devnull,'w') as dnull:
+    subprocess.call(["rm -rf " + prefix + ".corpus"], shell=True, stdout=dnull, stderr=dnull)
+
+os.mkdir(prefix + ".corpus")
+
 cmd0 = ["./TestsLF -rss_limit_mv=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
-        str(timeout) + " corpus"]
+        str(timeout) + " " + prefix + ".corpus"]
 if BUILD_DICT:
     cmd1 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
-            str(timeout) + " -dict=dict.txt corpus"]
+            str(timeout) + " -dict=" + prefix + ".dict.txt " + prefix + ".corpus"]
 else:
     cmd1 = cmd0
 
-with open("libfuzzer.data",'w') as outf:
+with open(prefix + ".libfuzzer.data",'w') as outf:
     outf.write("time,coverage,fitness,total_execs,dictionary\n")
 
 while (runs * timeout) < total_time:
-    with open("libfuzzer.out",'w') as outf:
+    with open(prefix + ".libfuzzer.out",'w') as outf:
         if runs == 0:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
         else:
@@ -37,7 +44,7 @@ while (runs * timeout) < total_time:
     if BUILD_DICT:
         dictionary = []
         dict_started = False
-    with open("libfuzzer.out",'r') as inf:
+    with open(prefix + ".libfuzzer.out",'r') as inf:
         coverage = None
         execs = None
         fit = None
@@ -64,12 +71,12 @@ while (runs * timeout) < total_time:
     total_execs += execs
     print "TOTAL EXECS:", total_execs
     print "TOTAL RUNTIME:", runs * timeout,"seconds"
-    with open("libfuzzer.data",'a') as outf:
+    with open(prefix + ".libfuzzer.data",'a') as outf:
         outf.write(str(runs * timeout) + "," + str(coverage) + "," + str(fit) + "," +
                    str(total_execs) + "," + str(len(dictionary)) + "\n")
     if BUILD_DICT:
         print "DICTIONARY LENGTH:", len(dictionary)
-        with open("dict.txt",'w') as outf:
+        with open(prefix + ".dict.txt",'w') as outf:
             for entry in dictionary:
                 outf.write(entry + "\n")
 
