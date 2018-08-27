@@ -27,6 +27,9 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
   c->cur_dir = testfs_get_inode(sb, 0);
   for (int pos = lpos-1; pos > 1; pos--) {
     //printf("%d: %s\n", lpos, components[pos]);
+    if (testfs_inode_get_type(c->cur_dir) != I_DIR) {
+      return -1;
+    }
     int nr = testfs_dir_name_to_inode_nr(c->cur_dir, components[pos]);
     free(components[pos]);
     if (nr < 0) {
