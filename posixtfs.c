@@ -32,7 +32,7 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
     if (nr < 0) {
       return -1;
     }    
-    if (testfs_inode_get_type(nr) != I_DIR) {
+    if (testfs_inode_get_type(testfs_get_inode(sb, nr)) != I_DIR) {
       return -1;
     }    
     c->cur_dir = testfs_get_inode(sb, nr);
