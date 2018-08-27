@@ -38,6 +38,7 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
   free(cpath);
   free(components);
   c->cmd[1] = p;
+  printf("SET CONTEXT\n");
   return 0;
 }
 
@@ -49,6 +50,7 @@ int tfs_mkdir(struct super_block *sb, const char *path) {
   }
   c.nargs = 2;
   r = cmd_mkdir(sb, &c);
+  printf("COMPLETED MKDIR\n");
   free(c.cmd[1]);
   return r;
 }
