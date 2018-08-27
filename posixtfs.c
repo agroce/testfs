@@ -6,9 +6,9 @@
 #include "posixtfs.h"
 
 int put_context_at_dir(struct super_block *sb, const char *path, struct context *c) {
-  char *cpath = path;
+  char *cpath = (char*)path;
   char **components = malloc(strlen(path)*sizeof(char *));
-  printf("CALLING PUT CONTEXT\n");
+  //printf("CALLING PUT CONTEXT\n");
   int lpos = 0;
   char *dir = dirname(cpath);
   components[lpos] = malloc((strlen(path)+1)*sizeof(char));  
@@ -23,26 +23,22 @@ int put_context_at_dir(struct super_block *sb, const char *path, struct context 
     cpath = dirname(cpath);
     dir = basename(cpath);
   }
-  printf("SETTING CURRENT DIRECTORY\n");
+  //printf("SETTING CURRENT DIRECTORY\n");
   c->cur_dir = testfs_get_inode(sb, 0);
   for (int pos = lpos-1; pos > 1; pos--) {
     //printf("%d: %s\n", lpos, components[pos]);
     int nr = testfs_dir_name_to_inode_nr(c->cur_dir, components[pos]);
-    printf("FREEING AT %d\n", pos);
     free(components[pos]);
     if (nr < 0) {
       return -1;
     }
     c->cur_dir = testfs_get_inode(sb, nr);
   }
-  printf("DONE SETTING CURRENT DIRECTORY");
+  //printf("DONE SETTING CURRENT DIRECTORY");
   char *p = malloc(strlen(components[0])+1*sizeof(char));
   strcpy(p, components[0]);
-  printf("FREEING COMPONENTS\n");
   free(components);
-  printf("DONE FREEING MEMORY\n");  
   c->cmd[1] = p;
-  printf("SET CONTEXT\n");
   return 0;
 }
 
