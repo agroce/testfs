@@ -50,7 +50,6 @@ int tfs_mkdir(struct super_block *sb, const char *path) {
   }
   c.nargs = 2;
   r = cmd_mkdir(sb, &c);
-  printf("COMPLETED MKDIR\n");
   free(c.cmd[1]);
   return r;
 }
