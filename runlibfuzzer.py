@@ -36,7 +36,7 @@ with open(prefix + ".libfuzzer.data",'w') as outf:
 dictionary = []
     
 while (runs * timeout) < total_time:
-    with open(prefix + ".libfuzzer.out",'w') as outf:
+    with open(prefix + "." + str(runs + 1) + ".libfuzzer.out",'w') as outf:
         if len(dictionary) == 0:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
         else:
