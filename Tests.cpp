@@ -32,6 +32,8 @@ extern "C" {
 #define PATH_LEN 10
 #define DATA_LEN 2
 
+#define MAX_RESET 5
+
 static char DataChar() {
   symbolic_char c;
   ASSUME ((c == 'x') || (c == 'y'));
