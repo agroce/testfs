@@ -60,12 +60,14 @@ while (runs * timeout) < total_time:
         corpus = None
         initFatals = []
         initFatalsCount = 0
+        fatalCount = 0
         for line in inf:
             if "INITED" in line:
-                inited = True            
+                inited = True  
             if "FATAL" in line:
+                fatalCount += 1
                 if line not in fatals:
-                    print "NEW FATAL:", line
+                    print "NEW FATAL:", line,
                     fatals.append(line)
             if (not inited) and ("FATAL" in line):
                 initFatalsCount += 1
@@ -99,6 +101,7 @@ while (runs * timeout) < total_time:
     print "COVERAGE:", coverage
     print "FITNESS:", fit    
     print "EXECS:", execs
+    print "FATALS:", fatalCount
     if execs:
         total_execs += execs
     print "TOTAL EXECS:", total_execs
