@@ -55,11 +55,14 @@ while (runs * timeout) < total_time:
         fit = None
         for line in inf:
             if "cov:" in line:
-                coverage = int(line.split()[2])
+                try: coverage = int(line.split()[2])
+                except: pass
             if "ft:" in line:
-                fit = int(line.split()[2])                
+                try: fit = int(line.split()[2])
+                except: pass
             if "number_of_executed_units" in line:
-                execs = int(line.split()[2])
+                try: execs = int(line.split()[2])
+                except: pass
             if BUILD_DICT and dict_started:
                 if "EXTERNAL:" in line:
                     if "Uses" not in line:
