@@ -37,24 +37,40 @@ with open(prefix + ".libfuzzer.data",'w') as outf:
     outf.write("time,coverage,fitness,total_execs,dictionary\n")
 
 dictionary = []
-    
+
+fatals = []
+
 while (runs * timeout) < total_time:
     runs += 1
     with open(prefix + "." + str(runs) + ".libfuzzer.out",'w') as outf:
         if len(dictionary) == 0:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
         else:
-            subprocess.call(cmd1, shell=True, stdout=outf, stderr=outf)            
+            subprocess.call(cmd1, shell=True, stdout=outf, stderr=outf)
+    print "=" * 80
     print prefix, "RUN #" + str(runs)
     if BUILD_DICT:
         dictionary = []
         dict_started = False
     with open(prefix + "." + str(runs) + ".libfuzzer.out",'r') as inf:
+        inited = False
         coverage = None
         execs = None
         fit = None
         corpus = None
+        initFatals = []
+        initFatalsCount = 0
         for line in inf:
+            if "INITED:" in line:
+                inited = True            
+            if "FATAL" in line:
+                if line not in fatals:
+                    print "NEW FATAL:", line
+                    fatals.append(line)
+            if (not inited) and ("FATAL" in line):
+                initFatalsCount += 1
+                if line not in initFatals:
+                    initFatals.append(line)
             if "files found in" in line:
                 try: corpus = int(line.split()[2])
                 except: pass
@@ -78,6 +94,8 @@ while (runs * timeout) < total_time:
                 dict_started = True
                 current_entry = ""
     print "SAVED CORPUS SIZE:", corpus
+    print "FATALS IN CORPUS:", initFatalsCount
+    print "UNIQUE FATALS IN CORPUS:", len(initFatals)
     print "COVERAGE:", coverage
     print "FITNESS:", fit    
     print "EXECS:", execs
