@@ -58,7 +58,7 @@ while (runs * timeout) < total_time:
         execs = None
         fit = None
         corpus = None
-        initFatals = []
+        initFatals = {}
         initFatalsCount = 0
         fatalCount = 0
         for line in inf:
@@ -72,7 +72,9 @@ while (runs * timeout) < total_time:
             if (not inited) and ("FATAL" in line):
                 initFatalsCount += 1
                 if line not in initFatals:
-                    initFatals.append(line)
+                    initFatals[line] = 1
+                else:
+                    initFatals[line] += 1
             if "files found in" in line:
                 try: corpus = int(line.split()[2])
                 except: pass
@@ -98,6 +100,8 @@ while (runs * timeout) < total_time:
     print "SAVED CORPUS SIZE:", corpus
     print "FATALS IN CORPUS:", initFatalsCount
     print "UNIQUE FATALS IN CORPUS:", len(initFatals)
+    for fatal in initFatals:
+        print initFatals[fatal], fatal,
     print "COVERAGE:", coverage
     print "FITNESS:", fit    
     print "EXECS:", execs
