@@ -66,6 +66,8 @@ TEST(TestFs, FilesDirs) {
   char storage[MAX_STORAGE];
 
   memset(storage, 0, MAX_STORAGE);
+
+  set_reset_countdown(-1);
   
   struct super_block *sb = testfs_make_super_block(storage);
   ASSERT(sb != nullptr)
