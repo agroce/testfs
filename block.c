@@ -5,8 +5,11 @@ static char zero[BLOCK_SIZE] = {0};
 
 static int reset_countdown = -1;
 
-void set_reset_countdown(int k) {
+static jmp_buf jmp_target;
+
+int set_reset_countdown(int k) {
   reset_countdown = k;
+  return setjmp(jmp_target);
 }
 
 int get_reset_countdown() {
@@ -19,7 +22,7 @@ write_blocks(struct super_block *sb, char *blocks, int start, int nr)
   if (reset_countdown > 0) {
     reset_countdown -= 1;
   } else if (reset_countdown == 0) {
-    return;
+    longjmp(jmp_target, 1);
   }
   memcpy(sb->storage + (start * BLOCK_SIZE), blocks, nr * BLOCK_SIZE);
 }

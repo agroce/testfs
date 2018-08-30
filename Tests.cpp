@@ -167,7 +167,9 @@ TEST(TestFs, FilesDirs) {
 	ASSUME_GT(k, 0);
 	ASSUME_LT(k, MAX_RESET);
 	LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";
-	set_reset_countdown(k);
+	if (set_reset_countdown(k) != 0) {
+	  LOG(INFO) << "Returning from reset";
+	}
       });
 
     if (get_reset_countdown() == 0) {
