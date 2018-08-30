@@ -9,7 +9,7 @@ total_time = int(sys.argv[2])
 BUILD_DICT = "--no_dict" not in sys.argv
 VALUE_PROFILE = "--no_value_profile" not in sys.argv
 
-if "--checkpoint" not in sys.argv:
+if "--no_checkpoint" in sys.argv:
     timeout = total_time
 
 if VALUE_PROFILE:
@@ -39,7 +39,8 @@ with open(prefix + ".libfuzzer.data",'w') as outf:
 dictionary = []
     
 while (runs * timeout) < total_time:
-    with open(prefix + "." + str(runs + 1) + ".libfuzzer.out",'w') as outf:
+    runs += 1
+    with open(prefix + "." + str(runs) + ".libfuzzer.out",'w') as outf:
         if len(dictionary) == 0:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
         else:
@@ -49,7 +50,7 @@ while (runs * timeout) < total_time:
     if BUILD_DICT:
         dictionary = []
         dict_started = False
-    with open(prefix + ".libfuzzer.out",'r') as inf:
+    with open(prefix + str(runs) + ".libfuzzer.out",'r') as inf:
         coverage = None
         execs = None
         fit = None
