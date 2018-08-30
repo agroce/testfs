@@ -1,11 +1,9 @@
 #ifndef _BLOCK_H
 #define _BLOCK_H
 
-#include "setjmp.h"
-
 #include "super.h"
 
-int set_reset_countdown(int k);
+void set_reset_countdown(int k);
 int get_reset_countdown();
 
 void write_blocks(struct super_block *sb, char *blocks, int start, int nr);
