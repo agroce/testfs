@@ -53,4 +53,4 @@ for n in names:
         plt.errorbar(t, scipy.mean(values), yerr=conf[1]-scipy.mean(values), color=colors[n])
 
 f1.savefig("libfuzzer.png")
-f1.close()
+
