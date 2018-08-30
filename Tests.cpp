@@ -164,7 +164,7 @@ TEST(TestFs, FilesDirs) {
 	symbolic_int k;
 	ASSUME_GT(k, 0);
 	ASSUME_LT(k, MAX_RESET);
-	printf("STEP %d: set_reset-countdown(%d);", n, k);
+	LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";
 	set_reset_countdown(k);
       });
 
