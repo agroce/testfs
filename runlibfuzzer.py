@@ -45,12 +45,11 @@ while (runs * timeout) < total_time:
             subprocess.call(cmd0, shell=True, stdout=outf, stderr=outf)
         else:
             subprocess.call(cmd1, shell=True, stdout=outf, stderr=outf)            
-    runs += 1
     print prefix, "RUN #" + str(runs)
     if BUILD_DICT:
         dictionary = []
         dict_started = False
-    with open(prefix + str(runs) + ".libfuzzer.out",'r') as inf:
+    with open(prefix + "." + str(runs) + ".libfuzzer.out",'r') as inf:
         coverage = None
         execs = None
         fit = None
@@ -74,7 +73,8 @@ while (runs * timeout) < total_time:
     print "COVERAGE:", coverage
     print "FITNESS:", fit    
     print "EXECS:", execs
-    total_execs += execs
+    if execs:
+        total_execs += execs
     print "TOTAL EXECS:", total_execs
     print "TOTAL RUNTIME:", runs * timeout,"seconds"
     with open(prefix + ".libfuzzer.data",'a') as outf:
