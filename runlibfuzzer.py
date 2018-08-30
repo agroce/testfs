@@ -25,7 +25,7 @@ with open(os.devnull,'w') as dnull:
 
 os.mkdir(prefix + ".corpus")
 
-cmd0 = ["./TestsLF -rss_limit_mv=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
+cmd0 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
         str(timeout) + " " + prefix + ".corpus"]
 if BUILD_DICT:
     cmd1 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
@@ -53,7 +53,11 @@ while (runs * timeout) < total_time:
         coverage = None
         execs = None
         fit = None
+        corpus = None
         for line in inf:
+            if "files found in" in line:
+                try: corpus = int(line.split()[2])
+                except: pass
             if "cov:" in line:
                 try: coverage = int(line.split()[2])
                 except: pass
@@ -73,6 +77,7 @@ while (runs * timeout) < total_time:
             if BUILD_DICT and ("dictionary" in line):
                 dict_started = True
                 current_entry = ""
+    print "SAVED CORPUS SIZE:", corpus
     print "COVERAGE:", coverage
     print "FITNESS:", fit    
     print "EXECS:", execs
