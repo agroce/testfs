@@ -61,7 +61,7 @@ while (runs * timeout) < total_time:
         initFatals = []
         initFatalsCount = 0
         for line in inf:
-            if "INITED:" in line:
+            if "INITED" in line:
                 inited = True            
             if "FATAL" in line:
                 if line not in fatals:
