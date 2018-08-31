@@ -4,7 +4,7 @@ import glob
 
 corpus = sys.argv[1]
 
-cmd = "./Tests --input_test_file corpus/"
+cmd = "./Tests --input_test_file "
 
 crashes = {}
 fatals = {}
