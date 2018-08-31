@@ -20,10 +20,14 @@ else:
 runs = 0
 total_execs = 0
 
-with open(os.devnull,'w') as dnull:
-    subprocess.call(["rm -rf " + prefix + ".corpus"], shell=True, stdout=dnull, stderr=dnull)
+if "--resume" not in sys.argv:
+    with open(os.devnull,'w') as dnull:
+        subprocess.call(["rm -rf " + prefix + ".corpus"], shell=True, stdout=dnull, stderr=dnull)
 
-os.mkdir(prefix + ".corpus")
+    os.mkdir(prefix + ".corpus")
+else:
+    print "RESUMING FUZZING WITH EXISTING CORPUS"
+    assert os.path.exists(prefix + ".corpus")
 
 cmd0 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
         str(timeout) + " " + prefix + ".corpus"]
