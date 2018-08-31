@@ -1,6 +1,6 @@
 import subprocess
-import os
 import sys
+import glob
 
 corpus = sys.argv[1]
 
