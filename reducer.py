@@ -49,6 +49,11 @@ with open(test, 'rb') as test:
 print "ORIGINAL TEST HAS", len(currentTest), "BYTES"
     
 s = structure(initial)
+print "LAST BYTE READ IS", s[1]
+
+if s[1] < len(currentTest):
+    print "SHRINKING TO IGNORE UNREAD BYTES"
+    currentTest = currentTest[:s[1]+1]
 
 changed = True
 while changed:
