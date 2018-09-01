@@ -15,7 +15,7 @@ if "--help" in sys.argv:
 deepstate = sys.argv[1]
 test = sys.argv[2]
 out = sys.argv[3]
-if len(sys.argv) > 3:
+if len(sys.argv) > 4:
     checkString = sys.argv[4]
 else:
     checkString = None
