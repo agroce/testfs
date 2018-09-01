@@ -38,6 +38,7 @@ def structure(result):
         elif "FINISHED OneOf CALL" in line:
             OneOfs.append((currentOneOf[-1], lastRead))
             currentOneOf = currentOneOf[:-1]
+    return (OneOfs, lastRead)
 
 initial = runCandidate(test)
 assert checks(initial)
