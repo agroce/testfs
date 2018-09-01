@@ -60,13 +60,26 @@ while changed:
             outf.write(newTest)
         r = runCandidate(".candidate.test")
         if checks(r):
-            print "FOUND REDUCED TEST OF LENGTH", len(newTest)
+            print "ONEOF REMOVAL SUCCEEDED:", len(newTest)
             s = structure(r)
             changed = True
             currentTest = newTest
             break
+    for b in range(0, len(currentTest)):
+        for v in range(0, currentTest[b]):
+            newTest = bytearray(currentTest)
+            newTest[b] = v
+            with open(".candidate.test", 'wb') as outf:
+                outf.write(newTest)
+            r = runCandidate(".candidate.test")
+            if checks(r):
+                print "BYTE REDUCTION SUCCEEDED:", len(newTest)
+                s = structure(r)
+                changed = True
+                currentTest = newTest
+                break            
     if not changed:
-        print "NO REDUCTIONS VIA REMOVING OneOfs FOUND"
+        print "NO REDUCTIONS FOUND"
         
 with open(out, 'wb') as outf:
     outf.write(currentTest)
