@@ -43,12 +43,30 @@ def structure(result):
 initial = runCandidate(test)
 assert checks(initial)
 
-with open(test, 'rb') as data:
-    data = data.read()
+with open(test, 'rb') as initial:
+    currentTest = bytearray(initial.read())
 
-original = bytes(data)
-print type(original)
-print type(data)
+print "ORIGINAL TEST HAS", len(currentTest), "BYTES"
+    
+s = structure(initial)
 
-print structure(initial)
+changed = True
+while changed:
+    changed = False
+    cuts = s[0]
+    for c in cuts:
+        newTest = currentTest[:c[0]] + currentTest[c[1]+1:]
+        with open(".candidate.test", 'wb') as outf:
+            outf.write(newTest)
+        r = runCandidate(".candidate.test")
+        if checks(r):
+            print "FOUND REDUCED TEST OF LENGTH", len(newTest)
+            s = structure(r)
+            changed = True
+            currentTest = newTest
+            break
+    if not changed:
+        print "NO REDUCTIONS VIA REMOVING OneOfs FOUND"
         
+with open(out, 'wb') as outf:
+    outf.write(currentTest)
