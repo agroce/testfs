@@ -15,7 +15,7 @@ def runCandidate(candidate):
     result = []
     with open(".reducer.out", 'r') as inf:
         for line in inf:
-            result.append(inf)
+            result.append(line)
     return result
 
 def checks(result):
