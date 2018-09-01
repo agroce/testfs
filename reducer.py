@@ -25,6 +25,6 @@ def checks(result):
     return False
 
 initial = runCandidate(test)
-assert checks(result)
+assert checks(initial)
 
         
