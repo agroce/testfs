@@ -24,8 +24,8 @@ try:
     whichTest = args[which+1]
     args = args[:which] + args[which + 2:]
     print args
-except e:
-    print e
+except:
+    pass
     
 deepstate = args[1]
 test = args[2]
@@ -98,7 +98,7 @@ while changed:
             outf.write(newTest)
         r = runCandidate(".candidate.test")
         if checks(r):
-            print "ONEOF REMOVAL SUCCEEDED:", len(newTest)
+            print "ONEOF REMOVAL REDUCED TEST TO", len(newTest), "BYTES"
             s = structure(r)
             changed = True
             currentTest = newTest
@@ -111,7 +111,7 @@ while changed:
                 outf.write(newTest)
             r = runCandidate(".candidate.test")
             if checks(r):
-                print "BYTE REDUCTION SUCCEEDED:", len(newTest)
+                print "BYTE REDUCTION: BYTE", b, "FROM", currentTest[b], "TO", v
                 s = structure(r)
                 changed = True
                 currentTest = newTest
