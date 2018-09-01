@@ -4,7 +4,7 @@ import os
 import shutil
 
 if "--help" in sys.argv:
-    print "usage: deepstate-reduce binary input-test output-test [string]"
+    print "usage: deepstate-reduce binary input-test output-test [string] [--which test]"
     print
     print "Reduces input-test by trying to delete OneOf blocks and lower byte values."
     print "Writes reduced test to output-test."
