@@ -1,5 +1,5 @@
 INFO: No test specified, defaulting to first test
-INFO: Initialized test input buffer with data from `with_resets.corpus/6ebce0ecbc33628f533f16ca76e8bbb12a886e89`
+INFO: Initialized test input buffer with data from `createreset.test`
 INFO: Running: TestFs_FilesDirs from /root/testfs/Tests.cpp(65)
 INFO: /root/testfs/Tests.cpp(76): Making inode free map
 INFO: /root/testfs/Tests.cpp(79): Making block free map
