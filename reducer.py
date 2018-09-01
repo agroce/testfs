@@ -15,6 +15,7 @@ def runCandidate(candidate):
     result = []
     with open(".reducer.out", 'r') as inf:
         for line in inf:
+            print line,
             result.append(line)
     return result
 
