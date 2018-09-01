@@ -34,7 +34,7 @@ def structure(result):
         elif "Reading byte at" in line:
             lastRead = int(line.split()[-1])
             if currentOneOf[-1] == -1:
-                currentOneOf[-1] == lastRead
+                currentOneOf[-1] = lastRead
         elif "FINISHED OneOf CALL" in line:
             OneOfs.append((currentOneOf[-1], lastRead))
             currentOneOf = currentOneOf[:-1]
