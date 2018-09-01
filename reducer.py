@@ -10,8 +10,9 @@ checkString = sys.argv[4]
 
 def runCandidate(candidate):
     with open(".reducer.out", 'w') as outf:
-        subprocess.call([deepstate + " --verbose_reads --input_test_file " +
-                             candidate], shell=True, stdout=outf, stderr=outf)
+        subprocess.call([deepstate + " --input_test_file " +
+                         candidate + " --verbose_reads"],
+                        shell=True, stdout=outf, stderr=outf)
     result = []
     with open(".reducer.out", 'r') as inf:
         for line in inf:
