@@ -25,7 +25,7 @@ try:
     args = args[:which] + args[which + 2:]
     print args
 except:
-    pass
+    whichTest = None
     
 deepstate = args[1]
 test = args[2]
@@ -37,9 +37,11 @@ else:
 
 def runCandidate(candidate):
     with open(".reducer.out", 'w') as outf:
-        subprocess.call([deepstate + " --input_test_file " +
-                         candidate + " --verbose_reads"],
-                        shell=True, stdout=outf, stderr=outf)
+        cmd = [deepstate + " --input_test_file " +
+               candidate + " --verbose_reads"]
+        if whichTest is not None:
+            cmd += ["--input_which_test", whichTest]
+        subprocess.call(cmd, shell=True, stdout=outf, stderr=outf)
     result = []
     with open(".reducer.out", 'r') as inf:
         for line in inf:
