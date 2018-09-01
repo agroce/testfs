@@ -85,6 +85,11 @@ while changed:
                 break            
     if not changed:
         print "NO REDUCTIONS FOUND"
+
+if (s[1] + 1) > len(currentTest):
+    print "PADDING TEST WITH ZEROS"
+    padding = bytearray('\x00' * (s[1] + 1) - currentTest)
+    currentTest = currentTest + padding
         
 with open(out, 'wb') as outf:
     outf.write(currentTest)
