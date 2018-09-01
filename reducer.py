@@ -22,7 +22,7 @@ args = sys.argv
 try:
     which = args.index("--which")
     whichTest = args[which+1]
-    args = args[:which] + args[which + 2]
+    args = args[:which] + args[which + 2:]
     print args
 except e:
     print e
