@@ -8,10 +8,21 @@ if "--help" in sys.argv:
     print
     print "Reduces input-test by trying to delete OneOf blocks and lower byte values."
     print "Writes reduced test to output-test."
-    print "Optional string gives an output reduction criteria."
-    print "If no string provided, looks for Failure or Crash."
+    print "Optional string gives an output reduction criteria (string to look for in output)."
+    print "If no string is provided, looks for Failure or Crash."
+    print
+    print "--which test allows control over which DeepState test is executed, if"
+    print "none is provided, defaults to last test defined."
     sys.exit(0)
 
+try:
+    which = sys.argv.index("--which")
+    whichTest = sys.argv[which+1]
+    sys.argv = sys.argv[:which] + sys.argv[which + 2]
+    print sys.argv
+except:
+    pass
+    
 deepstate = sys.argv[1]
 test = sys.argv[2]
 out = sys.argv[3]
