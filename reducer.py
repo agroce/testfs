@@ -43,8 +43,8 @@ def structure(result):
 initial = runCandidate(test)
 assert checks(initial)
 
-with open(test, 'rb') as initial:
-    currentTest = bytearray(initial.read())
+with open(test, 'rb') as test:
+    currentTest = bytearray(test.read())
 
 print "ORIGINAL TEST HAS", len(currentTest), "BYTES"
     
