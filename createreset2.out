@@ -1,0 +1,62 @@
+INFO: No test specified, defaulting to first test
+INFO: Initialized test input buffer with data from `createreset2.test`
+INFO: Running: TestFs_FilesDirs from /root/testfs/Tests.cpp(65)
+INFO: /root/testfs/Tests.cpp(76): Making inode free map
+INFO: /root/testfs/Tests.cpp(79): Making block free map
+INFO: /root/testfs/Tests.cpp(82): Making checksum table
+INFO: /root/testfs/Tests.cpp(85): Making inode blocks
+INFO: /root/testfs/Tests.cpp(97): Created root directory; File system initialized
+INFO: /root/testfs/Tests.cpp(106): Checking the initial file system...
+INFO: nr of allocated inodes = 1
+
+INFO: nr of allocated blocks = 1
+
+INFO: /root/testfs/Tests.cpp(56): Checked condition
+INFO: /root/testfs/Tests.cpp(57): Checked condition
+INFO: STEP 0: tfs_mkdir(sb, "aB");
+INFO: STEP 0: tfs_mkdir(sb, "aB") = 0
+INFO: /root/testfs/Tests.cpp(182): Checking the file system...
+INFO: nr of allocated inodes = 2
+
+INFO: nr of allocated blocks = 2
+
+INFO: /root/testfs/Tests.cpp(56): Checked condition
+INFO: /root/testfs/Tests.cpp(57): Checked condition
+INFO: STEP 1: create(sb, "ab");
+INFO: STEP 1: create(sb, "ab") = 0
+INFO: /root/testfs/Tests.cpp(182): Checking the file system...
+INFO: nr of allocated inodes = 3
+
+INFO: nr of allocated blocks = 2
+
+INFO: /root/testfs/Tests.cpp(56): Checked condition
+INFO: /root/testfs/Tests.cpp(57): Checked condition
+INFO: STEP 2: tfs_rmdir(sb, "aB");
+INFO: STEP 2: tfs_rmdir(sb, "aB") = 0
+INFO: /root/testfs/Tests.cpp(182): Checking the file system...
+INFO: nr of allocated inodes = 2
+
+INFO: nr of allocated blocks = 1
+
+INFO: /root/testfs/Tests.cpp(167): Checked condition
+INFO: /root/testfs/Tests.cpp(169): Checked condition
+INFO: /root/testfs/Tests.cpp(170): Checked condition
+INFO: /root/testfs/Tests.cpp(171): STEP 3: set_reset_countdown(2);
+INFO: /root/testfs/Tests.cpp(182): Checking the file system...
+INFO: nr of allocated inodes = 2
+
+INFO: nr of allocated blocks = 1
+
+INFO: /root/testfs/Tests.cpp(56): Checked condition
+INFO: /root/testfs/Tests.cpp(57): Checked condition
+INFO: STEP 4: create(sb, "aa");
+INFO: Decremented reset counter to 1
+INFO: Decremented reset counter to 0
+INFO: Ignoring write due to simulated reset
+INFO: Ignoring write due to simulated reset
+INFO: Ignoring write due to simulated reset
+INFO: STEP 4: create(sb, "aa") = 0
+INFO: /root/testfs/Tests.cpp(176): Reset took place during operation.
+INFO: /root/testfs/Tests.cpp(182): Checking the file system...
+FATAL: /root/testfs/super.c(252): Assertion (testfs_inode_get_type(in) == I_FILE) || (testfs_inode_get_type(in) == I_DIR) failed in function int testfs_checkfs(struct super_block *, struct bitmap *, struct bitmap *, int)
+ERROR: Failed: TestFs_FilesDirs
