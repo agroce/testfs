@@ -87,7 +87,7 @@ while changed:
         print "NO REDUCTIONS FOUND"
 
 if (s[1] + 1) > len(currentTest):
-    print "PADDING TEST WITH ZEROS"
+    print "PADDING TEST WITH", (s[1] + 1) - len(currentTest), "ZEROS"
     padding = bytearray('\x00' * ((s[1] + 1) - len(currentTest)))
     currentTest = currentTest + padding
         
