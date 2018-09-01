@@ -24,8 +24,8 @@ try:
     whichTest = args[which+1]
     args = args[:which] + args[which + 2]
     print args
-except:
-    pass
+except e:
+    print e
     
 deepstate = args[1]
 test = args[2]
