@@ -3,10 +3,22 @@ import subprocess
 import os
 import shutil
 
+if "--help" in sys.argv:
+    print "usage: deepstate-reduce binary input-test output-test [string]"
+    print
+    print "Reduces input-test by trying to delete OneOf blocks and lower byte values."
+    print "Writes reduced test to output-test."
+    print "Optional string gives an output reduction criteria."
+    print "If no string provided, looks for Failure or Crash."
+    sys.exit(0)
+
 deepstate = sys.argv[1]
 test = sys.argv[2]
 out = sys.argv[3]
-checkString = sys.argv[4]
+if len(sys.argv) > 3:
+    checkString = sys.argv[4]
+else:
+    checkString = None
 
 def runCandidate(candidate):
     with open(".reducer.out", 'w') as outf:
@@ -21,8 +33,14 @@ def runCandidate(candidate):
 
 def checks(result):
     for line in result:
-        if checkString in line:
-            return True
+        if checkString:
+            if checkString in line:
+                return True
+        else:
+            if "ERROR: Failed:" in line:
+                return True
+            if "ERROR: Crashed" in line:
+                return True
     return False
 
 def structure(result):
