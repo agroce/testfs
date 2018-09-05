@@ -150,10 +150,16 @@ int tfs_lsr(struct super_block * sb) {
   return cmd_lsr(sb, &c);
 }
 
-int tfs_open(struct super_block *sb, const char *path, int size, ...) {
-  return 1;
-}
-
-int tfs_close(struct super_block *sb, int fd) {
-  return 0;
+int tfs_cat(struct super_block *sb, const char *path) {
+  struct context c;
+  int r;
+  char *pcopy = malloc((strlen(path)+1)*sizeof(char));
+  strcpy(pcopy, path);  
+  if (put_context_at_dir(sb, pcopy, &c) < 0) {
+    return -1;
+  }
+  c.nargs = 2;
+  r = cmd_cat(sb, &c);
+  free(c.cmd[1]);  
+  return r;
 }

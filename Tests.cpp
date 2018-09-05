@@ -162,6 +162,12 @@ TEST(TestFs, FilesDirs) {
         r = tfs_stat(sb, path);
 	LOG(INFO) << "RESULT " << n << ": tfs_stat(sb) = " << r;
       },
+      [&r, n, sb, &path] {
+	MakeNewPath(path);
+	LOG(INFO) << "STEP " << n << ": tfs_cat(sb);";
+        r = tfs_cat(sb, path);
+	LOG(INFO) << "RESULT " << n << ": tfs_cat(sb) = " << r;
+      },
       [n, sb] {
 	ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
 	symbolic_int k;

@@ -10,7 +10,5 @@ int tfs_checkfs(struct super_block *sb);
 int tfs_ls(struct super_block *sb);
 int tfs_lsr(struct super_block *sb);
 int tfs_stat(struct super_block *sb, const char *path);
-
-int tfs_open(struct super_block *sb, const char *path, int size, ...);
-int tfs_close(struct super_block *sb, int fd);
+int tfs_cat(struct super_block *sb, const char *path);
 #endif /* _POSIXTFS_H_ */
