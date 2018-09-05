@@ -91,11 +91,10 @@ TEST(TestFs, FilesDirs) {
     << "Couldn't initialize super block";
 
   ASSERT(!testfs_make_root_dir(sb))
-      << "Couldn't create root directory.";
+    << "Couldn't create root directory.";
 
   testfs_close_super_block(sb);
-  LOG(INFO)
-      << "Created root directory; File system initialized";
+  LOG(INFO) << "Created root directory; File system initialized";
 
   ASSERT(!testfs_init_super_block(storage, 0, &sb))
     << "Couldn't initialize super block";
@@ -114,54 +113,54 @@ TEST(TestFs, FilesDirs) {
     OneOf(
       [&r, n, sb, &path] {
         MakeNewPath(path);
-        printf("STEP %d: tfs_mkdir(sb, \"%s\");",
-               n, path);
+	LOG(INFO) <<
+	  "STEP " << n << ": tfs_mkdir(sb, \"" << path << "\");";
         r = tfs_mkdir(sb, path);
-	printf("STEP %d: tfs_mkdir(sb, \"%s\") = %d",
-	       n, path, r);
+	LOG(INFO) <<
+	  "RESULT " << n << ": tfs_mkdir(sb, \"" << path << "\") = " << r;
       },
       [&r, n, sb, &path] {
         MakeNewPath(path);
-        printf("STEP %d: tfs_rmdir(sb, \"%s\");",
-               n, path);
+	LOG(INFO) <<
+	  "STEP " << n << ": tfs_rmdir(sb, \"" << path << "\");";
         r = tfs_rmdir(sb, path);
-	printf("STEP %d: tfs_rmdir(sb, \"%s\") = %d",
-	       n, path, r);	
+	LOG(INFO) <<
+	  "RESULT " << n << ": tfs_rmdir(sb, \"" << path << "\") = " << r;
       },
       [&r, n, sb] {
-        printf("STEP %d: tfs_ls(sb);", n);
+	LOG(INFO) << "STEP " << n << ": tfs_ls(sb);";
         r = tfs_ls(sb);
-	printf("STEP %d: tfs_ls(sb) = %d", n, r);	
+	LOG(INFO) << "RESULT " << n << ": tfs_ls(sb) = " << r;
       },
       [&r, n, sb] {
-        printf("STEP %d: tfs_lsr(sb);", n);
+	LOG(INFO) << "STEP " << n << ": tfs_lsr(sb);";
         r = tfs_lsr(sb);
-	printf("STEP %d: tfs_lsr(sb) = %d", n, r);	
+	LOG(INFO) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
       },
       [&r, n, sb, &path] {
 	MakeNewPath(path);
-        printf("STEP %d: create(sb, \"%s\");", 
-               n, path);
+	LOG(INFO) <<
+	  "STEP " << n << ": tfs_create(sb, \"" << path << "\");";
         r = tfs_create(sb, path);
-	printf("STEP %d: create(sb, \"%s\") = %d",
-	       n, path, r);	
+	LOG(INFO) <<
+	  "RESULT " << n << ": tfs_create(sb, \"" << path << "\") = " << r;
       },
       [&r, n, sb, &path, &data] {
 	MakeNewPath(path);
         MakeNewData(data);
-        printf("STEP %d: write(sb, \"%s\", \"%s\");", 
-               n, path, data);
+	LOG(INFO) <<
+	  "STEP " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
+	  data << "\");";
         r = tfs_write(sb, path, data);
-	printf("STEP %d: write(sb, \"%s\", \"%s\") = %d",
-	       n, path, data, r);	
+	LOG(INFO) <<
+	  "RESULT " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
+	  data << "\") = " << r;
       },
       [&r, n, sb, &path] {
 	MakeNewPath(path);
-        printf("STEP %d: stat(sb, \"%s\");", 
-               n, path);
+	LOG(INFO) << "STEP " << n << ": tfs_stat(sb);";
         r = tfs_stat(sb, path);
-	printf("STEP %d: stat(sb, \"%s\") = %d",
-	       n, path, r);	
+	LOG(INFO) << "RESULT " << n << ": tfs_stat(sb) = " << r;
       },
       [n, sb] {
 	ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
