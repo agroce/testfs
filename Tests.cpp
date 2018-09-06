@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#include <fcntl.h>
-
 #include <deepstate/DeepState.hpp>
 
 using namespace deepstate;
@@ -71,7 +68,7 @@ TEST(TestFs, FilesDirs) {
   
   struct super_block *sb = testfs_make_super_block(storage);
   ASSERT(sb != nullptr)
-      << "Couldn't initialize super block";
+    << "Couldn't initialize super block";
 
   LOG(INFO) << "Making inode free map";
   testfs_make_inode_freemap(sb);
@@ -111,71 +108,71 @@ TEST(TestFs, FilesDirs) {
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-      [&r, n, sb, &path] {
-        MakeNewPath(path);
-	LOG(INFO) <<
-	  "STEP " << n << ": tfs_mkdir(sb, \"" << path << "\");";
-        r = tfs_mkdir(sb, path);
-	LOG(INFO) <<
-	  "RESULT " << n << ": tfs_mkdir(sb, \"" << path << "\") = " << r;
-      },
-      [&r, n, sb, &path] {
-        MakeNewPath(path);
-	LOG(INFO) <<
-	  "STEP " << n << ": tfs_rmdir(sb, \"" << path << "\");";
-        r = tfs_rmdir(sb, path);
-	LOG(INFO) <<
-	  "RESULT " << n << ": tfs_rmdir(sb, \"" << path << "\") = " << r;
-      },
-      [&r, n, sb] {
-	LOG(INFO) << "STEP " << n << ": tfs_ls(sb);";
-        r = tfs_ls(sb);
-	LOG(INFO) << "RESULT " << n << ": tfs_ls(sb) = " << r;
-      },
-      [&r, n, sb] {
-	LOG(INFO) << "STEP " << n << ": tfs_lsr(sb);";
-        r = tfs_lsr(sb);
-	LOG(INFO) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
-      },
-      [&r, n, sb, &path] {
-	MakeNewPath(path);
-	LOG(INFO) <<
-	  "STEP " << n << ": tfs_create(sb, \"" << path << "\");";
-        r = tfs_create(sb, path);
-	LOG(INFO) <<
-	  "RESULT " << n << ": tfs_create(sb, \"" << path << "\") = " << r;
-      },
-      [&r, n, sb, &path, &data] {
-	MakeNewPath(path);
-        MakeNewData(data);
-	LOG(INFO) <<
-	  "STEP " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
-	  data << "\");";
-        r = tfs_write(sb, path, data);
-	LOG(INFO) <<
-	  "RESULT " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
-	  data << "\") = " << r;
-      },
-      [&r, n, sb, &path] {
-	MakeNewPath(path);
-	LOG(INFO) << "STEP " << n << ": tfs_stat(sb);";
-        r = tfs_stat(sb, path);
-	LOG(INFO) << "RESULT " << n << ": tfs_stat(sb) = " << r;
-      },
-      [&r, n, sb, &path] {
-	MakeNewPath(path);
-	LOG(INFO) << "STEP " << n << ": tfs_cat(sb);";
-        r = tfs_cat(sb, path);
-	LOG(INFO) << "RESULT " << n << ": tfs_cat(sb) = " << r;
-      },
-      [n, sb] {
-	ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
-	symbolic_int k;
-	ASSUME_GT(k, 0);
-	ASSUME_LT(k, MAX_RESET);
-	LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";
-	set_reset_countdown(k);
-      });
+	  [&r, n, sb, &path] {
+	    MakeNewPath(path);
+	    LOG(INFO) <<
+	      "STEP " << n << ": tfs_mkdir(sb, \"" << path << "\");";
+	    r = tfs_mkdir(sb, path);
+	    LOG(INFO) <<
+	      "RESULT " << n << ": tfs_mkdir(sb, \"" << path << "\") = " << r;
+	  },
+	  [&r, n, sb, &path] {
+	    MakeNewPath(path);
+	    LOG(INFO) <<
+	      "STEP " << n << ": tfs_rmdir(sb, \"" << path << "\");";
+	    r = tfs_rmdir(sb, path);
+	    LOG(INFO) <<
+	      "RESULT " << n << ": tfs_rmdir(sb, \"" << path << "\") = " << r;
+	  },
+	  [&r, n, sb] {
+	    LOG(INFO) << "STEP " << n << ": tfs_ls(sb);";
+	    r = tfs_ls(sb);
+	    LOG(INFO) << "RESULT " << n << ": tfs_ls(sb) = " << r;
+	  },
+	  [&r, n, sb] {
+	    LOG(INFO) << "STEP " << n << ": tfs_lsr(sb);";
+	    r = tfs_lsr(sb);
+	    LOG(INFO) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
+	  },
+	  [&r, n, sb, &path] {
+	    MakeNewPath(path);
+	    LOG(INFO) <<
+	      "STEP " << n << ": tfs_create(sb, \"" << path << "\");";
+	    r = tfs_create(sb, path);
+	    LOG(INFO) <<
+	      "RESULT " << n << ": tfs_create(sb, \"" << path << "\") = " << r;
+	  },
+	  [&r, n, sb, &path, &data] {
+	    MakeNewPath(path);
+	    MakeNewData(data);
+	    LOG(INFO) <<
+	      "STEP " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
+	      data << "\");";
+	    r = tfs_write(sb, path, data);
+	    LOG(INFO) <<
+	      "RESULT " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
+	      data << "\") = " << r;
+	  },
+	  [&r, n, sb, &path] {
+	    MakeNewPath(path);
+	    LOG(INFO) << "STEP " << n << ": tfs_stat(sb);";
+	    r = tfs_stat(sb, path);
+	    LOG(INFO) << "RESULT " << n << ": tfs_stat(sb) = " << r;
+	  },
+	  [&r, n, sb, &path] {
+	    MakeNewPath(path);
+	    LOG(INFO) << "STEP " << n << ": tfs_cat(sb);";
+	    r = tfs_cat(sb, path);
+	    LOG(INFO) << "RESULT " << n << ": tfs_cat(sb) = " << r;
+	  },
+	  [n, sb] {
+	    ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
+	    symbolic_int k;
+	    ASSUME_GT(k, 0);
+	    ASSUME_LT(k, MAX_RESET);
+	    LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";
+	    set_reset_countdown(k);
+	  });
 
     if (get_reset_countdown() == 0) {
       LOG(INFO) << "Reset took place during operation.";
