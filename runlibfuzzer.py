@@ -3,8 +3,9 @@ import os
 import sys
 
 timeout = 60
-prefix = sys.argv[1]
-total_time = int(sys.argv[2])
+executable = sys.argv[1]
+prefix = sys.argv[2]
+total_time = int(sys.argv[3])
 
 BUILD_DICT = "--no_dict" not in sys.argv
 VALUE_PROFILE = "--no_value_profile" not in sys.argv
@@ -29,16 +30,16 @@ else:
     print "RESUMING FUZZING WITH EXISTING CORPUS"
     assert os.path.exists(prefix + ".corpus")
 
-cmd0 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
+cmd0 = [executable + " -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
         str(timeout) + " " + prefix + ".corpus"]
 if BUILD_DICT:
-    cmd1 = ["./TestsLF -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
+    cmd1 = [executable + " -rss_limit_mb=4096" + val_prof + "-print_final_stats=1 -max_total_time=" +
             str(timeout) + " -dict=" + prefix + ".dict.txt " + prefix + ".corpus"]
 else:
     cmd1 = cmd0
 
 with open(prefix + ".libfuzzer.data",'w') as outf:
-    outf.write("time,coverage,fitness,total_execs,dictionary\n")
+    outf.write("time,coverage,fitness,total_execs,dictionary,fatals\n")
 
 dictionary = []
 
@@ -116,7 +117,7 @@ while (runs * timeout) < total_time:
     print "TOTAL RUNTIME:", runs * timeout,"seconds"
     with open(prefix + ".libfuzzer.data",'a') as outf:
         outf.write(str(runs * timeout) + "," + str(coverage) + "," + str(fit) + "," +
-                   str(total_execs) + "," + str(len(dictionary)) + "\n")
+                   str(total_execs) + "," + str(len(dictionary)) + "," + str(fatalCount) + "\n")
     if BUILD_DICT:
         print "DICTIONARY LENGTH:", len(dictionary)
         with open(prefix + ".dict.txt",'w') as outf:
