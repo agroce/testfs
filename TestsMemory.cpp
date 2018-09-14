@@ -83,9 +83,8 @@ static void MakeNewPath(char *path) {
   } else {
     target = DeepState_UInt();
     ASSUME_LT(target, PATH_MEMORY_SIZE);
-    LOG(INFO) <<
-      "Returning previously generated path @" <<
-      target << " " << paths[target];    
+    LOG(INGO) << "Returning path @" << target;
+    LOG(INFO) << "Path = " << paths[target];
   }
   strcpy(path, paths[target]);
 }
