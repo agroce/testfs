@@ -76,7 +76,7 @@ static void MakeNewPath(char *path) {
       target = DeepState_UInt();
       ASSUME_LT(target, PATH_MEMORY_SIZE);
     }
-    GenPath(&paths[target]);
+    GenPath(paths[target]);
   } else {
     target = DeepState_UInt();
     ASSUME_LT(target, PATH_MEMORY_SIZE);
