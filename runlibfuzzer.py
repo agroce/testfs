@@ -117,7 +117,7 @@ while (runs * timeout) < total_time:
     print "TOTAL RUNTIME:", runs * timeout,"seconds"
     with open(prefix + ".libfuzzer.data",'a') as outf:
         outf.write(str(runs * timeout) + "," + str(coverage) + "," + str(fit) + "," +
-                   str(total_execs) + "," + str(len(dictionary)) + "," + str(fatalCount) + "\n")
+                   str(total_execs) + "," + str(len(dictionary)) + "," + str(len(fatals)) + "\n")
     if BUILD_DICT:
         print "DICTIONARY LENGTH:", len(dictionary)
         with open(prefix + ".dict.txt",'w') as outf:
