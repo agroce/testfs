@@ -68,7 +68,7 @@ static void GenPath(char *path) {
 }
 
 static void MakeNewPath(char *path) {
-  int target = generated;
+  unsigned int target = generated;
   if ((generated == 0) || DeepState_Bool()) {
     LOG(INFO) << "Generating new path (" << generated << " previous generated)";
     if (generated < PATH_MEMORY_SIZE) {
