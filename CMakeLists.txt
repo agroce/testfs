@@ -41,6 +41,18 @@ set(TESTS_SOURCE_FILES
   super.c
   tx.c)
 
+set(TESTS_MEMORY_SOURCE_FILES
+  TestsMemory.cpp
+  posixtfs.c
+  bitmap.c
+  block.c
+  csum.c
+  dir.c
+  file.c
+  inode.c
+  super.c
+  tx.c)
+
 set(MKDIR_RMDIR_SOURCE_FILES
   Tests.cpp
   posixtfs.c
@@ -59,6 +71,11 @@ add_executable(Tests
 add_executable(TestsLF
   ${TESTS_SOURCE_FILES})
 
+add_executable(TestsMemory
+  ${TESTS_MEMORY_SOURCE_FILES})
+
+add_executable(TestsMemoryLF
+  ${TESTS_MEMORY_SOURCE_FILES})
 
 add_executable(MkdirRmdir
   ${MKDIR_RMDIR_SOURCE_FILES})
@@ -69,10 +86,17 @@ add_executable(MkdirRmdirLF
 set_target_properties(Tests 
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
 
+set_target_properties(TestsMemory
+  PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
+
 set_target_properties(MkdirRmdir
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
 
 set_target_properties(TestsLF 
+  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined
+  -DLIBFUZZER" LINK_FLAGS "-g")
+
+set_target_properties(TestsMemoryLF 
   PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
 
 set_target_properties(MkdirRmdirLF 
@@ -81,10 +105,16 @@ set_target_properties(MkdirRmdirLF
 target_link_libraries(Tests 
   deepstate)
 
+target_link_libraries(TestsMemory
+  deepstate)
+
 target_link_libraries(MkdirRmdir
   deepstate)
 
 target_link_libraries(TestsLF 
+  deepstate_LF)
+
+target_link_libraries(TestsMemoryLF 
   deepstate_LF)
 
 target_link_libraries(MkdirRmdirLF 
@@ -92,8 +122,12 @@ target_link_libraries(MkdirRmdirLF
 
 target_link_libraries(Tests -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
+target_link_libraries(TestsMemory -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
+
 target_link_libraries(MkdirRmdir -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
 target_link_libraries(TestsLF "-fsanitize=fuzzer,undefined")
+
+target_link_libraries(TestsMemoryLF "-fsanitize=fuzzer,undefined")
 
 target_link_libraries(MkdirRmdirLF "-fsanitize=fuzzer,undefined")
