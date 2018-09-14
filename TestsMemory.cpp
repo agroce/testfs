@@ -76,7 +76,7 @@ static void MakeNewPath(char *path) {
       target = DeepState_UInt();
       ASSUME_LT(target, PATH_MEMORY_SIZE);
     }
-    GenPath(paths[target]);
+    GenPath(&paths[target]);
   } else {
     target = DeepState_UInt();
     ASSUME_LT(target, PATH_MEMORY_SIZE);
@@ -84,7 +84,13 @@ static void MakeNewPath(char *path) {
   strcpy(path, paths[target]);
 }
 
+static void InitPathMem() {
+  generated = 0;
+}
+
 TEST(TestFs, FilesDirs) {
+  InitPathMem();
+  
   char storage[MAX_STORAGE];
 
   memset(storage, 0, MAX_STORAGE);
