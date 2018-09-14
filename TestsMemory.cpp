@@ -69,6 +69,7 @@ static void GenPath(char *path) {
 
 static void MakeNewPath(char *path) {
   int target = generated;
+  LOG(INFO) << "Generating new path (" << generated << " previous generated)";  
   if ((generated == 0) || DeepState_Bool()) {
     if (generated < PATH_MEMORY_SIZE) {
       generated++;
@@ -76,10 +77,15 @@ static void MakeNewPath(char *path) {
       target = DeepState_UInt();
       ASSUME_LT(target, PATH_MEMORY_SIZE);
     }
+    LOG(INFO) << "Generating @" << target;
     GenPath(paths[target]);
+    LOG(INFO) << "New path = " << paths[target];
   } else {
     target = DeepState_UInt();
     ASSUME_LT(target, PATH_MEMORY_SIZE);
+    LOG(INFO) <<
+      "Returning previously generated path @" <<
+      target << " " << paths[target];    
   }
   strcpy(path, paths[target]);
 }
