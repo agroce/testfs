@@ -54,7 +54,7 @@ set(TESTS_MEMORY_SOURCE_FILES
   tx.c)
 
 set(MKDIR_RMDIR_SOURCE_FILES
-  Tests.cpp
+  MkdirRmdir.cpp
   posixtfs.c
   bitmap.c
   block.c
@@ -93,8 +93,7 @@ set_target_properties(MkdirRmdir
   PROPERTIES COMPILE_FLAGS "-g" LINK_FLAGS "-g")
 
 set_target_properties(TestsLF 
-  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined
-  -DLIBFUZZER" LINK_FLAGS "-g")
+  PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
 
 set_target_properties(TestsMemoryLF 
   PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
