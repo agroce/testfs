@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set(CMAKE_C_COMPILER "clang")
+set(CMAKE_CXX_COMPILER "clang++")
+
 project(testfs)
 cmake_minimum_required(VERSION 2.8)
-
-SET(CMAKE_C_COMPILER /usr/bin/clang)
-SET(CMAKE_CXX_COMPILER /usr/bin/clang++)
 
 enable_language(C)
 enable_language(CXX)
