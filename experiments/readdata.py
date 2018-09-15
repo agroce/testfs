@@ -20,8 +20,6 @@ for n in names:
             reader = csv.DictReader(data)
             for row in reader:
                 allValues[n][e][int(row['time'])] = row
-                if int(row['coverage']) > 1770:
-                    print n,e,int(row['time']),int(row['coverage'])
 
 for n in names:
     t3600 = []
