@@ -159,7 +159,7 @@ target_link_libraries(MkdirRmdir -static "-Wl,--allow-multiple-definition,--no-e
 
 target_link_libraries(TestsLF "-fsanitize=fuzzer,undefined")
 
-target_link_libraries(SecdevTestfs "-fsanitize=fuzzer,undefined")
+target_link_libraries(SecdevTestfsLF "-fsanitize=fuzzer,undefined")
 
 target_link_libraries(TestsMemoryLF "-fsanitize=fuzzer,undefined")
 
