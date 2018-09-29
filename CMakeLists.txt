@@ -116,7 +116,7 @@ set_target_properties(MkdirRmdir
 set_target_properties(TestsLF 
   PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
 
-set_target_properties(SecdevTestsLF 
+set_target_properties(SecdevTestfsLF 
   PROPERTIES COMPILE_FLAGS "-g -fsanitize=fuzzer,undefined -DLIBFUZZER" LINK_FLAGS "-g")
 
 set_target_properties(TestsMemoryLF 
