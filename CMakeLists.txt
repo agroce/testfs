@@ -86,7 +86,7 @@ add_executable(TestsLF
 add_executable(SecdevTestfs
   ${SECDEV_TESTS_SOURCE_FILES})
 
-add_executable(SecdevTestfs
+add_executable(SecdevTestfsLF
   ${SECDEV_TESTS_SOURCE_FILES})
 
 add_executable(TestsMemory
