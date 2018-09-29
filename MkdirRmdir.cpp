@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#include <fcntl.h>
-
 #include <deepstate/DeepState.hpp>
 
 using namespace deepstate;
@@ -87,8 +85,8 @@ TEST(TestFs, MkdirRmdir) {
   MakeNewPath(path);
   tfs_mkdir(sb, path);
 
-  //MakeNewPath(path);
-  //tfs_rmdir(sb, path);
+  MakeNewPath(path);
+  tfs_rmdir(sb, path);
 
   testfs_close_super_block(sb);
 }
