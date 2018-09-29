@@ -131,10 +131,3 @@ TEST(TestFs, FilesDirs) {
 
   testfs_close_super_block(sb);
 }
-
-#ifndef LIBFUZZER
-int main(int argc, char *argv[]) {
-  DeepState_InitOptions(argc, argv);
-  return DeepState_Run();
-}
-#endif
