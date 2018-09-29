@@ -140,7 +140,7 @@ target_link_libraries(MkdirRmdir
 target_link_libraries(TestsLF 
   deepstate_LF) 
 
-target_link_libraries(SecdevTestfs
+target_link_libraries(SecdevTestfsLF
   deepstate_LF) 
 
 target_link_libraries(TestsMemoryLF 
