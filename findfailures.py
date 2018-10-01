@@ -23,16 +23,18 @@ for f in glob.glob(corpus + "/*"):
                 fatalline = line
             if "STEP" in line:
                 stepcount += 1
-    if crashline not in crashes:
-        crashes[crashline] = (stepcount, f)
-    else:
-        if stepcount < crashes[crashline][0]:
+    if crashline is not None:
+        if crashline not in crashes:
             crashes[crashline] = (stepcount, f)
-    if fatalline not in fatals:
-        fatals[fatalline] = (stepcount, f)
-    else:
-        if stepcount < fatals[fatalline][0]:
+        else:
+            if stepcount < crashes[crashline][0]:
+                crashes[crashline] = (stepcount, f)
+    if fatalline is not None:
+        if fatalline not in fatals:
             fatals[fatalline] = (stepcount, f)
+        else:
+            if stepcount < fatals[fatalline][0]:
+                fatals[fatalline] = (stepcount, f)
 for fatal in fatals:
     print fatal, fatals[fatal]
 for crash in crashes:
