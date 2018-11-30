@@ -203,15 +203,13 @@ TEST(TestFs, FilesDirs) {
 	  },
 	  [n, sb] {
 	    ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
-	    symbolic_int k;
-	    ASSUME_GT(k, 0);
-	    ASSUME_LT(k, MAX_RESET);
+	    int k = DeepState_IntInRange(1, MAX_RESET);	    
 	    LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";
 	    set_reset_countdown(k);
 	  });
 
     if (get_reset_countdown() == 0) {
-      LOG(INFO) << "Reset took place during operation.";
+      LOG(INFO) << "Reset took place during operation.";      
       set_reset_countdown(-1);
       ASSERT(!testfs_init_super_block(storage, 0, &sb))
 	<< "Couldn't initialize super block";
