@@ -33,12 +33,12 @@ extern "C" {
 
 static char DataChar() {
   symbolic_char c;
-  char c = DeepState_CharRange('x','y');
+  char c = DeepState_CharInRange('x','y');
   return c;
 }
 
 static void MakeNewData(char *data) {
-  unsigned l = DeepState_UIntRange(1, DATA_LEN);
+  unsigned l = DeepState_UIntInRange(1, DATA_LEN);
   unsigned i;
   for (i = 0; i < l; i++) {
     data[i] = DataChar();
@@ -48,7 +48,7 @@ static void MakeNewData(char *data) {
 
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
-  unsigned l = DeepState_UIntRange(1, PATH_LEN);
+  unsigned l = DeepState_UIntInRange(1, PATH_LEN);
   int i, max_i = Pump(l);
   for (i = 0; i < max_i; i++) {
     path[i] = OneOf("aAbB/.");
