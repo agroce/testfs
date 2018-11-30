@@ -32,9 +32,7 @@ extern "C" {
 #define MAX_RESET 5
 
 static char DataChar() {
-  symbolic_char c;
-  char c = DeepState_CharInRange('x','y');
-  return c;
+  return DeepState_CharInRange('x','y');
 }
 
 static void MakeNewData(char *data) {
@@ -47,7 +45,6 @@ static void MakeNewData(char *data) {
 }
 
 static void MakeNewPath(char *path) {
-  symbolic_unsigned l;
   unsigned l = DeepState_UIntInRange(1, PATH_LEN);
   int i, max_i = Pump(l);
   for (i = 0; i < max_i; i++) {
