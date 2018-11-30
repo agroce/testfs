@@ -48,7 +48,7 @@ static void MakeNewData(char *data) {
 
 static void MakeNewPath(char *path) {
   symbolic_unsigned l;
-  unsigned l = DeepState_UIntRange(1, PATH_LEN)
+  unsigned l = DeepState_UIntRange(1, PATH_LEN);
   int i, max_i = Pump(l);
   for (i = 0; i < max_i; i++) {
     path[i] = OneOf("aAbB/.");
