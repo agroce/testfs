@@ -64,16 +64,16 @@ TEST(TestFs, FilesDirs) {
   ASSERT(sb != nullptr)
     << "Couldn't initialize super block";
 
-  LOG(INFO) << "Making inode free map";
+  LOG(TRACE) << "Making inode free map";
   testfs_make_inode_freemap(sb);
 
-  LOG(INFO) << "Making block free map";
+  LOG(TRACE) << "Making block free map";
   testfs_make_block_freemap(sb);
 
-  LOG(INFO) << "Making checksum table";
+  LOG(TRACE) << "Making checksum table";
   testfs_make_csum_table(sb);
 
-  LOG(INFO) << "Making inode blocks";
+  LOG(TRACE) << "Making inode blocks";
   testfs_make_inode_blocks(sb);
 
   testfs_close_super_block(sb);  
@@ -85,7 +85,7 @@ TEST(TestFs, FilesDirs) {
     << "Couldn't create root directory.";
 
   testfs_close_super_block(sb);
-  LOG(INFO) << "Created root directory; File system initialized";
+  LOG(TRACE) << "Created root directory; File system initialized";
 
   ASSERT(!testfs_init_super_block(storage, 0, &sb))
     << "Couldn't initialize super block";
@@ -93,7 +93,7 @@ TEST(TestFs, FilesDirs) {
   struct inode *root = testfs_get_inode(sb, 0);
   ASSERT(root != NULL) << "Root is null!";
 
-  LOG(INFO) << "Checking the initial file system...";  
+  LOG(TRACE) << "Checking the initial file system...";  
   tfs_checkfs(sb);
 
   char path[PATH_LEN+1];
@@ -104,76 +104,76 @@ TEST(TestFs, FilesDirs) {
     OneOf(
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_mkdir(sb, \"" << path << "\");";
 	    r = tfs_mkdir(sb, path);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_mkdir(sb, \"" << path << "\") = " << r;
 	  },
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_rmdir(sb, \"" << path << "\");";
 	    r = tfs_rmdir(sb, path);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_rmdir(sb, \"" << path << "\") = " << r;
 	  },
 	  [&r, n, sb] {
-	    LOG(INFO) << "STEP " << n << ": tfs_ls(sb);";
+	    LOG(TRACE) << "STEP " << n << ": tfs_ls(sb);";
 	    r = tfs_ls(sb);
-	    LOG(INFO) << "RESULT " << n << ": tfs_ls(sb) = " << r;
+	    LOG(TRACE) << "RESULT " << n << ": tfs_ls(sb) = " << r;
 	  },
 	  [&r, n, sb] {
-	    LOG(INFO) << "STEP " << n << ": tfs_lsr(sb);";
+	    LOG(TRACE) << "STEP " << n << ": tfs_lsr(sb);";
 	    r = tfs_lsr(sb);
-	    LOG(INFO) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
+	    LOG(TRACE) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
 	  },
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_create(sb, \"" << path << "\");";
 	    r = tfs_create(sb, path);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_create(sb, \"" << path << "\") = " << r;
 	  },
 	  [&r, n, sb, &path, &data] {
 	    MakeNewPath(path);
 	    MakeNewData(data);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
 	      data << "\");";
 	    r = tfs_write(sb, path, data);
-	    LOG(INFO) <<
+	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
 	      data << "\") = " << r;
 	  },
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(INFO) << "STEP " << n << ": tfs_stat(sb);";
+	    LOG(TRACE) << "STEP " << n << ": tfs_stat(sb);";
 	    r = tfs_stat(sb, path);
-	    LOG(INFO) << "RESULT " << n << ": tfs_stat(sb) = " << r;
+	    LOG(TRACE) << "RESULT " << n << ": tfs_stat(sb) = " << r;
 	  },
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(INFO) << "STEP " << n << ": tfs_cat(sb);";
+	    LOG(TRACE) << "STEP " << n << ": tfs_cat(sb);";
 	    r = tfs_cat(sb, path);
-	    LOG(INFO) << "RESULT " << n << ": tfs_cat(sb) = " << r;
+	    LOG(TRACE) << "RESULT " << n << ": tfs_cat(sb) = " << r;
 	  },
 	  [n, sb] {
 	    ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
 	    int k = DeepState_IntInRange(1, MAX_RESET);
-	    LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";
+	    LOG(TRACE) << "STEP " << n << ": set_reset_countdown(" << k << ");";
 	    set_reset_countdown(k);
 	  });
 
     if (get_reset_countdown() == 0) {
-      LOG(INFO) << "Reset took place during operation.";
+      LOG(TRACE) << "Reset took place during operation.";
       set_reset_countdown(-1);
       ASSERT(!testfs_init_super_block(storage, 0, &sb))
 	<< "Couldn't initialize super block";
     }
     
-    LOG(INFO) << "Checking the file system...";
+    LOG(TRACE) << "Checking the file system...";
     tfs_checkfs(sb);
   }
 
