@@ -31,26 +31,14 @@ extern "C" {
 
 #define MAX_RESET 5
 
-static char DataChar() {
-  return DeepState_CharInRange('x','y');
-}
-
 static void MakeNewData(char *data) {
   unsigned l = DeepState_UIntInRange(1, DATA_LEN);
-  unsigned i;
-  for (i = 0; i < l; i++) {
-    data[i] = DataChar();
-  }
-  data[i] = 0;
+  /* We need to use AssignString since we don't want null strings here. */
+  DeepState_AssignString(data, Pump(l, DATA_LEN-1), "xy", 2, 1);
 }
 
 static void MakeNewPath(char *path) {
-  unsigned l = DeepState_UIntInRange(1, PATH_LEN);
-  int i, max_i = Pump(l);
-  for (i = 0; i < max_i; i++) {
-    path[i] = OneOf("aAbB/.");
-  }
-  path[i] = 0;
+  DeepState_AssignCString(path, PATH_LEN, "aAbB/.", 6, 1);
 }
 
 TEST(TestFs, FilesDirs) {
