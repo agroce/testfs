@@ -33,12 +33,12 @@ extern "C" {
 
 static void MakeNewData(char *data) {
   unsigned l = DeepState_UIntInRange(1, DATA_LEN);
-  /* We need to use AssignString since we don't want null strings here. */
+  /* We need to use AssignCStr since we don't want null strings here. */
   DeepState_AssignCStr(data, Pump(l, DATA_LEN-1), "xy");
 }
 
 static void MakeNewPath(char *path) {
-  DeepState_AssignCStrMax(path, PATH_LEN, "aAbB/.");
+  DeepState_AssignCStrUpToLen(path, PATH_LEN, "aAbB/.");
 }
 
 TEST(TestFs, FilesDirs) {
