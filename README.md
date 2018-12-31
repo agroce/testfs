@@ -18,4 +18,6 @@ Usage
 
 2.  cmake .; make
 
-3.  Use TestsLF to test via libFuzzer, and Tests to replay tests
+3.  Use TestsLF to test via libFuzzer, and Tests to replay tests/use built-in fuzzer
+
+4.  Symbolic analysis is unlikely to work great here
