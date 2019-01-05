@@ -148,10 +148,15 @@ TEST(TestFs, FilesDirs) {
 	    LOG(TRACE) << "RESULT " << n << ": tfs_cat(sb) = " << r;
 	  },
 	  [n, sb] {
-	    ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
-	    int k = DeepState_IntInRange(1, MAX_RESET);
-	    LOG(TRACE) << "STEP " << n << ": set_reset_countdown(" << k << ");";
-	    set_reset_countdown(k);
+	    // ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
+	    // above also works, but is bad for fuzzing
+	    if (get_reset_countdown() == -1) {
+	      int k = DeepState_IntInRange(1, MAX_RESET);
+	      LOG(TRACE) << "STEP " << n << ": set_reset_countdown(" << k << ");";
+	      set_reset_countdown(k);
+	    } else {
+	      LOG(TRACE) << "STEP " << n << ": set_reset_countdown() ignored; already set";
+	    }
 	  });
 
     if (get_reset_countdown() == 0) {
