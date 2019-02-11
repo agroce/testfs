@@ -11,6 +11,8 @@ This version is based on a series of implementations, first adapted to DeepState
 
 Tests.cpp shows what a DeepState harness for a POSIX-like interface looks like.
 
+The tests check that resets at inopportune times do not make the file system unmountable (which does not hold).
+
 Usage
 =====
 
