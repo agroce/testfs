@@ -3,7 +3,7 @@ testfs
 
 This is a DeepState test harness for TestFS, which is a user level toy file system that is similar to ext3.
 
-TestFS comes out of U Toronto file system research:
+TestFS comes out of U. Toronto file system research:
 
 J. Sun, D. Fryer, A. Goel, and A. D. Brown, “Using declarative invariants for protecting file-system integrity,” in Proceedings of the 6th Workshop on Programming Languages and Operating Systems. 2011.  http://www.sigops.org/sosp/sosp11/workshops/plos/06-sun.pdf
 
@@ -20,4 +20,4 @@ Usage
 
 3.  Use TestsLF to test via libFuzzer, and Tests to replay tests/use built-in fuzzer
 
-4.  Symbolic analysis is unlikely to work great here
+4.  Symbolic analysis is unlikely to work great here, the complexity is just too large
