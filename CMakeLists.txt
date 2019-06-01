@@ -56,6 +56,9 @@ add_executable(Tests
 add_executable(TestsLF
   ${TESTS_SOURCE_FILES})
 
+add_executable(TestsAFL
+  ${TESTS_SOURCE_FILES})
+
 add_executable(MkdirRmdir
   ${MKDIR_RMDIR_SOURCE_FILES})
 
@@ -81,14 +84,13 @@ target_link_libraries(MkdirRmdir
   deepstate)
 
 target_link_libraries(TestsLF 
-  deepstate_LF) 
+  deepstate_LF)
+
+target_link_libraries(TestsLF 
+  deepstate_AFL) 
 
 target_link_libraries(MkdirRmdirLF 
   deepstate_LF)
-
-#target_link_libraries(Tests -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
-
-#target_link_libraries(MkdirRmdir -static "-Wl,--allow-multiple-definition,--no-export-dynamic")
 
 target_link_libraries(TestsLF "-fsanitize=fuzzer,undefined,integer,address")
 
