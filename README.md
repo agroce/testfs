@@ -16,10 +16,13 @@ The tests check that resets at inopportune times do not make the file system unm
 Usage
 =====
 
-1.  Install DeepState (https://github.com/trailofbits/deepstate), and build with BUILD_LIBFUZZER
+Easiest way to play with this is to use the [DeepState docker](https://github.com/trailofbits/deepstate#DOCKER), and:
 
-2.  cmake .; make
+1.  clone this repo
+2.  `cmake .`
+3.  `make Tests TestsLF`
+4.  `rm -rf CMakeFiles/ CMakeCache.txt`
+5.  `CC=afl-clang CXX=afl-clang++ cmake .`
+6.  `make TestsAFL`
 
-3.  Use TestsLF to test via libFuzzer, and Tests to replay tests/use built-in fuzzer
-
-4.  Symbolic analysis is unlikely to work great here, the complexity is just too large
+You then have a binary you can fuzz with Eclipser, a binary you can fuzz with libFuzzer, and a binary you can fuzz with AFL.
