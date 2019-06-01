@@ -83,10 +83,10 @@ target_link_libraries(Tests
 target_link_libraries(MkdirRmdir
   deepstate)
 
-target_link_libraries(TestsLF 
+target_link_libraries(TestsLF
   deepstate_LF)
 
-target_link_libraries(TestsLF 
+target_link_libraries(TestsAFL
   deepstate_AFL) 
 
 target_link_libraries(MkdirRmdirLF 
