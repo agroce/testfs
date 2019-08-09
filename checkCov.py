@@ -1,3 +1,4 @@
+from __future__ import print_function
 import subprocess
 import sys
 import os
@@ -33,6 +34,8 @@ with open("new.covout", 'r') as covf:
         coverage_new.append(count)
 
 if coverage_original == coverage_new:
+    print("COVERAGE MATCHES!")
     sys.exit(0)
 else:
+    print("COVERAGE DOES NOT MATCH!")
     sys.exit(1)
