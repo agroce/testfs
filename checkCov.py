@@ -23,7 +23,7 @@ with open("covout", 'r') as covf:
             count = -1
         coverage_original.append(count)
 
-coverage_new = []
+pos = 0
 with open("new.covout", 'r') as covf:
     for line in covf:
         ls = line.split("|")
@@ -33,11 +33,11 @@ with open("new.covout", 'r') as covf:
                 count = 1
         except:
             count = -1
-        coverage_new.append(count)
+        if coverage_original[pos] != count:
+            print("COVERAGE DOES NOT MATCH!")
+            sys.exit(1)
+        pos += 1
 
-if coverage_original == coverage_new:
-    print("COVERAGE MATCHES!")
-    sys.exit(0)
-else:
-    print("COVERAGE DOES NOT MATCH!")
-    sys.exit(1)
+print("COVERAGE MATCHES!")
+sys.exit(0)
+
