@@ -33,7 +33,7 @@ with open("new.covout", 'r') as covf:
                 count = 1
         except:
             count = -1
-        if coverage_original[pos] != count:
+        if coverage_original[pos] > count:
             print("COVERAGE DOES NOT MATCH!")
             sys.exit(1)
         pos += 1
