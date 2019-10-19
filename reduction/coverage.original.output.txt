@@ -1,0 +1,286 @@
+WARNING: No test specified, defaulting to first test defined (TestFs_FilesDirs)
+TRACE: Initialized test input buffer with data from `coverage/780e56a0c59ce0b0279efbc53cf3207a878de2da.pass`
+TRACE: Running: TestFs_FilesDirs from /home/user/testfs/Tests.cpp(44)
+TRACE: /home/user/testfs/Tests.cpp(55): Making inode free map
+TRACE: /home/user/testfs/Tests.cpp(58): Making block free map
+TRACE: /home/user/testfs/Tests.cpp(61): Making checksum table
+TRACE: /home/user/testfs/Tests.cpp(64): Making inode blocks
+TRACE: /home/user/testfs/Tests.cpp(76): Created root directory; File system initialized
+TRACE: /home/user/testfs/Tests.cpp(84): Checking the initial file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(95): STEP 0: tfs_mkdir(sb, ".baa/b");
+TRACE: /home/user/testfs/Tests.cpp(98): RESULT 0: tfs_mkdir(sb, ".baa/b") = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 2
+
+TRACE: nr of allocated blocks = 2
+
+TRACE: /home/user/testfs/Tests.cpp(140): STEP 1: tfs_stat(sb);
+TRACE: /home/user/testfs/Tests.cpp(142): RESULT 1: tfs_stat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 2
+
+TRACE: nr of allocated blocks = 2
+
+TRACE: /home/user/testfs/Tests.cpp(110): STEP 2: tfs_ls(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: .baa/
+
+TRACE: /home/user/testfs/Tests.cpp(112): RESULT 2: tfs_ls(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 2
+
+TRACE: nr of allocated blocks = 2
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 3: tfs_create(sb, "A.aaBa//aa");
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 3: tfs_create(sb, "A.aaBa//aa") = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 3
+
+TRACE: nr of allocated blocks = 2
+
+TRACE: /home/user/testfs/Tests.cpp(155): STEP 4: set_reset_countdown(3);
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 3
+
+TRACE: nr of allocated blocks = 2
+
+TRACE: /home/user/testfs/Tests.cpp(95): STEP 5: tfs_mkdir(sb, "a");
+TRACE: Decremented reset counter to 2
+TRACE: Decremented reset counter to 1
+TRACE: Decremented reset counter to 0
+TRACE: Ignoring write due to simulated reset
+TRACE: Ignoring write due to simulated reset
+TRACE: Ignoring write due to simulated reset
+TRACE: Ignoring write due to simulated reset
+TRACE: Ignoring write due to simulated reset
+TRACE: Ignoring write due to simulated reset
+TRACE: Ignoring write due to simulated reset
+TRACE: /home/user/testfs/Tests.cpp(98): RESULT 5: tfs_mkdir(sb, "a") = 0
+TRACE: /home/user/testfs/Tests.cpp(163): Reset took place during operation.
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 4
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 6: tfs_create(sb, "Abba//A");
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 6: tfs_create(sb, "Abba//A") = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 7: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 7: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 8: tfs_create(sb, "a.BB/./.");
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 8: tfs_create(sb, "a.BB/./.") = -1
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(115): STEP 9: tfs_lsr(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: .baa/
+
+TRACE: ./
+
+TRACE: ../
+
+TRACE: A.aaBa
+
+TRACE: Abba
+
+TRACE: /home/user/testfs/Tests.cpp(117): RESULT 9: tfs_lsr(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 10: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 10: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(110): STEP 11: tfs_ls(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: .baa/
+
+TRACE: A.aaBa
+
+TRACE: Abba
+
+TRACE: /home/user/testfs/Tests.cpp(112): RESULT 11: tfs_ls(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 12: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 12: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 5
+
+TRACE: nr of allocated blocks = 3
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 13: tfs_create(sb, "ABBb.bA");
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 13: tfs_create(sb, "ABBb.bA") = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 6
+
+TRACE: nr of allocated blocks = 4
+
+TRACE: /home/user/testfs/Tests.cpp(95): STEP 14: tfs_mkdir(sb, "/AAb.Aa..b");
+TRACE: /home/user/testfs/Tests.cpp(98): RESULT 14: tfs_mkdir(sb, "/AAb.Aa..b") = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 7
+
+TRACE: nr of allocated blocks = 5
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 15: tfs_create(sb, "B");
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 15: tfs_create(sb, "B") = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 8
+
+TRACE: nr of allocated blocks = 5
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 16: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 16: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 8
+
+TRACE: nr of allocated blocks = 5
+
+TRACE: /home/user/testfs/Tests.cpp(103): STEP 17: tfs_rmdir(sb, "abA/B");
+TRACE: /home/user/testfs/Tests.cpp(106): RESULT 17: tfs_rmdir(sb, "abA/B") = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 8
+
+TRACE: nr of allocated blocks = 5
+
+TRACE: /home/user/testfs/Tests.cpp(110): STEP 18: tfs_ls(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: .baa/
+
+TRACE: A.aaBa
+
+TRACE: Abba
+
+TRACE: ABBb.bA
+
+TRACE: //
+
+TRACE: B
+
+TRACE: /home/user/testfs/Tests.cpp(112): RESULT 18: tfs_ls(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 8
+
+TRACE: nr of allocated blocks = 5
+
+TRACE: /home/user/testfs/Tests.cpp(110): STEP 19: tfs_ls(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: .baa/
+
+TRACE: A.aaBa
+
+TRACE: Abba
+
+TRACE: ABBb.bA
+
+TRACE: //
+
+TRACE: B
+
+TRACE: /home/user/testfs/Tests.cpp(112): RESULT 19: tfs_ls(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: inode freemap is not consistent
+
+TRACE: block freemap is not consistent
+
+TRACE: nr of allocated inodes = 8
+
+TRACE: nr of allocated blocks = 5
+
+TRACE: Passed: TestFs_FilesDirs

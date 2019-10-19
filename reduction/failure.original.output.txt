@@ -1,0 +1,139 @@
+WARNING: No test specified, defaulting to first test defined (TestFs_FilesDirs)
+TRACE: Initialized test input buffer with data from `failure/42d657f6eac4f34dc548d9dcaed37a0bcd214172.fail`
+TRACE: Running: TestFs_FilesDirs from /home/user/testfs/Tests.cpp(44)
+TRACE: /home/user/testfs/Tests.cpp(55): Making inode free map
+TRACE: /home/user/testfs/Tests.cpp(58): Making block free map
+TRACE: /home/user/testfs/Tests.cpp(61): Making checksum table
+TRACE: /home/user/testfs/Tests.cpp(64): Making inode blocks
+TRACE: /home/user/testfs/Tests.cpp(76): Created root directory; File system initialized
+TRACE: /home/user/testfs/Tests.cpp(84): Checking the initial file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 0: tfs_create(sb, "Ba/AbbA/A");
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 0: tfs_create(sb, "Ba/AbbA/A") = -1
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(140): STEP 1: tfs_stat(sb);
+TRACE: /home/user/testfs/Tests.cpp(142): RESULT 1: tfs_stat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(130): STEP 2: tfs_write(sb, "/A/aa", "x");
+TRACE: /home/user/testfs/Tests.cpp(134): RESULT 2: tfs_write(sb, "/A/aa", "x") = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(155): STEP 3: set_reset_countdown(4);
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(103): STEP 4: tfs_rmdir(sb, "bBa");
+TRACE: /home/user/testfs/Tests.cpp(106): RESULT 4: tfs_rmdir(sb, "bBa") = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 5: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 5: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(158): STEP 6: set_reset_countdown() ignored; already set
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(103): STEP 7: tfs_rmdir(sb, "BaabbAABA.");
+TRACE: /home/user/testfs/Tests.cpp(106): RESULT 7: tfs_rmdir(sb, "BaabbAABA.") = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 8: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 8: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(95): STEP 9: tfs_mkdir(sb, "..");
+TRACE: /home/user/testfs/Tests.cpp(98): RESULT 9: tfs_mkdir(sb, "..") = -17
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(115): STEP 10: tfs_lsr(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: /home/user/testfs/Tests.cpp(117): RESULT 10: tfs_lsr(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(158): STEP 11: set_reset_countdown() ignored; already set
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(110): STEP 12: tfs_ls(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: /home/user/testfs/Tests.cpp(112): RESULT 12: tfs_ls(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(115): STEP 13: tfs_lsr(sb);
+TRACE: ./
+
+TRACE: ../
+
+TRACE: /home/user/testfs/Tests.cpp(117): RESULT 13: tfs_lsr(sb) = 0
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(146): STEP 14: tfs_cat(sb);
+TRACE: /home/user/testfs/Tests.cpp(148): RESULT 14: tfs_cat(sb) = -2
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+TRACE: nr of allocated inodes = 1
+
+TRACE: nr of allocated blocks = 1
+
+TRACE: /home/user/testfs/Tests.cpp(121): STEP 15: tfs_create(sb, ".BB.bba");
+TRACE: Decremented reset counter to 3
+TRACE: Decremented reset counter to 2
+TRACE: Decremented reset counter to 1
+TRACE: Decremented reset counter to 0
+TRACE: Ignoring write due to simulated reset
+TRACE: /home/user/testfs/Tests.cpp(124): RESULT 15: tfs_create(sb, ".BB.bba") = 0
+TRACE: /home/user/testfs/Tests.cpp(163): Reset took place during operation.
+TRACE: /home/user/testfs/Tests.cpp(169): Checking the file system...
+CRITICAL: /home/user/testfs/super.c(252): Assertion (testfs_inode_get_type(in) == I_FILE) || (testfs_inode_get_type(in) == I_DIR) failed in function int testfs_checkfs(struct super_block *, struct bitmap *, struct bitmap *, int)
+ERROR: Failed: TestFs_FilesDirs
+ERROR: Test case failure/42d657f6eac4f34dc548d9dcaed37a0bcd214172.fail failed
