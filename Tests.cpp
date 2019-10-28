@@ -137,15 +137,15 @@ TEST(TestFs, FilesDirs) {
 	  },
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(TRACE) << "STEP " << n << ": tfs_stat(sb);";
+	    LOG(TRACE) << "STEP " << n << ": tfs_stat(sb, \"" << path << "\");";
 	    r = tfs_stat(sb, path);
-	    LOG(TRACE) << "RESULT " << n << ": tfs_stat(sb) = " << r;
+	    LOG(TRACE) << "RESULT " << n << ": tfs_stat(sb, \"" << path << "\") = " << r;
 	  },
 	  [&r, n, sb, &path] {
 	    MakeNewPath(path);
-	    LOG(TRACE) << "STEP " << n << ": tfs_cat(sb);";
+	    LOG(TRACE) << "STEP " << n << ": tfs_cat(sb, \"" << path << "\");";
 	    r = tfs_cat(sb, path);
-	    LOG(TRACE) << "RESULT " << n << ": tfs_cat(sb) = " << r;
+	    LOG(TRACE) << "RESULT " << n << ": tfs_cat(sb, \"" << path << "\") = " << r;
 	  },
 	  [n, sb] {
 	    // ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
