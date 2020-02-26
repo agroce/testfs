@@ -144,7 +144,7 @@ TEST(TestFs, FilesDirs) {
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(INFO) <<
 	      "STEP " << n << ": tfs_mkdir(sb, \"" << path << "\");";
@@ -152,7 +152,7 @@ TEST(TestFs, FilesDirs) {
 	    LOG(INFO) <<
 	      "RESULT " << n << ": tfs_mkdir(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(INFO) <<
 	      "STEP " << n << ": tfs_rmdir(sb, \"" << path << "\");";
@@ -160,17 +160,17 @@ TEST(TestFs, FilesDirs) {
 	    LOG(INFO) <<
 	      "RESULT " << n << ": tfs_rmdir(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb] {
+	  [&] {
 	    LOG(INFO) << "STEP " << n << ": tfs_ls(sb);";
 	    r = tfs_ls(sb);
 	    LOG(INFO) << "RESULT " << n << ": tfs_ls(sb) = " << r;
 	  },
-	  [&r, n, sb] {
+	  [&] {
 	    LOG(INFO) << "STEP " << n << ": tfs_lsr(sb);";
 	    r = tfs_lsr(sb);
 	    LOG(INFO) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(INFO) <<
 	      "STEP " << n << ": tfs_create(sb, \"" << path << "\");";
@@ -178,7 +178,7 @@ TEST(TestFs, FilesDirs) {
 	    LOG(INFO) <<
 	      "RESULT " << n << ": tfs_create(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb, &path, &data] {
+	  [&] {
 	    MakeNewPath(path);
 	    MakeNewData(data);
 	    LOG(INFO) <<
@@ -189,19 +189,19 @@ TEST(TestFs, FilesDirs) {
 	      "RESULT " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
 	      data << "\") = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(INFO) << "STEP " << n << ": tfs_stat(sb);";
 	    r = tfs_stat(sb, path);
 	    LOG(INFO) << "RESULT " << n << ": tfs_stat(sb) = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(INFO) << "STEP " << n << ": tfs_cat(sb);";
 	    r = tfs_cat(sb, path);
 	    LOG(INFO) << "RESULT " << n << ": tfs_cat(sb) = " << r;
 	  },
-	  [n, sb] {
+	  [&] {
 	    ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
 	    int k = DeepState_IntInRange(1, MAX_RESET);	    
 	    LOG(INFO) << "STEP " << n << ": set_reset_countdown(" << k << ");";

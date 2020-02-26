@@ -90,7 +90,7 @@ TEST(TestFs, FilesDirs) {
 
   for (int n = 0; n < LENGTH; n++) {
     OneOf(
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_mkdir(sb, \"" << path << "\");";
@@ -98,7 +98,7 @@ TEST(TestFs, FilesDirs) {
 	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_mkdir(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_rmdir(sb, \"" << path << "\");";
@@ -106,17 +106,17 @@ TEST(TestFs, FilesDirs) {
 	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_rmdir(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb] {
+	  [&] {
 	    LOG(TRACE) << "STEP " << n << ": tfs_ls(sb);";
 	    r = tfs_ls(sb);
 	    LOG(TRACE) << "RESULT " << n << ": tfs_ls(sb) = " << r;
 	  },
-	  [&r, n, sb] {
+	  [&] {
 	    LOG(TRACE) << "STEP " << n << ": tfs_lsr(sb);";
 	    r = tfs_lsr(sb);
 	    LOG(TRACE) << "RESULT " << n << ": tfs_lsr(sb) = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(TRACE) <<
 	      "STEP " << n << ": tfs_create(sb, \"" << path << "\");";
@@ -124,7 +124,7 @@ TEST(TestFs, FilesDirs) {
 	    LOG(TRACE) <<
 	      "RESULT " << n << ": tfs_create(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb, &path, &data] {
+	  [&] {
 	    MakeNewPath(path);
 	    MakeNewData(data);
 	    LOG(TRACE) <<
@@ -135,19 +135,19 @@ TEST(TestFs, FilesDirs) {
 	      "RESULT " << n << ": tfs_write(sb, \"" << path << "\", \"" <<
 	      data << "\") = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(TRACE) << "STEP " << n << ": tfs_stat(sb, \"" << path << "\");";
 	    r = tfs_stat(sb, path);
 	    LOG(TRACE) << "RESULT " << n << ": tfs_stat(sb, \"" << path << "\") = " << r;
 	  },
-	  [&r, n, sb, &path] {
+	  [&] {
 	    MakeNewPath(path);
 	    LOG(TRACE) << "STEP " << n << ": tfs_cat(sb, \"" << path << "\");";
 	    r = tfs_cat(sb, path);
 	    LOG(TRACE) << "RESULT " << n << ": tfs_cat(sb, \"" << path << "\") = " << r;
 	  },
-	  [n, sb] {
+	  [&] {
 	    // ASSUME_EQ(get_reset_countdown(), -1); // Only one reset at a time
 	    // above also works, but is bad for fuzzing
 	    if (get_reset_countdown() == -1) {
