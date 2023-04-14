@@ -19,10 +19,6 @@ Usage
 Easiest way to play with this is to use the [DeepState docker](https://github.com/trailofbits/deepstate#DOCKER), and:
 
 1.  clone this repo
-2.  `cmake .`
-3.  `make Tests TestsLF`
-4.  `rm -rf CMakeFiles/ CMakeCache.txt`
-5.  `CC=afl-clang CXX=afl-clang++ cmake .`
-6.  `make TestsAFL`
+2.  `cd testfs; make`
 
-You then have a binary you can fuzz with Eclipser, a binary you can fuzz with libFuzzer, and a binary you can fuzz with AFL.
+You then have a binary you can fuzz with Eclipser, a binary you can fuzz with libFuzzer, a binary you can fuzz with AFL, and a binary that collects code coverage information.
